@@ -331,6 +331,7 @@ namespace Settings {
   extern Option ShuffleMagicBeans;
   extern Option ShuffleMerchants;
   extern Option ShuffleAdultTradeQuest;
+  extern Option ShuffleChestMinigame;
 
   extern Option MapsAndCompasses;
   extern Option Keysanity;
@@ -343,6 +344,16 @@ namespace Settings {
   extern Option LACSRewardCount;
   extern Option LACSDungeonCount;
   extern Option LACSTokenCount;
+  extern Option KeyRings;
+  extern Option RingFortress;
+  extern Option RingForest;
+  extern Option RingFire;
+  extern Option RingWater;
+  extern Option RingSpirit;
+  extern Option RingShadow;
+  extern Option RingWell;
+  extern Option RingGtg;
+  extern Option RingCastle;
 
   extern Option SkipChildStealth;
   extern Option SkipTowerEscape;
@@ -358,6 +369,7 @@ namespace Settings {
   extern Option QuickText;
   extern Option SkipSongReplays;
   extern Option KeepFWWarpPoint;
+  extern Option FastBunnyHood;
 
   extern Option GossipStoneHints;
   extern Option ClearerHints;
@@ -376,6 +388,19 @@ namespace Settings {
   extern Option StickAsAdult;
   extern Option BoomerangAsAdult;
   extern Option HammerAsChild;
+  extern Option SlingshotAsAdult;
+  extern Option BowAsChild;
+  extern Option HookshotAsChild;
+  extern Option IronBootsAsChild;
+  extern Option HoverBootsAsChild;
+  extern Option MasksAsAdult;
+  extern Option KokiriSwordAsAdult;
+  extern Option MasterSwordAsChild;
+  extern Option BiggoronSwordAsChild;
+  extern Option DekuShieldAsAdult;
+  extern Option MirrorShieldAsChild;
+  extern Option GoronTunicAsChild;
+  extern Option ZoraTunicAsChild;
   extern Option GkDurability;
 
   extern Option ItemPoolValue;
@@ -463,14 +488,17 @@ namespace Settings {
   extern Option LogicLabWallGS;
   extern Option LogicGraveyardPoH;
   extern Option LogicChildDampeRacePoH;
+  extern Option LogicGVHammerChest;
   extern Option LogicGerudoKitchen;
   extern Option LogicLensWasteland;
   extern Option LogicReverseWasteland;
   extern Option LogicColossusGS;
   extern Option LogicOutsideGanonsGS;
   extern Option LogicManOnRoof;
+  extern Option LogicWindmillPoHHookshot;
   extern Option LogicDMTBombable;
   extern Option LogicDMTSoilGS;
+  extern Option LogicDMTSummitHover;
   extern Option LogicLinkGoronDins;
   extern Option LogicGoronCityLeftMost;
   extern Option LogicGoronCityPot;
@@ -481,6 +509,7 @@ namespace Settings {
   extern Option LogicBiggoronBolero;
   extern Option LogicZoraRiverLower;
   extern Option LogicZoraRiverUpper;
+  extern Option LogicZFGreatFairy;
   extern Option LogicDekuB1WebsWithBow;
   extern Option LogicDekuB1Skip;
   extern Option LogicDekuBasementGS;
@@ -538,17 +567,64 @@ namespace Settings {
   extern Option LogicLensGtgMQ;
   extern Option LogicLensCastleMQ;
   extern Option LogicSpiritTrialHookshot;
+  extern Option LogicFlamingChests;
 
   //Glitch Settings
+  extern Option GlitchRestrictedItems;
+  extern Option GlitchSuperStab;
   extern Option GlitchISG;
   extern Option GlitchHover;
+  extern Option GlitchBombOI;
+  extern Option GlitchHoverBoost;
+  extern Option GlitchSuperSlide;
   extern Option GlitchMegaflip;
+  extern Option GlitchASlide;
+  extern Option GlitchHammerSlide;
+  extern Option GlitchLedgeCancel;
+  extern Option GlitchActionSwap;
+  extern Option GlitchQPA;
   extern Option GlitchHookshotClip;
   extern Option GlitchHookshotJump_Bonk;
   extern Option GlitchHookshotJump_Boots;
-  extern Option GlitchLedgeClip;
+  extern Option GlitchCutsceneDive;
+  extern Option GlitchNaviDive_Stick;
   extern Option GlitchTripleSlashClip;
+  extern Option GlitchLedgeClip;
+  extern Option GlitchSeamWalk;
+  //Misc Glitch Settings
+  extern Option GlitchWWTEscape;
+  extern Option GlitchGVTentAsChild;
+  extern Option GlitchGFGuardSneak;
+  extern Option GlitchItemlessWasteland;
+  extern Option GlitchOccamsStatue;
+  extern Option GlitchZDOoBJumpSlash;
+  extern Option GlitchJabuStickRecoil;
+  extern Option GlitchJabuAdult;
+  extern Option GlitchBlueFireWall;
+  extern Option GlitchClassicHalfie;
+  extern Option GlitchModernHalfie;
+  extern Option GlitchJabuSwitch;
+  extern Option GlitchForestBKSkip;
+  extern Option GlitchFireGrunzClip;
 
+  //Multiplayer Settings
+  extern Option MP_Enabled;
+  extern Option MP_SharedProgress;
+  extern Option MP_SyncId;
+  extern Option MP_SharedHealth;
+  extern Option MP_SharedRupees;
+  extern Option MP_SharedAmmo;
+
+  //Ingame Default Settings
+  extern Option ZTargeting;
+  extern Option CameraControl;
+  extern Option MotionControl;
+  extern Option TogglePlayMusic;
+  extern Option TogglePlaySFX;
+  extern Option SilenceNavi;
+  extern Option IgnoreMaskReaction;
+
+  //Cosmetic Settings
   extern Option CustomTunicColors;
   extern Option ChildTunicColor;
   extern Option KokiriTunicColor;
@@ -581,9 +657,16 @@ namespace Settings {
 
   extern std::vector<std::vector<Option *>> excludeLocationsOptionsVector;
   extern std::vector<Menu *> excludeLocationsMenus;
-  extern std::vector<Option *> startingInventoryOptions;
+  extern std::vector<Option *> startingItemsOptions;
+  extern std::vector<Option *> startingSongsOptions;
+  extern std::vector<Option *> startingEquipmentOptions;
+  extern std::vector<Option *> startingStonesMedallionsOptions;
+  extern std::vector<Option *> startingOtherOptions;
   extern std::vector<Option *> trickOptions;
+  extern std::vector<Option *> glitchCategories;
+  extern std::vector<Option *> miscGlitches;
 
+  extern std::vector<Menu *> startingInventoryOptions;
   extern std::vector<Menu *> detailedLogicOptions;
 
   extern std::vector<Menu *> mainMenu;

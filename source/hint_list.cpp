@@ -1284,7 +1284,7 @@ void HintTable_Init() {
     hintTable[FOREST_TEMPLE_SMALL_KEY] = HintText::Item({
                         //obscure text
                         Text{"a sylvan tool for unlocking", /*french*/"un anti-porte sylvestre",            /*spanish*/"una clave de una entrada enselvada"},
-                        Text{"a sylvan dungeon pass",       /*french*/"le rêve sylvestre d'un prisonnier", /*spanish*/"un pase de una mazmorra enselvada"},
+                        Text{"a sylvan dungeon pass",       /*french*/"le rêve sylvestre d'un prisonnier",  /*spanish*/"un pase de una mazmorra enselvada"},
                         Text{"a sylvan lock remover",       /*french*/"un efface-serrure sylvestre",        /*spanish*/"un destructor de cerraduras enselvada"},
                         Text{"a sylvan lockpick",           /*french*/"un crochet à porte sylvestre",       /*spanish*/"una apertura portentosa enselvada"},
                       }, {
@@ -1297,7 +1297,7 @@ void HintTable_Init() {
     hintTable[FIRE_TEMPLE_SMALL_KEY] = HintText::Item({
                         //obscure text
                         Text{"a molten tool for unlocking", /*french*/"un anti-porte fondu",            /*spanish*/"una clave de una entrada fundida"},
-                        Text{"a molten dungeon pass",       /*french*/"le rêve fondu d'un prisonnier", /*spanish*/"un pase de una mazmorra fundida"},
+                        Text{"a molten dungeon pass",       /*french*/"le rêve fondu d'un prisonnier",  /*spanish*/"un pase de una mazmorra fundida"},
                         Text{"a molten lock remover",       /*french*/"un efface-serrure fondu",        /*spanish*/"un destructor de cerraduras fundida"},
                         Text{"a molten lockpick",           /*french*/"un crochet à porte fondu",       /*spanish*/"una apertura portentosa fundida"},
                       }, {
@@ -1310,7 +1310,7 @@ void HintTable_Init() {
     hintTable[WATER_TEMPLE_SMALL_KEY] = HintText::Item({
                         //obscure text
                         Text{"a wet tool for unlocking", /*french*/"un anti-porte humide",            /*spanish*/"una clave de una entrada mojada"},
-                        Text{"a wet dungeon pass",       /*french*/"le rêve humide d'un prisonnier", /*spanish*/"un pase de una mazmorra mojada"},
+                        Text{"a wet dungeon pass",       /*french*/"le rêve humide d'un prisonnier",  /*spanish*/"un pase de una mazmorra mojada"},
                         Text{"a wet lock remover",       /*french*/"un efface-serrure humide",        /*spanish*/"un destructor de cerraduras mojada"},
                         Text{"a wet lockpick",           /*french*/"un crochet à porte humide",       /*spanish*/"una apertura portentosa mojada"},
                       }, {
@@ -1323,7 +1323,7 @@ void HintTable_Init() {
     hintTable[SPIRIT_TEMPLE_SMALL_KEY] = HintText::Item({
                         //obscure text
                         Text{"a sandy tool for unlocking", /*french*/"un anti-porte sableux",            /*spanish*/"una clave de una entrada arenosa"},
-                        Text{"a sandy dungeon pass",       /*french*/"le rêve sableux d'un prisonnier", /*spanish*/"un pase de una mazmorra arenosa"},
+                        Text{"a sandy dungeon pass",       /*french*/"le rêve sableux d'un prisonnier",  /*spanish*/"un pase de una mazmorra arenosa"},
                         Text{"a sandy lock remover",       /*french*/"un efface-serrure sableux",        /*spanish*/"un destructor de cerraduras arenosa"},
                         Text{"a sandy lockpick",           /*french*/"un crochet à porte sableux",       /*spanish*/"una apertura portentosa arenosa"},
                       }, {
@@ -1336,7 +1336,7 @@ void HintTable_Init() {
     hintTable[SHADOW_TEMPLE_SMALL_KEY] = HintText::Item({
                         //obscure text
                         Text{"a creepy tool for unlocking", /*french*/"un anti-porte sinistre",            /*spanish*/"una clave de una entrada siniestra:a"},
-                        Text{"a creepy dungeon pass",       /*french*/"le rêve sinistre d'un prisonnier", /*spanish*/"un pase de una mazmorra siniestra:a"},
+                        Text{"a creepy dungeon pass",       /*french*/"le rêve sinistre d'un prisonnier",  /*spanish*/"un pase de una mazmorra siniestra:a"},
                         Text{"a creepy lock remover",       /*french*/"un efface-serrure sinistre",        /*spanish*/"un destructor de cerraduras siniestra:a"},
                         Text{"a creepy lockpick",           /*french*/"un crochet à porte sinistre",       /*spanish*/"una apertura portentosa siniestra:a"},
                       }, {
@@ -1349,7 +1349,7 @@ void HintTable_Init() {
     hintTable[GERUDO_TRAINING_GROUNDS_SMALL_KEY] = HintText::Item({
                         //obscure text
                         Text{"a labyrinthian tool for unlocking", /*french*/"un anti-porte labyrinthique",            /*spanish*/"una clave de una entrada laberíntica"},
-                        Text{"a labyrinthian dungeon pass",       /*french*/"le rêve labyrinthique d'un prisonnier", /*spanish*/"un pase de una mazmorra laberíntica"},
+                        Text{"a labyrinthian dungeon pass",       /*french*/"le rêve labyrinthique d'un prisonnier",  /*spanish*/"un pase de una mazmorra laberíntica"},
                         Text{"a labyrinthian lock remover",       /*french*/"un efface-serrure labyrinthique",        /*spanish*/"un destructor de cerraduras laberíntica"},
                         Text{"a labyrinthian lockpick",           /*french*/"un crochet à porte labyrinthique",       /*spanish*/"una apertura portentosa laberíntica"},
                       }, {
@@ -1362,7 +1362,7 @@ void HintTable_Init() {
     hintTable[GERUDO_FORTRESS_SMALL_KEY] = HintText::Item({
                         //obscure text
                         Text{"an imprisoned tool for unlocking", /*french*/"un anti-porte emprisonné",            /*spanish*/"una clave de una entrada encarcelada"},
-                        Text{"an imprisoned dungeon pass",       /*french*/"le rêve emprisonné d'un prisonnier", /*spanish*/"un pase de una mazmorra encarcelada"},
+                        Text{"an imprisoned dungeon pass",       /*french*/"le rêve emprisonné d'un prisonnier",  /*spanish*/"un pase de una mazmorra encarcelada"},
                         Text{"an imprisoned lock remover",       /*french*/"un efface-serrure emprisonné",        /*spanish*/"un destructor de cerraduras encarcelada"},
                         Text{"an imprisoned lockpick",           /*french*/"un crochet à porte emprisonné",       /*spanish*/"una apertura portentosa encarcelada"},
                       }, {
@@ -1375,7 +1375,7 @@ void HintTable_Init() {
     hintTable[BOTTOM_OF_THE_WELL_SMALL_KEY] = HintText::Item({
                         //obscure text
                         Text{"a moldy tool for unlocking", /*french*/"un anti-porte moisi",            /*spanish*/"una clave de una entrada mohosa"},
-                        Text{"a moldy dungeon pass",       /*french*/"le rêve moisi d'un prisonnier", /*spanish*/"un pase de una mazmorra mohosa"},
+                        Text{"a moldy dungeon pass",       /*french*/"le rêve moisi d'un prisonnier",  /*spanish*/"un pase de una mazmorra mohosa"},
                         Text{"a moldy lock remover",       /*french*/"un efface-serrure moisi",        /*spanish*/"un destructor de cerraduras mohosa"},
                         Text{"a moldy lockpick",           /*french*/"un crochet à porte moisi",       /*spanish*/"una apertura portentosa mohosa"},
                       }, {
@@ -1388,7 +1388,7 @@ void HintTable_Init() {
     hintTable[GANONS_CASTLE_SMALL_KEY] = HintText::Item({
                         //obscure text
                         Text{"a final tool for unlocking", /*french*/"un anti-porte final",            /*spanish*/"una clave de una entrada final"},
-                        Text{"a final dungeon pass",       /*french*/"le rêve final d'un prisonnier", /*spanish*/"un pase de una mazmorra final"},
+                        Text{"a final dungeon pass",       /*french*/"le rêve final d'un prisonnier",  /*spanish*/"un pase de una mazmorra final"},
                         Text{"a final lock remover",       /*french*/"un efface-serrure final",        /*spanish*/"un destructor de cerraduras final"},
                         Text{"a final lockpick",           /*french*/"un crochet à porte final",       /*spanish*/"una apertura portentosa final"},
                       }, {
@@ -1398,10 +1398,141 @@ void HintTable_Init() {
                         //clear text
                         Text{"a Ganon's Castle Small Key", /*french*/"une petite clé du château de Ganon", /*spanish*/"una llave pequeña del Castillo de Ganon"}
      );
+     hintTable[FOREST_TEMPLE_KEY_RING] = HintText::Item({
+                        //obscure text
+                        Text{"a sylvan toolbox for unlocking", /*french*/"des anti-portes sylvestres",            /*spanish*/"un conjunto silvestre de cerrajero"},
+                        Text{"a sylvan dungeon season pass",   /*french*/"les rêves sylvestres d'un prisonnier",  /*spanish*/"un pase vip de mazmorras silvestre"},
+                        Text{"a sylvan jingling ring",         /*french*/"des efface-serrures sylvestres",        /*spanish*/"una cadena multiusos silvestre"},
+                        Text{"a sylvan skeleton key",          /*french*/"des crochets à porte sylvestres",       /*spanish*/"un anillo silvestre contra cerrojos"},
+                      }, {
+                        //ambiguous text
+                        Text{"a key ring", /*french*/"un trousseau de clés", /*spanish*/"un llavero"},
+                      },
+                        //clear text
+                        Text{"a Forest Temple Key Ring", /*french*/"un trousseau de clés du temple de la forêt", /*spanish*/"un llavero del Templo del Bosque"}
+     );
+    hintTable[FIRE_TEMPLE_KEY_RING] = HintText::Item({
+                        //obscure text
+                        Text{"a molten toolbox for unlocking", /*french*/"des anti-portes fondus",            /*spanish*/"un conjunto fundido de cerrajero"},
+                        Text{"a molten dungeon season pass",   /*french*/"les rêves fondus d'un prisonnier",  /*spanish*/"un pase vip de mazmorras fundido"},
+                        Text{"a molten jingling ring",         /*french*/"des efface-serrures fondus",        /*spanish*/"una cadena multiusos fundida"},
+                        Text{"a molten skeleton key",          /*french*/"des crochets à porte fondus",       /*spanish*/"un anillo fundido contra cerrojos"},
+                      }, {
+                        //ambiguous text
+                        Text{"a key ring", /*french*/"un trousseau de clés", /*spanish*/"un llavero"},
+                      },
+                        //clear text
+                        Text{"a Fire Temple Key Ring", /*french*/"un trousseau de clés du temple du feu", /*spanish*/"un llavero del Templo del Fuego"}
+     );
+    hintTable[WATER_TEMPLE_KEY_RING] = HintText::Item({
+                        //obscure text
+                        Text{"a wet toolbox for unlocking", /*french*/"des anti-portes humides",            /*spanish*/"un conjunto abisal de cerrajero"},
+                        Text{"a wet dungeon season pass",   /*french*/"les rêves humides d'un prisonnier",  /*spanish*/"un pase vip de mazmorras abisal"},
+                        Text{"a wet jingling ring",         /*french*/"des efface-serrures humides",        /*spanish*/"una cadena multiusos abisal"},
+                        Text{"a wet skeleton key",          /*french*/"des crochets à porte humides",       /*spanish*/"un anillo abisal contra cerrojos"},
+                      }, {
+                        //ambiguous text
+                        Text{"a key ring", /*french*/"un trousseau de clés", /*spanish*/"un llavero"},
+                      },
+                        //clear text
+                        Text{"a Water Temple Key Ring", /*french*/"un trousseau de clés du temple de l'eau", /*spanish*/"un llavero del Templo del Agua"}
+     );
+    hintTable[SPIRIT_TEMPLE_KEY_RING] = HintText::Item({
+                        //obscure text
+                        Text{"a sandy toolbox for unlocking", /*french*/"des anti-portes sableux",            /*spanish*/"un conjunto arenoso de cerrajero"},
+                        Text{"a sandy dungeon season pass",   /*french*/"les rêves sableux d'un prisonnier",  /*spanish*/"un pase vip de mazmorras arenoso"},
+                        Text{"a sandy jingling ring",         /*french*/"des efface-serrures sableux",        /*spanish*/"una cadena multiusos arenosa"},
+                        Text{"a sandy skeleton key",          /*french*/"des crochets à porte sableux",       /*spanish*/"un anillo arenoso contra cerrojos"},
+                      }, {
+                        //ambiguous text
+                        Text{"a key ring", /*french*/"un trousseau de clés", /*spanish*/"un llavero"},
+                      },
+                        //clear text
+                        Text{"a Spirit Temple Key Ring", /*french*/"un trousseau de clés du temple de l'esprit", /*spanish*/"un llavero del Templo del Espíritu"}
+     );
+    hintTable[SHADOW_TEMPLE_KEY_RING] = HintText::Item({
+                        //obscure text
+                        Text{"a creepy toolbox for unlocking", /*french*/"des anti-portes sinistres",            /*spanish*/"un conjunto tenebroso de cerrajero"},
+                        Text{"a creepy dungeon season pass",   /*french*/"les rêves sinistres d'un prisonnier",  /*spanish*/"un pase vip de mazmorras tenebroso"},
+                        Text{"a creepy jingling ring",         /*french*/"des efface-serrures sinistres",        /*spanish*/"una cadena multiusos tenebrosa"},
+                        Text{"a creepy skeleton key",          /*french*/"des crochets à porte sinistres",       /*spanish*/"un anillo tenebroso contra cerrojos"},
+                      }, {
+                        //ambiguous text
+                        Text{"a key ring", /*french*/"un trousseau de clés", /*spanish*/"un llavero"},
+                      },
+                        //clear text
+                        Text{"a Shadow Temple Key Ring", /*french*/"un trousseau de clés du temple de l'ombre", /*spanish*/"un llavero del Templo de las Sombras"}
+     );
+    hintTable[GERUDO_TRAINING_GROUNDS_KEY_RING] = HintText::Item({
+                        //obscure text
+                        Text{"a labyrinthian toolbox for unlocking", /*french*/"des anti-portes labyrinthiques",            /*spanish*/"un conjunto laberíntico de cerrajero"},
+                        Text{"a labyrinthian dungeon season pass",   /*french*/"les rêves labyrinthiques d'un prisonnier",  /*spanish*/"un pase vip de mazmorras laberíntico"},
+                        Text{"a labyrinthian jingling ring",         /*french*/"des efface-serrures labyrinthiques",        /*spanish*/"una cadena multiusos laberíntica"},
+                        Text{"a labyrinthian skeleton key",          /*french*/"des crochets à porte labyrinthiques",       /*spanish*/"un anillo laberíntico contra cerrojos"},
+                      }, {
+                        //ambiguous text
+                        Text{"a key ring", /*french*/"un trousseau de clés", /*spanish*/"un llavero"},
+                      },
+                        //clear text
+                        Text{"a Gerudo Training Ground Key Ring", /*french*/"un trousseau de clés du gymnase Gerudo", /*spanish*/"un llavero del Centro de Instrucción Gerudo"}
+     );
+    hintTable[GERUDO_FORTRESS_KEY_RING] = HintText::Item({
+                        //obscure text
+                        Text{"an imprisoned toolbox for unlocking", /*french*/"des anti-portes emprisonnés",            /*spanish*/"un conjunto enjaulado de cerrajero"},
+                        Text{"an imprisoned dungeon season pass",   /*french*/"les rêves emprisonnés d'un prisonnier",  /*spanish*/"un pase vip de una mazmorra enjaulado"},
+                        Text{"an imprisoned jingling ring",         /*french*/"des efface-serrures emprisonnés",        /*spanish*/"una cadena multiusos enjaulada"},
+                        Text{"an imprisoned skeleton key",          /*french*/"des crochets à porte emprisonnés",       /*spanish*/"un anillo enjaulado contra cerrojos"},
+                      }, {
+                        //ambiguous text
+                        Text{"a key ring", /*french*/"un trousseau de clés", /*spanish*/"un llavero"},
+                      },
+                        //clear text
+                        Text{"a Gerudo Fortress Key Ring", /*french*/"un trousseau de clés de la forteresse Gerudo", /*spanish*/"un llavero de la Fortaleza Gerudo"}
+     );
+    hintTable[BOTTOM_OF_THE_WELL_KEY_RING] = HintText::Item({
+                        //obscure text
+                        Text{"a moldy toolbox for unlocking", /*french*/"des anti-portes moisis",            /*spanish*/"un conjunto subterráneo de cerrajero"},
+                        Text{"a moldy dungeon season pass",   /*french*/"les rêves moisis d'un prisonnier",  /*spanish*/"un pase vip de una mazmorra subterráneo"},
+                        Text{"a moldy jingling ring",         /*french*/"des efface-serrures moisis",        /*spanish*/"una cadena multiusos subterránea"},
+                        Text{"a moldy skeleton key",          /*french*/"des crochets à porte moisis",       /*spanish*/"un anillo subterráneo contra cerrojos"},
+                      }, {
+                        //ambiguous text
+                        Text{"a key ring", /*french*/"un trousseau de clés", /*spanish*/"un llavero"},
+                      },
+                        //clear text
+                        Text{"a Bottom of the Well Key Ring", /*french*/"un trousseau de clés du fond du puits", /*spanish*/"un llavero del Fondo del pozo"}
+     );
+    hintTable[GANONS_CASTLE_KEY_RING] = HintText::Item({
+                        //obscure text
+                        Text{"a final toolbox for unlocking", /*french*/"des anti-portes finaux",            /*spanish*/"un conjunto decisivo de cerrajero"},
+                        Text{"a final dungeon season pass",   /*french*/"les rêves finaux d'un prisonnier",  /*spanish*/"un pase vip de una mazmorra decisivo"},
+                        Text{"a final jingling ring",         /*french*/"des efface-serrures finaux",        /*spanish*/"una cadena multiusos decisiva"},
+                        Text{"a final skeleton key",          /*french*/"des crochets à porte finaux",       /*spanish*/"un anillo decisivo multiusos"},
+                      }, {
+                        //ambiguous text
+                        Text{"a key ring", /*french*/"un trousseau de clés", /*spanish*/"un llavero"},
+                      },
+                        //clear text
+                        Text{"a Ganon's Castle Key Ring", /*french*/"un trousseau de clés du château de Ganon", /*spanish*/"un llavero del Castillo de Ganon"}
+     );
+
+    hintTable[TREASURE_GAME_SMALL_KEY] = HintText::Item({
+                        //obscure text
+                        Text{"a gambler's tool for unlocking", /*french*/"un anti-porte de parieur",        /*spanish*/"una clave de un juego de azar"},
+                        Text{"a gambler's dungeon pass",       /*french*/"le rêve d'un prisonnier parieur", /*spanish*/"un pase de un juego de azar"},
+                        Text{"a gambler's lock remover",       /*french*/"un efface-serrure de parieur",    /*spanish*/"un destructor de cerraduras del juego de azar"},
+                        Text{"a gambler's lockpick",           /*french*/"un crochet à serrure de parieur", /*spanish*/"una apertura portentosa del juego de azar"},
+                      }, {
+                        //ambiguous text
+                        Text{"a small key", /*french*/"une petite clé", /*spanish*/"una llave pequeña"},
+                      },
+                        //clear text
+                        Text{"a Treasure Chest Shop Small Key", /*french*/"une petite clé de la chasse aux trésors", /*spanish*/"una llave pequeña del Cofre del Tesoro"}
+    );
 
     hintTable[KOKIRI_EMERALD] = HintText::Item({
                        //obscure text
-                       Text{"a green stone",       /*french*/"une pierre verte",               /*spanish*/"una piedra trébol"},
+                       Text{"a green stone",       /*french*/"une pierre verte",               /*spanish*/"una piedra verde"},
                        Text{"a gift before death", /*french*/"le dernier souffle d'un arbre", /*spanish*/"un obsequio testamentario"},
                      }, {
                        //ambiguous text
@@ -2067,9 +2198,54 @@ void HintTable_Init() {
                        Text{"the #treasure chest game# grants", /*french*/"la #chasse aux trésors# donne", /*spanish*/"#el Cofre del Tesoro# premia"}
   );
 
+    hintTable[MARKET_TREASURE_CHEST_GAME_ITEM_1] = HintText::Sometimes({
+                       //obscure text
+                       Text{"#gambling once# grants",                    /*french*/"#parier une fois# donne",                        /*spanish*/"#apostar solo una vez# revelará"},
+                       Text{"the #first or second game chest# contains", /*french*/"le #premier ou deuxième coffre à jeu# contient", /*spanish*/"#el primer o segundo cofre del azar# revela"},
+                     }, {},
+                       //clear text
+                       Text{"the #first locked room# in the chest game contains", /*french*/"la #première salle# de la chasse aux trésors contient", /*spanish*/"#en la primera sala del Cofre del Tesoro# aguarda"}
+  );
+
+    hintTable[MARKET_TREASURE_CHEST_GAME_ITEM_2] = HintText::Sometimes({
+                       //obscure text
+                       Text{"#gambling twice# grants",                   /*french*/"#parier deux fois# donne",                          /*spanish*/"#apostar dos veces# revelará"},
+                       Text{"the #third or fourth game chest# contains", /*french*/"le #troisième ou quatrième coffre à jeu# contient", /*spanish*/"#el tercer o cuarto cofre del azar# revela"},
+                     }, {},
+                       //clear text
+                       Text{"the #second locked room# in the chest game contains", /*french*/"la #deuxième salle# de la chasse aux trésors contient", /*spanish*/"#en la segunda sala del Cofre del Tesoro# aguarda"}
+  );
+
+    hintTable[MARKET_TREASURE_CHEST_GAME_ITEM_3] = HintText::Sometimes({
+                       //obscure text
+                       Text{"#gambling 3 times# grants",                /*french*/"#parier trois fois# donne",                       /*spanish*/"#apostar tres veces# revelará"},
+                       Text{"the #fifth or sixth game chest# contains", /*french*/"le #cinquième ou sixième coffre à jeu# contient", /*spanish*/"#el quinto o sexto cofre del azar# revela"},
+                     }, {},
+                       //clear text
+                       Text{"the #third locked room# in the chest game contains", /*french*/"la #troisième salle# de la chasse aux trésors contient", /*spanish*/"#en la tercera sala del Cofre del Tesoro# aguarda"}
+  );
+
+    hintTable[MARKET_TREASURE_CHEST_GAME_ITEM_4] = HintText::Sometimes({
+                       //obscure text
+                       Text{"#gambling 4 times# grants",                   /*french*/"#parier quatre fois# donne",                      /*spanish*/"#apostar cuatro veces# revelará"},
+                       Text{"the #seventh or eighth game chest# contains", /*french*/"le #septième ou huitième coffre à jeu# contient", /*spanish*/"#el séptimo u octavo cofre del azar# revela"},
+                     }, {},
+                       //clear text
+                       Text{"the #fourth locked room# in the chest game contains", /*french*/"la #quatrième salle# de la chasse aux trésors contient", /*spanish*/"#en la cuarta sala del Cofre del Tesoro# aguarda"}
+  );
+
+    hintTable[MARKET_TREASURE_CHEST_GAME_ITEM_5] = HintText::Sometimes({
+                       //obscure text
+                       Text{"#gambling 5 times# grants",                /*french*/"#parier cinq fois# donne",                       /*spanish*/"#apostar cinco veces# revelará"},
+                       Text{"the #ninth or tenth game chest# contains", /*french*/"le #neuvième ou dixième coffre à jeu# contient", /*spanish*/"#el noveno o décimo cofre del azar# revela"},
+                     }, {},
+                       //clear text
+                       Text{"the #fifth locked room# in the chest game contains", /*french*/"la #cinquième salle# de la chasse aux trésors contient", /*spanish*/"#en la quinta sala del Cofre del Tesoro# aguarda"}
+  );
+
     hintTable[GF_HBA_1500_POINTS] = HintText::Sometimes({
                        //obscure text
-                       Text{"mastery of #horseback archery# grants", /*french*/"maîtriser l'#archerie équestre# donne", /*spanish*/"amaestrar el #tiro con arco a caballo# premia"},
+                       Text{"mastery of #horseback archery# grants", /*french*/"maîtriser l'#archerie équestre# donne", /*spanish*/"dominar el #tiro con arco a caballo# premia con"},
                      }, {},
                        //clear text
                        Text{"scoring 1500 in #horseback archery# grants", /*french*/"obtenir 1500 points dans l'#archerie équestre# donne", /*spanish*/"conseguir 1500 puntos en el #tiro con arco a caballo# premia"}
@@ -5895,7 +6071,7 @@ void HintTable_Init() {
 
     hintTable[MARKET_TREASURE_CHEST_GAME] = HintText::Region({
                      //obscure text
-                     Text{"the #Treasure Box Shop#", /*french*/"la #chasse aux trésors#", /*spanish*/"el Cofre del Tesoro"},
+                     Text{"the #Treasure Chest Shop#", /*french*/"la #chasse aux trésors#", /*spanish*/"el Cofre del Tesoro"},
   });
 
     hintTable[MARKET_BOMBCHU_SHOP] = HintText::Region({
@@ -6801,35 +6977,35 @@ void HintTable_Init() {
                      //obscure text                                                  singular        plural
                      Text{"The awakened ones will await for the&Hero to collect #%d |Spiritual Stone|Spiritual Stones|#.",
                 /*french*/"Les êtres de sagesse attendront le&héros muni de #%d |pierre spirituelle|pierres spirituelles|#.",
-               /*spanish*/"Los sabios aguardarán a que el héroe&obtenga #%d |una piedra espiritual|unas piedras espirituales|#."},
+               /*spanish*/"Los sabios aguardarán a que el héroe&obtenga #%d |piedra espiritual|piedras espirituales|#."},
     });
 
     hintTable[BRIDGE_MEDALLIONS_HINT] = HintText::Bridge({
                      //obscure text                                                  singular  plural
                      Text{"The awakened ones will await for the&Hero to collect #%d |Medallion|Medallions|#.",
                 /*french*/"Les êtres de sagesse attendront le&héros muni de #%d |médaillon|médaillons|#.",
-               /*spanish*/"Los sabios aguardarán a que el héroe&obtenga #%d |un medallón|unos medallones|#."},
+               /*spanish*/"Los sabios aguardarán a que el héroe&obtenga #%d |medallón|medallones|#."},
     });
 
     hintTable[BRIDGE_REWARDS_HINT] = HintText::Bridge({
                      //obscure text                                                  singular                     plural
                      Text{"The awakened ones will await for the&Hero to collect #%d |Spiritual Stone&or Medallion|Spiritual Stones&and Medallions|#.",
                 /*french*/"Les êtres de sagesse attendront le&héros muni de #%d |pierre spirituelle&ou médaillon|pierres spirituelles&et médaillons|#.",
-               /*spanish*/"Los sabios aguardarán a que el héroe&obtenga #%d |una piedra espiritual o medallón|unas piedras espirtuales y unos medallones|#."},
+               /*spanish*/"Los sabios aguardarán a que el héroe&obtenga #%d |piedra espiritual o medallón|piedras espirtuales y medallones|#."},
     });
 
     hintTable[BRIDGE_DUNGEONS_HINT] = HintText::Bridge({
                      //obscure text                                                  singular plural
                      Text{"The awakened ones will await for the&Hero to conquer #%d |Dungeon|Dungeons|#.",
                 /*french*/"Les êtres de sagesse attendront la&conquête de #%d |donjon|donjons|#.",
-               /*spanish*/"Los sabios aguardarán a que el héroe& complete #%d |una mazmorra|unas mazmorras|#."},
+               /*spanish*/"Los sabios aguardarán a que el héroe& complete #%d |mazmorra|mazmorras|#."},
     });
 
     hintTable[BRIDGE_TOKENS_HINT] = HintText::Bridge({
                      //obscure text
                      Text{"The awakened ones will await for the&Hero to collect #%d |Gold Skulltula&Token|Gold Skulltula&Tokens|#.",
                 /*french*/"Les êtres de sagesse attendront le&héros muni de #%d |symbole|symboles| de&Skulltula d'or#.",
-               /*spanish*/"Los sabios aguardarán a que el héroe&obtenga #%d |un símbolo|unos símbolos| de&skulltula dorada#."},
+               /*spanish*/"Los sabios aguardarán a que el héroe&obtenga #%d |símbolo|símbolos| de&skulltula dorada#."},
     });
 
     /*--------------------------
@@ -6900,35 +7076,35 @@ void HintTable_Init() {
                      //obscure text                                                     singular      plural
                      Text{"And the #evil one#'s key will be&provided by Zelda once #%d&|Medallion# is|Medallions# are| retrieved.",
                 /*french*/"Aussi, Zelda crééra la clé du&#Malin# avec #%d |médaillon|médaillons|#.",
-               /*spanish*/"Y Zelda entregará la llave&del #señor del mal# tras obtener&#%d |un medallón|unos medallones|#."},
+               /*spanish*/"Y Zelda entregará la llave&del #señor del mal# tras obtener&#%d |medallón|medallones|#."},
     });
 
     hintTable[LACS_STONES_HINT] = HintText::LACS({
                      //obscure text                                                     singular            plural
                      Text{"And the #evil one#'s key will be&provided by Zelda once #%d |Spiritual&Stone# is|Spiritual&Stones# are| retrieved.",
                 /*french*/"Aussi, Zelda crééra la clé du&#Malin# avec #%d des |pierre&spirituelle|pierres&spirituelles|#.",
-               /*spanish*/"Y Zelda entregará la llave&del #señor del mal# tras obtener&#%d |una piedra espiritual|unas piedras espirituales|#."},
+               /*spanish*/"Y Zelda entregará la llave&del #señor del mal# tras obtener&#%d |piedra espiritual|piedras espirituales|#."},
     });
 
     hintTable[LACS_REWARDS_HINT] = HintText::LACS({
                      //obscure text                                                     singular                         plural
                      Text{"And the #evil one#'s key will be&provided by Zelda once #%d |Spiritual&Stone or Medallion# is|Spiritual&Stones and Medallions# are| retrieved.",
                 /*french*/"Aussi, Zelda crééra la clé du&#Malin# avec #%d |pierre spirituelle&et des médaillon|pierres spirituelles&et des médaillons|#.",
-               /*spanish*/"Y Zelda entregará la llave&del #señor del mal# tras obtener&#%d |una piedra espiritual o medallón|unas piedras espirituales o unos medallones|#."},
+               /*spanish*/"Y Zelda entregará la llave&del #señor del mal# tras obtener&#%d |piedra espiritual o medallón|piedras espirituales o medallones|#."},
     });
 
     hintTable[LACS_DUNGEONS_HINT] = HintText::LACS({
                      //obscure text                                                     singular    plural
                      Text{"And the #evil one#'s key will be&provided by Zelda once #%d |Dungeon#&is|Dungeons#&are| conquered.",
                 /*french*/"Aussi, Zelda crééra la clé du&#Malin# une fois #%d |donjon conquéri|donjons conquéris|#.",
-               /*spanish*/"las #piedras espirituales y los medallones#"},
+               /*spanish*/"Y Zelda entregará la llave&del #señor del mal# tras completar&#%d |mazmorra|mazmorras|#."},
     });
 
     hintTable[LACS_TOKENS_HINT] = HintText::LACS({
                      //obscure text                                                     singular                 plural
                      Text{"And the #evil one#'s key will be&provided by Zelda once #%d |Gold&Skulltula Token# is|Gold&Skulltula Tokens# are| retrieved.",
                 /*french*/"Aussi, Zelda crééra la clé du&#Malin# avec #%d |symbole|symboles| de&Skulltula d'or#.",
-               /*spanish*/"Y Zelda entregará la llave&del #señor del mal# tras obtener&#%d |un símbolo|unos símbolos| de&skulltula dorada#."},
+               /*spanish*/"Y Zelda entregará la llave&del #señor del mal# tras obtener&#%d |símbolo|símbolos| de&skulltula dorada#."},
     });
     /*--------------------------
     |     TRIAL HINT TEXT      |
@@ -7154,6 +7330,75 @@ void HintTable_Init() {
                /*spanish*/"!#^La marca que te guiará al #Templo del&Espíritu# es la #bandera que está a la&"+IF_NOT_MQ()+"izquierda"+MQ_ELSE()+"derecha"+MQ_END()+"# al salir de aquí. ¡Nos vemos!"},
     });
 }
+
+s32 StonesRequiredBySettings() {
+    s32 stones = 0;
+    if (Settings::Bridge.Is(RAINBOWBRIDGE_STONES)) {
+        stones = std::max<s32>({ stones, (s32)Settings::BridgeStoneCount.Value<u8>() });
+    }
+    if (Settings::Bridge.Is(RAINBOWBRIDGE_REWARDS)) {
+        stones = std::max<s32>({ stones, (s32)Settings::BridgeRewardCount.Value<u8>() - 6 });
+    }
+    if ((Settings::Bridge.Is(RAINBOWBRIDGE_DUNGEONS)) && (Settings::ShuffleRewards.Is(REWARDSHUFFLE_END_OF_DUNGEON))) {
+        stones = std::max<s32>({ stones, (s32)Settings::BridgeDungeonCount.Value<u8>() - 6 });
+    }
+    if (Settings::GanonsBossKey.Is(GANONSBOSSKEY_LACS_STONES)) {
+        stones = std::max<s32>({ stones, (s32)Settings::LACSStoneCount.Value<u8>() });
+    }
+    if (Settings::GanonsBossKey.Is(GANONSBOSSKEY_LACS_REWARDS)) {
+        stones = std::max<s32>({ stones, (s32)Settings::LACSRewardCount.Value<u8>() - 6 });
+    }
+    if (Settings::GanonsBossKey.Is(GANONSBOSSKEY_LACS_DUNGEONS)) {
+        stones = std::max<s32>({ stones, (s32)Settings::LACSDungeonCount.Value<u8>() - 6 });
+    }
+    return stones;
+}
+
+s32 MedallionsRequiredBySettings() {
+    s32 medallions = 0;
+    if (Settings::Bridge.Is(RAINBOWBRIDGE_MEDALLIONS)) {
+        medallions = std::max<s32>({ medallions, (s32)Settings::BridgeMedallionCount.Value<u8>() });
+    }
+    if (Settings::Bridge.Is(RAINBOWBRIDGE_REWARDS)) {
+        medallions = std::max<s32>({ medallions, (s32)Settings::BridgeRewardCount.Value<u8>() - 3 });
+    }
+    if ((Settings::Bridge.Is(RAINBOWBRIDGE_DUNGEONS)) && (Settings::ShuffleRewards.Is(REWARDSHUFFLE_END_OF_DUNGEON))) {
+        medallions = std::max<s32>({ medallions, (s32)Settings::BridgeDungeonCount.Value<u8>() - 3 });
+    }
+    if (Settings::GanonsBossKey.Is(GANONSBOSSKEY_LACS_MEDALLIONS)) {
+        medallions = std::max<s32>({ medallions, (s32)Settings::LACSMedallionCount.Value<u8>() });
+    }
+    if (Settings::GanonsBossKey.Is(GANONSBOSSKEY_LACS_REWARDS)) {
+        medallions = std::max<s32>({ medallions, (s32)Settings::LACSRewardCount.Value<u8>() - 3 });
+    }
+    if (Settings::GanonsBossKey.Is(GANONSBOSSKEY_LACS_DUNGEONS)) {
+        medallions = std::max<s32>({ medallions, (s32)Settings::LACSDungeonCount.Value<u8>() - 3 });
+    }
+    return medallions;
+}
+
+s32 TokensRequiredBySettings() {
+    s32 tokens = 0;
+    if (Settings::Bridge.Is(RAINBOWBRIDGE_TOKENS)) {
+        tokens = std::max<s32>({ tokens, (s32)Settings::BridgeTokenCount.Value<u8>() });
+    }
+    if (Settings::GanonsBossKey.Is(GANONSBOSSKEY_LACS_TOKENS)) {
+        tokens = std::max<s32>({ tokens, (s32)Settings::LACSTokenCount.Value<u8>() });
+    }
+    return tokens;
+}
+
+std::array<ConditionalAlwaysHint, 9> conditionalAlwaysHints = {
+    std::make_pair(MARKET_10_BIG_POES, [](){ return Settings::BigPoeTargetCount.Value<u8>() >= 3; }), // Remember, the option's value being 3 means 4 are required
+    std::make_pair(DEKU_THEATER_MASK_OF_TRUTH, [](){ return !Settings::CompleteMaskQuest; }),
+    std::make_pair(SONG_FROM_OCARINA_OF_TIME, [](){ return StonesRequiredBySettings() < 2; }),
+    std::make_pair(HF_OCARINA_OF_TIME_ITEM, [](){ return StonesRequiredBySettings() < 2; }),
+    std::make_pair(SHEIK_IN_KAKARIKO, [](){ return MedallionsRequiredBySettings() < 5; }),
+    std::make_pair(DMT_TRADE_CLAIM_CHECK, [](){ return false; }),
+    std::make_pair(KAK_30_GOLD_SKULLTULA_REWARD, [](){ return TokensRequiredBySettings() < 30; }),
+    std::make_pair(KAK_40_GOLD_SKULLTULA_REWARD, [](){ return TokensRequiredBySettings() < 40; }),
+    std::make_pair(KAK_50_GOLD_SKULLTULA_REWARD, [](){ return TokensRequiredBySettings() < 50; })
+};
 
 const HintText& Hint(const HintKey hintKey) {
     return hintTable[hintKey];

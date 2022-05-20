@@ -60,7 +60,7 @@ typedef struct {
     /* 0x0008 */ s32          cutsceneIndex;
     /* 0x000C */ u16          dayTime; // "zelda_time"
     /* 0x000E */ u8           masterQuestFlag;
-    /* 0x000F */ char         unk_F[0x0001];
+    /* 0x000F */ u8           motionControlSetting;
     /* 0x0010 */ s32          nightFlag;
     /* 0x0014 */ s32          unk_14;
     /* 0x0018 */ s32          unk_18;
@@ -142,7 +142,9 @@ typedef struct {
         /* 0x13C8 */ u32 hour;
         /* 0x13CC */ u32 minute;
     }                         saveTime;
-    /* 0x13D0 */ char         unk_13D0[0x0080];
+    /* 0x13D0 */ char         unk_13D0[0x0008];
+    /* 0x13D8 */ u8           cameraControlSetting;
+    /* 0x13D9 */ char         unk_13D9[0x0077];
     /* 0x1450 */ u32          bossBattleVictories[9];
     /* 0x1474 */ u32          bossBattleScores[9];
     /* 0x1498 */ char         unk_1498[0x0040]; //sheikah stone flags?
@@ -167,7 +169,8 @@ typedef struct {
     /* 0x156F */ u8           buttonStatus[5];
     /* 0x1574 */ char         unk_1574[0x000F];
     /* 0x1584 */ u16          magicMeterSize;
-    /* 0x1586 */ char         unk_1586[0x000C];
+    /* 0x1586 */ char         unk_1586[0x0004];
+    /* 0x158A */ u16          eventInf[4];
     /* 0x1592 */ u16          dungeonIndex;
     /* 0x1594 */ char         unk_1594[0x000C];
     /* 0x15A0 */ u16          nextCutsceneIndex;
@@ -271,6 +274,18 @@ typedef struct {
 } ActorListEntry; // size = 0x08
 
 typedef struct {
+    /* 0x00 */ u32    swch;
+    /* 0x04 */ u32    tempSwch;
+    /* 0x08 */ u32    unk0;
+    /* 0x0C */ u32    unk1;
+    /* 0x10 */ u32    chest;
+    /* 0x14 */ u32    clear;
+    /* 0x18 */ u32    tempClear;
+    /* 0x1C */ u32    collect;
+    /* 0x20 */ u32    tempCollect;
+} ActorFlags; // size = 0x24
+
+typedef struct {
     /* 0x0000 */ u8     unk_00;
     /* 0x0001 */ char   unk_01[0x01];
     /* 0x0002 */ u8     unk_02;
@@ -281,17 +296,7 @@ typedef struct {
     /* 0x000C */ ActorListEntry actorList[12];
     // /* 0x006C */ TargetContext targetCtx;
     /* 0x006C */ char   unk_6C[0x130];
-    struct {
-        /* 0x019C */ u32    swch;
-        /* 0x01A0 */ u32    tempSwch;
-        /* 0x01A4 */ u32    unk0;
-        /* 0x01A8 */ u32    unk1;
-        /* 0x01AC */ u32    chest;
-        /* 0x01B0 */ u32    clear;
-        /* 0x01B4 */ u32    tempClear;
-        /* 0x01B8 */ u32    collect;
-        /* 0x01BC */ u32    tempCollect;
-    }                   flags;
+    /* 0x019C */ ActorFlags flags;
     /* 0x01C0 */ TitleCardContext titleCtx;
 } ActorContext; // TODO: size = 0x1D8
 
@@ -405,7 +410,9 @@ typedef struct GlobalContext {
     /* 0x3230 */ u32                   lightSettingsList_addr;
     /* 0x3234 */ char                  unk_3234[0x0824];
     /* 0x3A58 */ ObjectContext         objectCtx;
-    /* 0x43DC */ char                  unk_43DC[0x1824];
+    /* 0x43DC */ char                  unk_43DC[0x0854];
+    /* 0x4C30 */ u8                    roomNum;
+    /* 0x4C31 */ char                  unk_4C31[0x0FCF];
     /* 0x5C00 */ u8                    linkAgeOnLoad;
     /* 0x5C01 */ char                  unk_5C01[0x001B];
     /* 0x5C1C */ s16*                  setupExitList;
@@ -466,6 +473,7 @@ extern const char DungeonNames[][25];
 #define gObjectTable ((ObjectFile*)0x53CCF4)
 #define gEntranceTable ((EntranceInfo*)0x543BB8)
 #define gItemUsabilityTable ((u8*)0x506C58)
+#define gGearUsabilityTable ((u32*)0x4D47C8)
 #define gDungeonSceneTable ((Scene*)0x4DC400)
 #define gMQDungeonSceneTable ((Scene*)0x4DCBA8)
 #define gSceneTable ((Scene*)0x545484)
@@ -474,6 +482,8 @@ extern const char DungeonNames[][25];
 #define gDrawItemTable ((DrawItemTableEntry*)0x4D88C8)
 #define gRestrictionFlags ((RestrictionFlags*)0x539DC4)
 #define PLAYER ((Player*)gGlobalContext->actorCtx.actorList[ACTORTYPE_PLAYER].first)
+
+#define GearSlot(X) (X - ITEM_SWORD_KOKIRI)
 
 typedef enum {
     DUNGEON_DEKU_TREE = 0,
@@ -517,11 +527,11 @@ typedef void (*DisplayTextbox_proc)(GlobalContext* globalCtx, u16 textId, Actor*
 #define DisplayTextbox_addr 0x367C7C
 #define DisplayTextbox ((DisplayTextbox_proc)DisplayTextbox_addr)
 
-typedef u32 (*EventCheck_proc)(u32 param_1);
+typedef u32 (*EventCheck_proc)(u32 flag);
 #define EventCheck_addr 0x350CF4
 #define EventCheck ((EventCheck_proc)EventCheck_addr)
 
-typedef void (*EventSet_proc)(u32 param_1);
+typedef void (*EventSet_proc)(u32 flag);
 #define EventSet_addr 0x34CBF8
 #define EventSet ((EventSet_proc)EventSet_addr)
 
@@ -566,5 +576,25 @@ typedef void (*Message_CloseTextbox_proc)(GlobalContext* globalCtx);
 typedef void (*SetupItemInWater_proc)(Player* player, GlobalContext* globalCtx);
 #define SetupItemInWater_addr 0x354894
 #define SetupItemInWater ((SetupItemInWater_proc)SetupItemInWater_addr)
+
+typedef void (*Health_ChangeBy_proc)(GlobalContext* arg1, u32 arg2);
+#define Health_ChangeBy_addr 0x352DBC
+#define Health_ChangeBy ((Health_ChangeBy_proc)Health_ChangeBy_addr)
+
+typedef void (*PlaySFX_proc)(u32 sfxId, Vec3f* pos, u32 token, f32* freqScale, f32* a4, s8* reverbAdd);
+#define PlaySFX_addr 0x37547C
+#define PlaySFX ((PlaySFX_proc)PlaySFX_addr)
+
+typedef void (*Flags_SetSwitch_proc)(GlobalContext* globalCtx, u32 flag);
+#define Flags_SetSwitch_addr 0x375C10
+#define Flags_SetSwitch ((Flags_SetSwitch_proc)Flags_SetSwitch_addr)
+
+typedef u32 (*Flags_GetSwitch_proc)(GlobalContext* globalCtx, u32 flag);
+#define Flags_GetSwitch_addr 0x36E864
+#define Flags_GetSwitch ((Flags_GetSwitch_proc)Flags_GetSwitch_addr)
+
+typedef u32 (*Flags_GetCollectible_proc)(GlobalContext* globalCtx, u32 flag);
+#define Flags_GetCollectible_addr 0x36405C
+#define Flags_GetCollectible ((Flags_GetCollectible_proc)Flags_GetCollectible_addr)
 
 #endif //_Z3D_H_

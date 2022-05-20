@@ -221,11 +221,6 @@ DampeCheckRewardFlag_patch:
 .section .patch_DampeSetCollectibleFlag
     .word 0x00000806
 
-.section .patch_DampeCheckCollectibleFlag
-.global DampeCheckCollectibleFlag_patch
-DampeCheckCollectibleFlag_patch:
-    bl hook_DampeCheckCollectibleFlag
-
 .section .patch_DampeCheckCanDig1
 .global DampeCheckCanDig1_patch
 DampeCheckCanDig1_patch:
@@ -296,7 +291,7 @@ RainbowBridge_patch:
     cmp r0,#0x0
     pop {r0-r12, lr}
     beq 0x3E7D70
-    b 0x3E7CE0
+    b 0x3E7D34
 
 .section .patch_ModelSpawnGetObjectStatus
 .global ModelSpawnGetObjectStatus_patch
@@ -519,163 +514,29 @@ Kokiri_CheckOpenForest_patch:
 BombchuBowlingStaticReward_patch:
     b 0x20618C
 
-.section .patch_DekuTreeItemGive
-.global DekuTreeItemGive_patch
-DekuTreeItemGive_patch:
-    nop
+.section .patch_ChildBlueWarpOverride
+.global ChildBlueWarpOverride_patch
+ChildBlueWarpOverride_patch:
+    push {r0-r12, lr}
+    bl Cutscene_BlueWarpOverride
+    pop {r0-r12, lr}
+    b 0x3F58A8
 
-.section .patch_DekuTreeCutsceneOverride
-.global DekuTreeCutsceneOverride_patch
-DekuTreeCutsceneOverride_patch:
-    bl Cutscene_OverrideDekuTree
-    nop
+.section .patch_RutoBlueWarpOverride
+.global RutoBlueWarpOverride_patch
+RutoBlueWarpOverride_patch:
+    push {r0-r12, lr}
+    bl Cutscene_BlueWarpOverride
+    pop {r0-r12, lr}
+    b 0x1A1944
 
-.section .patch_DodongosCavernItemGive
-.global DodongosCavernItemGive_patch
-DodongosCavernItemGive_patch:
-    nop
-
-.section .patch_DodongosCavernCutsceneOverride
-.global DodongosCavernCutsceneOverride_patch
-DodongosCavernCutsceneOverride_patch:
-    bl Custcene_OverrideDodongosCavern
-    nop
-
-.section .patch_JabuJabuItemGive
-.global JabuJabuItemGive_patch
-JabuJabuItemGive_patch:
-    nop
-
-.section .patch_JabuJabuCutsceneOverride
-.global JabuJabuCutsceneOverride_patch
-JabuJabuCutsceneOverride_patch:
-    bl Custcene_OverrideJabuJabusBelly
-    nop
-    nop
-
-.section .patch_ForestTempleItemGive
-.global ForestTempleItemGive_patch
-ForestTempleItemGive_patch:
-    nop
-
-.section .patch_ForestTempleItemGiveTwo
-.global ForestTempleItemGiveTwo_patch
-ForestTempleItemGiveTwo_patch:
-    nop
-
-.section .patch_ForestTempleItemGiveThree
-.global ForestTempleItemGiveThree_patch
-ForestTempleItemGiveThree_patch:
-    nop
-
-.section .patch_ForestTempleCutsceneOverride
-.global ForestTempleCutsceneOverride_patch
-ForestTempleCutsceneOverride_patch:
-    bl Custcene_OverrideForestTemple
-    nop
-    nop
-
-.section .patch_FireTempleItemGive
-.global FireTempleItemGive_patch
-FireTempleItemGive_patch:
-    nop
-
-.section .patch_FireTempleItemGiveTwo
-.global FireTempleItemGiveTwo_patch
-FireTempleItemGiveTwo_patch:
-    nop
-
-.section .patch_FireTempleItemGiveThree
-.global FireTempleItemGiveThree_patch
-FireTempleItemGiveThree_patch:
-    nop
-
-.section .patch_FireTempleItemGiveFour
-.global FireTempleItemGiveFour_patch
-FireTempleItemGiveFour_patch:
-    nop
-
-.section .patch_FireTempleCutsceneOverride
-.global FireTempleCutsceneOverride_patch
-FireTempleCutsceneOverride_patch:
-    bl Cutscene_OverrideFireTemple
-    nop
-    nop
-
-.section .patch_WaterTempleItemGive
-.global WaterTempleItemGive_patch
-WaterTempleItemGive_patch:
-    nop
-
-.section .patch_WaterTempleItemGiveTwo
-.global WaterTempleItemGiveTwo_patch
-WaterTempleItemGiveTwo_patch:
-    nop
-
-.section .patch_WaterTempleItemGiveThree
-.global WaterTempleItemGiveThree_patch
-WaterTempleItemGiveThree_patch:
-    nop
-
-.section .patch_WaterTempleCutsceneOverride
-.global WaterTempleCutsceneOverride_patch
-WaterTempleCutsceneOverride_patch:
-    bl Custcene_OverrideWaterTemple
-    nop
-    nop
-    nop
-
-.section .patch_SpiritTempleItemGive
-.global SpiritTempleItemGive_patch
-SpiritTempleItemGive_patch:
-    nop
-
-.section .patch_SpiritTempleItemGiveTwo
-.global SpiritTempleItemGiveTwo_patch
-SpiritTempleItemGiveTwo_patch:
-    nop
-
-.section .patch_SpiritTempleItemGiveThree
-.global SpiritTempleItemGiveThree_patch
-SpiritTempleItemGiveThree_patch:
-    nop
-
-.section .patch_SpiritTempleCompleteCheck
-.global SpiritTempleCompleteCheck_patch
-SpiritTempleCompleteCheck_patch:
-    nop
-
-.section .patch_SpiritTempleCutsceneOverride
-.global SpiritTempleCutsceneOverride_patch
-SpiritTempleCutsceneOverride_patch:
-    bl Custcene_OverrideSpiritTemple
-    nop
-
-.section .patch_ShadowTempleItemGive
-.global ShadowTempleItemGive_patch
-ShadowTempleItemGive_patch:
-    nop
-
-.section .patch_ShadowTempleItemGiveTwo
-.global ShadowTempleItemGiveTwo_patch
-ShadowTempleItemGiveTwo_patch:
-    nop
-
-.section .patch_ShadowTempleItemGiveThree
-.global ShadowTempleItemGiveThree_patch
-ShadowTempleItemGiveThree_patch:
-    nop
-
-.section .patch_ShadowTempleCompleteCheck
-.global ShadowTempleCompleteCheck_patch
-ShadowTempleCompleteCheck_patch:
-    nop
-
-.section .patch_ShadowTempleCutsceneOverride
-.global ShadowTempleCutsceneOverride_patch
-ShadowTempleCutsceneOverride_patch:
-    bl Custcene_OverrideShadowTemple
-    nop
+.section .patch_AdultBlueWarpOverride
+.global AdultBlueWarpOverride_patch
+AdultBlueWarpOverride_patch:
+    push {r0-r12, lr}
+    bl Cutscene_BlueWarpOverride
+    pop {r0-r12, lr}
+    b 0x1E4274
 
 .section .patch_EnExItemModelDraw
 .global EnExItemModelDraw_patch
@@ -829,15 +690,15 @@ ChildDontEquipSwordSlotByDefault_patch:
 LullabyCheckFlag_patch:
     bl hook_LullabyCheckFlag
 
-.section .patch_FishingStoreTempB
-.global FishingStoreTempB_patch
-FishingStoreTempB_patch:
-    bl hook_FishingStoreTempB
+.section .patch_FishingIgnoreTempBOne
+.global FishingIgnoreTempBOne_patch
+FishingIgnoreTempBOne_patch:
+    b hook_FishingIgnoreTempBOne
 
-.section .patch_FishingRestoreTempB
-.global FishingRestoreTempB_patch
-FishingRestoreTempB_patch:
-    bl hook_FishingRestoreTempB
+.section .patch_FishingIgnoreTempBTwo
+.global FishingIgnoreTempBTwo_patch
+FishingIgnoreTempBTwo_patch:
+    b hook_FishingIgnoreTempBTwo
 
 .section .patch_ItemGiveBombchuDropOne
 .global ItemGiveBombchuDropOne_patch
@@ -981,7 +842,6 @@ CowItemOverride_patch:
 .global AnjuCheckCuccoAmount_patch
 AnjuCheckCuccoAmount_patch:
     b hook_AnjuCheckCuccoAmount
-    beq 0x179444
 
 .section .patch_FrogReward
 .global FrogReward_patch
@@ -1191,6 +1051,8 @@ FishingSizeIgnoreAdult_patch:
 .global ReadGossipStoneHints_patch
 ReadGossipStoneHints_patch:
     bl hook_CanReadHints
+    nop
+    nop
     nop
     nop
 
@@ -1658,6 +1520,11 @@ LoadGame_patch:
 SaveGame_patch:
     b hook_SaveGame
 
+.section .patch_DontSetMotionSetting
+.global .DontSetMotionSetting_patch
+DontSetMotionSetting_patch:
+    nop
+
 .section .patch_SaveMenuIgnoreOpen
 .global SaveMenuIgnoreOpen_patch
 SaveMenuIgnoreOpen_patch:
@@ -1698,10 +1565,36 @@ PlayEntranceCutscene_patch:
 SkipJabuOpeningCutscene_patch:
     bl hook_SkipJabuOpeningCutscene
 
+.section .patch_MultiplyPlayerSpeed
+.global MultiplyPlayerSpeed_patch
+MultiplyPlayerSpeed_patch:
+    bl hook_MultiplyPlayerSpeed
+
+.section .patch_RunAnimationSpeed
+.global RunAnimationSpeed_patch
+RunAnimationSpeed_patch:
+    bl hook_RunAnimationSpeed
+
 .section .patch_SilenceNavi
 .global SilenceNavi_patch
 SilenceNavi_patch:
     bl hook_SilenceNavi
+
+.section .patch_ChestMinigame_RewardChestVisibility
+.global ChestMinigame_RewardChestVisibility_patch
+ChestMinigame_RewardChestVisibility_patch:
+    .word 0x00000EC0
+    .word 0x00000EA0
+
+.section .patch_ChestMinigame_KeyChestVisibility
+.global ChestMinigame_KeyChestVisibility_patch
+ChestMinigame_KeyChestVisibility_patch:
+    bl hook_ChestMinigame_KeyChestVisibility
+
+.section .patch_ChestMinigame_DontOpenChestsOnInit
+.global ChestMinigame_DontOpenChestsOnInit_patch
+ChestMinigame_DontOpenChestsOnInit_patch:
+    bl hook_ChestMinigame_DontOpenChestsOnInit
 
 .section .patch_GameplayDestroy
 .global GameplayDestroy_patch
@@ -1727,6 +1620,105 @@ OverrideGrottoActorEntrance_patch:
 .global ReturnFWSetupGrottoInfo_patch
 ReturnFWSetupGrottoInfo_patch:
     bl hook_ReturnFWSetupGrottoInfo
+
+.section .patch_ChildHoverBoots
+.global ChildHoverBoots_patch
+ChildHoverBoots_patch:
+    b hook_ChildHoverBoots
+
+.section .patch_NockArrow
+.global NockArrow_patch
+NockArrow_patch:
+    bl hook_ArrowsOrSeeds
+
+.section .patch_DecreaseArrowCount
+.global DecreaseArrowCount_patch
+DecreaseArrowCount_patch:
+    bl hook_ArrowsOrSeeds
+
+.section .patch_HookshotDrawRedLaser
+.global HookshotDrawRedLaser_patch
+HookshotDrawRedLaser_patch:
+    bl hook_HookshotDrawRedLaser
+
+.section .patch_HookshotDrawChain
+.global HookshotDrawChain_patch
+HookshotDrawChain_patch:
+    b hook_HookshotDrawChain
+
+.section .patch_HookshotRotation
+.global HookshotRotation_patch
+HookshotRotation_patch:
+    bl hook_HookshotRotation
+
+.section .patch_LinkReflection
+.global LinkReflection_patch
+LinkReflection_patch:
+    b hook_LinkReflection
+
+.section .patch_ChildCanOpenBowSubMenu
+.global ChildCanOpenBowSubMenu_patch
+ChildCanOpenBowSubMenu_patch:
+    b hook_ChildCanOpenBowSubMenu
+
+.section .patch_BrownBoulderExplode
+.global BrownBoulderExplode_patch
+BrownBoulderExplode_patch:
+    bl hook_BrownBoulderExplode
+
+.section .patch_RedBoulderExplode
+.global RedBoulderExplode_patch
+RedBoulderExplode_patch:
+    b hook_RedBoulderExplode
+
+.section .patch_Multiplayer_UpdatePrevActorFlags
+.global Multiplayer_UpdatePrevActorFlags_patch
+Multiplayer_UpdatePrevActorFlags_patch:
+    bl hook_Multiplayer_UpdatePrevActorFlags
+
+.section .patch_Multiplayer_OnLoadFile
+.global Multiplayer_OnLoadFile_patch
+Multiplayer_OnLoadFile_patch:
+    b hook_Multiplayer_OnLoadFile
+
+.section .patch_SendDroppedBottleContents
+.global SendDroppedBottleContents_patch
+SendDroppedBottleContents_patch:
+    bl hook_SendDroppedBottleContents
+
+.section .patch_IgnoreMaskReaction
+.global IgnoreMaskReaction_patch
+IgnoreMaskReaction_patch:
+    b hook_IgnoreMaskReaction
+
+.section .patch_MasterQuestGoldSkulltulaCheck
+.global MasterQuestGoldSkulltulaCheck_patch
+MasterQuestGoldSkulltulaCheck_patch:
+    b hook_MasterQuestGoldSkulltulaCheck
+
+.section .patch_WaterSpoutMasterQuestCheck
+.global WaterSpoutMasterQuestCheck_patch
+WaterSpoutMasterQuestCheck_patch:
+    bl hook_WaterSpoutMasterQuestCheck
+
+.section .patch_PierreSoftlockFixOne
+.global PierreSoftlockFixOne_patch
+PierreSoftlockFixOne_patch:
+    pop {r3-r7,lr}
+    bx lr
+
+.section .patch_PierreSoftlockFixTwo
+.global PierreSoftlockFixTwo_patch
+PierreSoftlockFixTwo_patch:
+    bl hook_PierreSoftlockFixTwo
+
+.section .patch_PierreSoftlockFixThree
+.global PierreSoftlockFixThree_patch
+PierreSoftlockFixThree_patch:
+    nop
+    nop
+    nop
+    nop
 
 .section .patch_loader
 .global loader_patch

@@ -106,6 +106,10 @@ u32 Settings_IsTurboText() {
     return (gSettingsContext.quickText >= QUICKTEXT_TURBO && rInputCtx.cur.b);
 }
 
+u32 Settings_GetChestMinigameOption() {
+    return gSettingsContext.shuffleChestMinigame;
+}
+
 void Settings_SkipSongReplays() {
     // msgModes 18 to 23 are used to manage the song replays. Skipping to mode 23 ends the replay.
     // msgMode 18 starts the playback music. It can't be skipped for scarecrow's song (song "12") because it spawns Pierre.
@@ -130,7 +134,26 @@ void Settings_SunsSongEndCloseTextbox() {
     gGlobalContext->unk_2B7E = 4; // msgCtx.ocarinaMode, exits the ocarina playing
 }
 
-  const char hashIconNames[32][25] = {
+s32 Settings_BowAsChild() {
+    return (s32)gSettingsContext.bowAsChild;
+}
+
+s32 Settings_IsMasterQuestDungeon(void) {
+    // Certain actors check the MQ flag in the base game, but they have to check the individual dungeon mode for the randomizer:
+    // - Gold Skulltulas becoming intangible if they're inside blocks in MQ;
+    // - The water jet covering the Boomerang chest (it didn't cover it on GameCube);
+    s16 scene = gGlobalContext->sceneNum;
+    if (scene <= 9)
+        return gSettingsContext.dungeonModes[scene];
+    else if (scene == 11) // GtG
+        return gSettingsContext.dungeonModes[11];
+    else if (scene == 13) // Inside Ganon's Castle
+        return gSettingsContext.dungeonModes[10];
+
+    return 0;
+}
+
+const char hashIconNames[32][25] = {
     "Deku Stick",
     "Deku Nut",
     "Bow",
@@ -163,4 +186,4 @@ void Settings_SunsSongEndCloseTextbox() {
     "Compass",
     "Map",
     "Big Magic",
-  };
+};
