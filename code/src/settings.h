@@ -325,11 +325,6 @@ typedef enum {
   DUNGEON_WOTH,
 } DungeonInfo;
 
-typedef enum {
-  PLAY_ON_CONSOLE,
-  PLAY_ON_CITRA,
-} PlayOption;
-
 typedef struct {
   u8 hashIndexes[5];
   u8 playOption;
