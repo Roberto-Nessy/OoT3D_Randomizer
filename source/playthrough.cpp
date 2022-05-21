@@ -1,5 +1,6 @@
 #include "playthrough.hpp"
 
+#include "custom_messages.hpp"
 #include "fill.hpp"
 #include "location_access.hpp"
 #include "logic.hpp"
@@ -13,22 +14,49 @@
 namespace Playthrough {
 
     int Playthrough_Init(u32 seed) {
+      //initialize the RNG with just the seed incase any settings need to be
+      //resolved to something random
       Random_Init(seed);
 
       overrides.clear();
+      CustomMessages::ClearMessages();
       ItemReset();
       HintReset();
-      Exits::AccessReset();
+      Areas::AccessReset();
 
       Settings::UpdateSettings();
+      //once the settings have been finalized turn them into a string for hashing
+      std::string settingsStr;
+      for (Menu* menu : Settings::GetAllOptionMenus()) {
+        //don't go through non-menus
+        if (menu->mode != OPTION_SUB_MENU) {
+          continue;
+        }
+
+        for (size_t i = 0; i < menu->settingsList->size(); i++) {
+          Option* setting = menu->settingsList->at(i);
+          if (setting->IsCategory(OptionCategory::Setting)) {
+            settingsStr += setting->GetSelectedOptionText();
+          }
+        }
+      }
+      unsigned int finalHash = std::hash<std::string>{}(Settings::seed + settingsStr);
+      Random_Init(finalHash);
+
       Logic::UpdateHelpers();
 
-      int ret = Fill();
-      if (ret < 0) {
-        return ret;
+      if (Settings::Logic.Is(LOGIC_VANILLA)) {
+        VanillaFill(); //Just place items in their vanilla locations
+      }
+      else { //Fill locations with logic
+        int ret = Fill();
+        if (ret < 0) {
+          return ret;
+        }
       }
 
       GenerateHash();
+      WriteIngameSpoilerLog();
 
       if (Settings::GenerateSpoilerLog) {
         //write logs
@@ -46,10 +74,13 @@ namespace Playthrough {
             printf("Failed\n");
           }
         #endif
-      } else {
-        playthroughLocations.clear();
-        playthroughBeatable = false;
+        PlacementLog_Clear();
       }
+
+      playthroughLocations.clear();
+      wothLocations.clear();
+      playthroughBeatable = false;
+
       return 1;
     }
 
@@ -60,7 +91,9 @@ namespace Playthrough {
       for (int i = 0; i < count; i++) {
         repeatedSeed = rand() % 0xFFFFFFFF;
         Settings::seed = std::to_string(repeatedSeed);
-        Playthrough_Init(repeatedSeed);
+        CitraPrint("testing seed: " + Settings::seed);
+        ClearProgress();
+        Playthrough_Init(std::hash<std::string>{}(Settings::seed));
         PlacementLog_Clear();
         printf("\x1b[15;15HSeeds Generated: %d\n", i + 1);
       }

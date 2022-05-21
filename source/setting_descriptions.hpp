@@ -1,5 +1,6 @@
 #pragma once
 #include <string_view>
+#include <vector>
 
 using string_view = std::string_view;
 
@@ -9,15 +10,20 @@ extern string_view shuffleRandomize;
 extern string_view dungeonRandomize;
 
 extern string_view logicGlitchless;
+extern string_view logicGlitched;
 extern string_view logicNoLogic;
+extern string_view logicVanilla;
 
 extern string_view forestOpen;
 extern string_view forestClosed;
+extern string_view forestClosedDeku;
 
 extern string_view kakGateOpen;
 extern string_view kakGateClosed;
 
-extern string_view doorOfTimeDesc;
+extern string_view doorOfTimeOpen;
+extern string_view doorOfTimeClosed;
+extern string_view doorOfTimeIntended;
 
 extern string_view fountainNormal;
 extern string_view fountainAdult;
@@ -47,15 +53,31 @@ extern string_view ganonsTrialCountDesc;
 
 extern string_view ageDesc;
 
+extern string_view shuffleEntrancesDesc;
+
+extern string_view dungeonEntrancesDesc;
+
+extern string_view overworldEntrancesDesc;
+
+extern string_view grottoEntrancesDesc;
+
+extern string_view interiorEntrancesOff;
+extern string_view interiorEntrancesSimple;
+extern string_view interiorEntrancesAll;
+
 extern string_view bombchuLogicDesc;
 
-extern string_view bombchuDropDesc;
+extern string_view defaultAmmoDropsDesc;
+extern string_view bombchuDropsDesc;
+extern string_view noAmmoDropsDesc;
 
-extern string_view randomMQDungeonsDesc;
+extern string_view defaultHeartDropsDesc;
+extern string_view noHeartDropsDesc;
+extern string_view noHeartRefillDesc;
+extern string_view scarceHeartsDesc;
 
 extern string_view mqDungeonCountDesc;
-
-extern string_view mirrorWorldDesc;
+extern string_view setDungeonTypesDesc;
 
 extern string_view shuffleRewardsEndOfDungeon;
 extern string_view shuffleRewardsAnyDungeon;
@@ -101,6 +123,13 @@ extern string_view gerudoTokenDesc;
 
 extern string_view magicBeansDesc;
 
+extern string_view merchantsDesc;
+extern string_view merchantsHintsDesc;
+
+extern string_view adultTradeDesc;
+
+extern string_view chestMinigameDesc;
+
 extern string_view mapCompassStartWith;
 extern string_view mapCompassVanilla;
 extern string_view mapCompassOwnDungeon;
@@ -119,6 +148,8 @@ extern string_view gerudoKeysVanilla;
 extern string_view gerudoKeysAnyDungeon;
 extern string_view gerudoKeysOverworld;
 extern string_view gerudoKeysAnywhere;
+
+extern string_view keyRingDesc;
 
 extern string_view bossKeyStartWith;
 extern string_view bossKeyVanilla;
@@ -153,30 +184,56 @@ extern string_view freeScarecrowDesc;
 
 extern string_view fourPoesDesc;
 
-extern string_view templeOfTimeIntroDesc;
+extern string_view lakeHyliaOwlDesc;
 
 extern string_view bigPoeTargetCountDesc;
 
 extern string_view numRequiredCuccosDesc;
 
+extern string_view kingZoraSpeedFast;
+extern string_view kingZoraSpeedVanilla;
+extern string_view kingZoraSpeedRandom;
+
+extern string_view completeMaskDesc;
+
+extern string_view quickTextDesc0;
+extern string_view quickTextDesc1;
+extern string_view quickTextDesc2;
+extern string_view quickTextDesc3;
+extern string_view skipSongReplaysDesc;
+
+extern string_view keepFWWarpPointDesc;
+
+extern string_view fastBunnyHoodDesc;
+
 extern string_view gossipStonesHintsDesc;
 
-extern string_view clearerHintsDesc;
+extern string_view obscureHintsDesc;
+extern string_view ambiguousHintsDesc;
+extern string_view clearHintsDesc;
 
 extern string_view uselessHintsDesc;
 extern string_view balancedHintsDesc;
 extern string_view strongHintsDesc;
 extern string_view veryStrongHintsDesc;
 
+extern string_view compassesShowRewardsDesc;
+extern string_view compassesShowWotHDesc;
+extern string_view mapsShowDungeonModesDesc;
+
 extern string_view damageMultiDesc;
 
 extern string_view startingTimeDesc;
 
+extern string_view locationsReachableDesc;
 extern string_view nightGSDesc;
 
 extern string_view chestAnimDesc;
 
 extern string_view chestSizeDesc;
+
+extern string_view ingameSpoilersShowDesc;
+extern string_view ingameSpoilersHideDesc;
 
 extern string_view menuButtonDesc;
 
@@ -195,13 +252,77 @@ extern string_view iceTrapsExtra;
 extern string_view iceTrapsMayhem;
 extern string_view iceTrapsOnslaught;
 
+extern string_view removeDDDesc;
+
+extern string_view progGoronSword;
+
+extern string_view faroresWindAnywhereDesc;
+
+extern string_view ageRestrictionsDesc;
 extern string_view adultStickDesc;
-
 extern string_view adultBoomerangDesc;
-
 extern string_view childHammerDesc;
+extern string_view adultSlingshotDesc;
+extern string_view childBowDesc;
+extern string_view childHookshotDesc;
+extern string_view childIronBootsDesc;
+extern string_view childHoverBootsDesc;
+extern string_view adultMasksDesc;
+extern string_view adultKokiriSwordDesc;
+extern string_view childMasterSwordDesc;
+extern string_view childBiggoronSwordDesc;
+extern string_view adultDekuShieldDesc;
+extern string_view childMirrorShieldDesc;
+extern string_view childGoronTunicDesc;
+extern string_view childZoraTunicDesc;
 
-extern string_view ToggleAllDetailedLogicDesc;
+extern string_view gkDurabilityVanilla;
+extern string_view gkDurabilityRandomRisk;
+extern string_view gkDurabilityRandomSafe;
+
+extern string_view mp_EnabledDesc;
+extern string_view mp_SharedProgressDesc;
+extern string_view mp_SyncIdDesc;
+extern string_view mp_SharedHealthDesc;
+extern string_view mp_SharedRupeesDesc;
+extern string_view mp_SharedAmmoDesc;
+
+extern string_view zTargetingDesc;
+extern string_view cameraControlDesc;
+extern string_view motionControlDesc;
+extern string_view togglePlayMusicDesc;
+extern string_view togglePlaySFXDesc;
+extern string_view silenceNaviDesc;
+extern string_view ignoreMaskReactionDesc;
+
+extern string_view coloredKeysDesc;
+extern string_view coloredBossKeysDesc;
+
+extern string_view mirrorWorldDesc;
+
+extern string_view musicRandoDesc;
+extern string_view shuffleBGMDesc;
+extern string_view fanfaresOffDesc;
+extern string_view onlyFanfaresDesc;
+extern string_view fanfaresOcarinaDesc;
+extern string_view shuffleOcaMusicDesc;
+
+extern string_view shuffleSFXOff;
+extern string_view shuffleSFXAll;
+extern string_view shuffleSFXSceneSpecific;
+extern string_view shuffleSFXChaos;
+extern string_view shuffleSFXCategorically;
+
+extern string_view randomTrapDmgDesc;
+extern string_view basicTrapDmgDesc;
+extern string_view advancedTrapDmgDesc;
+
+extern string_view ToggleAllTricksDesc;
+
+extern string_view ToggleLogicNoneDesc;
+extern string_view ToggleLogicNoviceDesc;
+extern string_view ToggleLogicIntermediateDesc;
+extern string_view ToggleLogicExpertDesc;
 extern string_view LogicGrottosWithoutAgonyDesc;
 extern string_view LogicVisibleCollisionDesc;
 extern string_view LogicFewerTunicRequirementsDesc;
@@ -210,6 +331,7 @@ extern string_view LogicLabDivingDesc;
 extern string_view LogicLabWallGSDesc;
 extern string_view LogicGraveyardPoHDesc;
 extern string_view LogicChildDampeRacePoHDesc;
+extern string_view LogicGVHammerChestDesc;
 extern string_view LogicGerudoKitchenDesc;
 extern string_view LogicLensWastelandDesc;
 extern string_view LogicReverseWastelandDesc;
@@ -285,3 +407,27 @@ extern string_view LogicLensBotwMQDesc;
 extern string_view LogicLensGtgMQDesc;
 extern string_view LogicLensCastleMQDesc;
 extern string_view LogicSpiritTrialHookshotDesc;
+extern string_view LogicFlamingChestsDesc;
+
+extern const std::vector<string_view> GlitchDifficulties;
+extern string_view GlitchISGDescDisabled;
+extern string_view GlitchISGDescNovice;
+extern string_view GlitchHoverDescDisabled;
+extern string_view GlitchHoverDescNovice;
+extern string_view GlitchHoverDescIntermediate;
+extern string_view GlitchHoverDescAdvanced;
+extern string_view GlitchMegaflipDescDisabled;
+extern string_view GlitchMegaflipDescNovice;
+extern string_view GlitchMegaflipDescIntermediate;
+extern string_view GlitchHookshotClipDescDisabled;
+extern string_view GlitchHookshotClipDescNovice;
+extern string_view GlitchHookshotJump_BonkDescDisabled;
+extern string_view GlitchHookshotJump_BonkDescIntermediate;
+extern string_view GlitchHookshotJump_BootsDescDisabled;
+extern string_view GlitchHookshotJump_BootsDescNovice;
+extern string_view GlitchHookshotJump_BootsDescIntermediate;
+extern string_view GlitchLedgeClipDescDisabled;
+extern string_view GlitchLedgeClipDescNovice;
+extern string_view GlitchLedgeClipDescIntermediate;
+extern string_view GlitchTripleSlashClipDescDisabled;
+extern string_view GlitchTripleSlashClipDescNovice;

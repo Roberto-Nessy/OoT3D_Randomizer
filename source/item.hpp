@@ -4,7 +4,8 @@
 #include <string>
 #include <variant>
 
-#include "hints.hpp"
+#include "keys.hpp"
+#include "hint_list.hpp"
 #include "settings.hpp"
 
 union ItemOverride_Value;
@@ -27,8 +28,9 @@ enum ItemType {
 
 class Item {
 public:
-    Item(std::string name_, ItemType type_, int getItemId_, bool advancement_, bool* logicVar_, HintText* hintText_, u16 price_ = 0);
-    Item(std::string name_, ItemType type_, int getItemId_, bool advancement_, u8* logicVar_, HintText* hintText_, u16 price_ = 0);
+    Item() = default;
+    Item(Text name_, ItemType type_, int getItemId_, bool advancement_, bool* logicVar_, HintKey hintKey_, u16 price_ = 0);
+    Item(Text name_, ItemType type_, int getItemId_, bool advancement_, u8* logicVar_, HintKey hintKey_, u16 price_ = 0);
     ~Item();
 
     void ApplyEffect();
@@ -36,7 +38,7 @@ public:
 
     ItemOverride_Value Value() const;
 
-    const std::string& GetName() const {
+    const Text& GetName() const {
         return name;
     }
 
@@ -88,7 +90,7 @@ public:
             return false;
         }
 
-        if (name.find("Bombchus") != std::string::npos && !BombchusInLogic) {
+        if (name.GetEnglish().find("Bombchus") != std::string::npos && !BombchusInLogic) {
             return false;
         }
 
@@ -111,8 +113,12 @@ public:
         return IsAdvancement();
     }
 
-    HintText GetHintText() const {
-        return *hintText;
+    const HintKey GetHintKey() const {
+        return hintKey;
+    }
+
+    const HintText& GetHint() const {
+        return Hint(hintKey);
     }
 
     bool operator== (const Item& right) const {
@@ -124,12 +130,12 @@ public:
     }
 
 private:
-    std::string name;
+    Text name;
     ItemType type;
     int  getItemId;
     bool advancement;
     std::variant<bool*, u8*> logicVar;
-    HintText* hintText;
+    HintKey hintKey;
     u16  price;
     bool playthrough = false;
 };

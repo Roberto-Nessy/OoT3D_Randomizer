@@ -11,11 +11,12 @@ sectionsInfo = [line.split()[1:6] for line in lines if line.split() and line.spl
 sections = ((sec[0], int(sec[2],16), int(sec[4],16), int(sec[1],16)) for sec in sectionsInfo if int(sec[2],16) != 0)
 
 # Put here the symbols from the patch which are needed by the app
-desiredSymbols = ("rItemOverrides", "gSettingsContext", "rScrubRandomItemPrices", "rDungeonRewardOverrides", "rCustomMessages", "numCustomMessageEntries", "ptrCustomMessageEntries", "rShopsanityPrices")
+desiredSymbols = ("rItemOverrides", "gSettingsContext", "gSpoilerData", "rScrubRandomItemPrices", "rDungeonRewardOverrides", "rCustomMessages", 
+"numCustomMessageEntries", "ptrCustomMessageEntries", "rShopsanityPrices", "rEntranceOverrides", "rBGMOverrides", "rSfxData", "rDungeonInfoData")
 
 nmResult = subprocess.run([os.environ["DEVKITARM"] + r'/bin/arm-none-eabi-nm', elf], stdout=subprocess.PIPE)
 nmLines = str(nmResult.stdout).split('\\n')
-symbolsInfo = [line.split() for line in nmLines if len(line.split()) >= 2 and line.split()[2].replace("\\r", "") in desiredSymbols]
+symbolsInfo = [line.split() for line in nmLines if len(line.split()) >= 3 and line.split()[2].replace("\\r", "") in desiredSymbols]
 symbols = {sym[2].replace("\\r", ""):hex(int(sym[0],16)) for sym in symbolsInfo}
 symbolsJson = json.dumps(symbols, indent=4)
 with open("../source/patch_symbols.hpp", 'w') as syms:
@@ -52,4 +53,3 @@ ips += b'EOF'
 
 with open("basecode.ips", 'wb') as patchFile:
     patchFile.write(ips)
-print("created basecode.ips")

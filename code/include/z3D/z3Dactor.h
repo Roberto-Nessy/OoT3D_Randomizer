@@ -209,7 +209,14 @@ typedef struct {
 
 typedef struct {
     /* 0x0000 */ Actor  actor;
-    /* 0x01A4 */ char   unk_148[0x00A8];
+    /* 0x01A4 */ char   unk_148[0x0005];
+    /* 0x01A9 */ s8     heldItemActionParam;
+    /* 0x01AA */ u8     heldItemId;
+    /* 0x01AB */ char   unk_1AB[0x1];
+    /* 0x01AC */ s8     itemActionParam;
+    /* 0x01AD */ char   unk_1AD[0x000A];
+    /* 0x01B7 */ u8     currentMask;
+    /* 0x01B8 */ char   unk_1B8[0x94];
     /* 0x024C */ void*  giDrawSpace;
     /* 0x0250 */ char   unk_250[0x0004];
     /* 0x0254 */ struct SkelAnime skelAnime;
@@ -218,14 +225,20 @@ typedef struct {
     /* 0x12AD */ char   unk_12AD[0x0001];
     /* 0x12AE */ u16    getItemDirection;
     /* 0x12B0 */ Actor* interactRangeActor;
-    /* 0x12B4 */ char   unk_12B4[0x045C];
+    /* 0x12B4 */ char   unk_12B4[0x0454];
+    /* 0x1708 */ void*  stateFuncPtr;
+    /* 0x170C */ char   unk_170C[0x0004];
     /* 0x1710 */ u32    stateFlags1;
     /* 0x1714 */ u32    stateFlags2;
-    /* 0x1718 */ char   unk_1718[0x0B04];
+    /* 0x1718 */ char   unk_1718[0x0013];
+    /* 0x172B */ s8     exchangeItemId;
+    /* 0x172C */ char   unk_172C[0x0AF0];
     /* 0x221C */ float  xzSpeed; //probably
     /* 0x2220 */ char   unk_2220[0x0007];
     /* 0x2227 */ u8     isg;
-    /* 0x2228 */ char   unk_2228[0x4DC];
+    /* 0x2228 */ char   unk_2228[0x260];
+    /* 0x2488 */ s8     invincibilityTimer; // prevents damage when nonzero (positive = visible, counts towards zero each frame)
+    /* 0x2489 */ char   unk_2489[0x27B];
     /* 0x2704 */ struct SkeletonAnimationModel_unk_0C* bodyTexAnim;
 } Player; //total size (from init vars): 2A4C
 
@@ -254,5 +267,9 @@ typedef struct ActorHeapNode {
 
 void Actor_Kill(Actor* actor);
 #define gActorOverlayTable ((ActorOverlay*)0x50CD84)
+
+typedef u32 (*Actor_HasParent_proc)(Actor* actor, struct GlobalContext* globalCtx);
+#define Actor_HasParent_addr 0x371E40
+#define Actor_HasParent ((Actor_HasParent_proc)Actor_HasParent_addr)
 
 #endif

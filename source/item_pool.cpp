@@ -12,423 +12,424 @@
 using namespace Settings;
 using namespace Dungeon;
 
-std::vector<Item> ItemPool = {};
-std::vector<Item> PendingJunkPool = {};
-std::vector<Item> dungeonRewards = {
-  I_KokiriEmerald,
-  I_GoronRuby,
-  I_ZoraSaphhire,
-  I_ForestMedallion,
-  I_FireMedallion,
-  I_WaterMedallion,
-  I_SpiritMedallion,
-  I_ShadowMedallion,
-  I_LightMedallion,
+std::vector<ItemKey> ItemPool = {};
+std::vector<ItemKey> PendingJunkPool = {};
+std::vector<u8> IceTrapModels = {};
+const std::array<ItemKey, 9> dungeonRewards = {
+  KOKIRI_EMERALD,
+  GORON_RUBY,
+  ZORA_SAPPHIRE,
+  FOREST_MEDALLION,
+  FIRE_MEDALLION,
+  WATER_MEDALLION,
+  SPIRIT_MEDALLION,
+  SHADOW_MEDALLION,
+  LIGHT_MEDALLION,
 };
-const std::array<Item, 16> JunkPoolItems = {
-  Bombs5,
-  Bombs10,
-  Bombs20,
-  DekuNuts5,
-  DekuStick1,
-  DekuSeeds30,
-  RecoveryHeart,
-  Arrows5,
-  Arrows10,
-  Arrows30,
-  BlueRupee,
-  RedRupee,
-  PurpleRupee,
-  HugeRupee,
-  DekuNuts10,
-  IceTrap,
+const std::array<ItemKey, 16> JunkPoolItems = {
+  BOMBS_5,
+  BOMBS_10,
+  BOMBS_20,
+  DEKU_NUTS_5,
+  DEKU_STICK_1,
+  DEKU_SEEDS_30,
+  RECOVERY_HEART,
+  ARROWS_5,
+  ARROWS_10,
+  ARROWS_30,
+  BLUE_RUPEE,
+  RED_RUPEE,
+  PURPLE_RUPEE,
+  HUGE_RUPEE,
+  DEKU_NUTS_10,
+  ICE_TRAP,
 };
-const std::array<Item, 59> alwaysItems = {
-  I_BiggoronSword,
-  I_Boomerang,
-  I_LensOfTruth,
-  I_MegatonHammer,
-  I_IronBoots,
-  I_GoronTunic,
-  I_ZoraTunic,
-  I_HoverBoots,
-  I_MirrorShield,
-  I_ShardOfAgony,
-  I_FireArrows,
-  I_IceArrows,
-  I_LightArrows,
-  I_DinsFire,
-  I_FaroresWind,
-  I_NayrusLove,
-  GreenRupee,
-  I_ProgressiveHookshot,  //2 progressive hookshots
-  I_ProgressiveHookshot,
-  I_DekuShield,
-  I_HylianShield,
-  I_ProgressiveStrength,  //3 progressive strength upgrades
-  I_ProgressiveStrength,
-  I_ProgressiveStrength,
-  I_ProgressiveScale,     //2 progressive scales
-  I_ProgressiveScale,
-  I_ProgressiveBow,       //3 progressive Bows
-  I_ProgressiveBow,
-  I_ProgressiveBow,
-  I_ProgressiveBulletBag, //3 progressive bullet bags
-  I_ProgressiveBulletBag,
-  I_ProgressiveBulletBag,
-  I_ProgressiveBombBag,   //3 progressive bomb bags
-  I_ProgressiveBombBag,
-  I_ProgressiveBombBag,
-  I_ProgressiveWallet, //2 progressive wallets
-  I_ProgressiveWallet,
-  I_ProgressiveMagic,  //2 progressive magic meters
-  I_ProgressiveMagic,
-  I_DoubleDefense,
-  I_ProgressiveStickCapacity, //2 stick upgrades
-  I_ProgressiveStickCapacity,
-  I_ProgressiveNutCapacity,   //2 nut upgrades
-  I_ProgressiveNutCapacity,
-  RecoveryHeart,  //6 recovery hearts
-  RecoveryHeart,
-  RecoveryHeart,
-  RecoveryHeart,
-  RecoveryHeart,
-  RecoveryHeart,
-  Bombs5, //2
-  Bombs5,
-  Bombs10,
-  Bombs20,
-  Arrows5,
-  Arrows10, //5
-  Arrows10,
-  Arrows10,
-  TreasureGameHeart,
+const std::array<ItemKey, 59> alwaysItems = {
+  BIGGORON_SWORD,
+  BOOMERANG,
+  LENS_OF_TRUTH,
+  MEGATON_HAMMER,
+  IRON_BOOTS,
+  GORON_TUNIC,
+  ZORA_TUNIC,
+  HOVER_BOOTS,
+  MIRROR_SHIELD,
+  SHARD_OF_AGONY,
+  FIRE_ARROWS,
+  ICE_ARROWS,
+  LIGHT_ARROWS,
+  DINS_FIRE,
+  FARORES_WIND,
+  NAYRUS_LOVE,
+  GREEN_RUPEE,
+  PROGRESSIVE_HOOKSHOT,  //2 progressive hookshots
+  PROGRESSIVE_HOOKSHOT,
+  DEKU_SHIELD,
+  HYLIAN_SHIELD,
+  PROGRESSIVE_STRENGTH,  //3 progressive strength upgrades
+  PROGRESSIVE_STRENGTH,
+  PROGRESSIVE_STRENGTH,
+  PROGRESSIVE_SCALE,     //2 progressive scales
+  PROGRESSIVE_SCALE,
+  PROGRESSIVE_BOW,       //3 progressive Bows
+  PROGRESSIVE_BOW,
+  PROGRESSIVE_BOW,
+  PROGRESSIVE_SLINGSHOT, //3 progressive bullet bags
+  PROGRESSIVE_SLINGSHOT,
+  PROGRESSIVE_SLINGSHOT,
+  PROGRESSIVE_BOMB_BAG,   //3 progressive bomb bags
+  PROGRESSIVE_BOMB_BAG,
+  PROGRESSIVE_BOMB_BAG,
+  PROGRESSIVE_WALLET, //2 progressive wallets
+  PROGRESSIVE_WALLET,
+  PROGRESSIVE_MAGIC_METER,  //2 progressive magic meters
+  PROGRESSIVE_MAGIC_METER,
+  DOUBLE_DEFENSE,
+  PROGRESSIVE_STICK_UPGRADE, //2 stick upgrades
+  PROGRESSIVE_STICK_UPGRADE,
+  PROGRESSIVE_NUT_UPGRADE,   //2 nut upgrades
+  PROGRESSIVE_NUT_UPGRADE,
+  RECOVERY_HEART,  //6 recovery hearts
+  RECOVERY_HEART,
+  RECOVERY_HEART,
+  RECOVERY_HEART,
+  RECOVERY_HEART,
+  RECOVERY_HEART,
+  BOMBS_5, //2
+  BOMBS_5,
+  BOMBS_10,
+  BOMBS_20,
+  ARROWS_5,
+  ARROWS_10, //5
+  ARROWS_10,
+  ARROWS_10,
+  TREASURE_GAME_HEART,
 };
-const std::array<Item, 43> easyItems = {
-  I_BiggoronSword,
-  I_KokiriSword,
-  I_Boomerang,
-  I_LensOfTruth,
-  I_MegatonHammer,
-  I_IronBoots,
-  I_GoronTunic,
-  I_ZoraTunic,
-  I_HoverBoots,
-  I_MirrorShield,
-  I_FireArrows,
-  I_LightArrows,
-  I_DinsFire,
-  I_ProgressiveHookshot,
-  I_ProgressiveStrength,
-  I_ProgressiveScale,
-  I_ProgressiveWallet,
-  I_ProgressiveMagic,
-  I_ProgressiveStickCapacity,
-  I_ProgressiveNutCapacity,
-  I_ProgressiveBow,
-  I_ProgressiveBulletBag,
-  I_ProgressiveBombBag,
-  I_DoubleDefense,
-  HeartContainer, //16 Heart Containers
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
-  PieceOfHeart,   //3 heart pieces
-  PieceOfHeart,
-  PieceOfHeart,
+const std::array<ItemKey, 43> easyItems = {
+  BIGGORON_SWORD,
+  KOKIRI_SWORD,
+  BOOMERANG,
+  LENS_OF_TRUTH,
+  MEGATON_HAMMER,
+  IRON_BOOTS,
+  GORON_TUNIC,
+  ZORA_TUNIC,
+  HOVER_BOOTS,
+  MIRROR_SHIELD,
+  FIRE_ARROWS,
+  LIGHT_ARROWS,
+  DINS_FIRE,
+  PROGRESSIVE_HOOKSHOT,
+  PROGRESSIVE_STRENGTH,
+  PROGRESSIVE_SCALE,
+  PROGRESSIVE_WALLET,
+  PROGRESSIVE_MAGIC_METER,
+  PROGRESSIVE_STICK_UPGRADE,
+  PROGRESSIVE_NUT_UPGRADE,
+  PROGRESSIVE_BOW,
+  PROGRESSIVE_SLINGSHOT,
+  PROGRESSIVE_BOMB_BAG,
+  DOUBLE_DEFENSE,
+  HEART_CONTAINER, //16 Heart Containers
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  PIECE_OF_HEART,   //3 heart pieces
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
 };
-const std::array<Item, 43> normalItems = {
-  PieceOfHeart,   //35 pieces of heart
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  PieceOfHeart,
-  HeartContainer, //8 heart containers
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
-  HeartContainer,
+const std::array<ItemKey, 43> normalItems = {
+  PIECE_OF_HEART,   //35 pieces of heart
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  PIECE_OF_HEART,
+  HEART_CONTAINER, //8 heart containers
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
+  HEART_CONTAINER,
 };
-const std::array<Item, 2> DT_Vanilla = {
-  RecoveryHeart,
-  RecoveryHeart,
+const std::array<ItemKey, 2> DT_Vanilla = {
+  RECOVERY_HEART,
+  RECOVERY_HEART,
 };
-const std::array<Item, 3> DT_MQ = {
-  I_DekuShield,
-  I_DekuShield,
-  PurpleRupee,
+const std::array<ItemKey, 3> DT_MQ = {
+  DEKU_SHIELD,
+  DEKU_SHIELD,
+  PURPLE_RUPEE,
 };
-const std::array<Item, 1> DC_Vanilla = {
-  RedRupee,
+const std::array<ItemKey, 1> DC_Vanilla = {
+  RED_RUPEE,
 };
-const std::array<Item, 2> DC_MQ = {
-  I_HylianShield,
-  BlueRupee,
+const std::array<ItemKey, 2> DC_MQ = {
+  HYLIAN_SHIELD,
+  BLUE_RUPEE,
 };
-const std::array<Item, 7> JB_MQ = {
-  DekuNuts5,
-  DekuNuts5,
-  DekuNuts5,
-  DekuNuts5,
-  RecoveryHeart,
-  I_DekuShield,
-  DekuStick1,
+const std::array<ItemKey, 7> JB_MQ = {
+  DEKU_NUTS_5,
+  DEKU_NUTS_5,
+  DEKU_NUTS_5,
+  DEKU_NUTS_5,
+  RECOVERY_HEART,
+  DEKU_SHIELD,
+  DEKU_STICK_1,
 };
-const std::array<Item, 3> FoT_Vanilla = {
-  RecoveryHeart,
-  Arrows10,
-  Arrows30,
+const std::array<ItemKey, 3> FoT_Vanilla = {
+  RECOVERY_HEART,
+  ARROWS_10,
+  ARROWS_30,
 };
-const std::array<Item, 1> FoT_MQ = {
-  Arrows5,
+const std::array<ItemKey, 1> FoT_MQ = {
+  ARROWS_5,
 };
-const std::array<Item, 1> FiT_Vanilla = {
-  HugeRupee,
+const std::array<ItemKey, 1> FiT_Vanilla = {
+  HUGE_RUPEE,
 };
-const std::array<Item, 2> FiT_MQ = {
-  Bombs20,
-  I_HylianShield,
+const std::array<ItemKey, 2> FiT_MQ = {
+  BOMBS_20,
+  HYLIAN_SHIELD,
 };
-const std::array<Item, 4> SpT_Vanilla = {
-  I_DekuShield,
-  I_DekuShield,
-  RecoveryHeart,
-  Bombs20,
+const std::array<ItemKey, 4> SpT_Vanilla = {
+  DEKU_SHIELD,
+  DEKU_SHIELD,
+  RECOVERY_HEART,
+  BOMBS_20,
 };
-const std::array<Item, 3> SpT_MQ = {
-  PurpleRupee,
-  PurpleRupee,
-  Arrows30,
+const std::array<ItemKey, 3> SpT_MQ = {
+  PURPLE_RUPEE,
+  PURPLE_RUPEE,
+  ARROWS_30,
 };
-const std::array<Item, 1> ShT_Vanilla = {
-  Arrows30,
+const std::array<ItemKey, 1> ShT_Vanilla = {
+  ARROWS_30,
 };
-const std::array<Item, 3> ShT_MQ = {
-  Arrows5,
-  Arrows5,
-  RedRupee,
+const std::array<ItemKey, 3> ShT_MQ = {
+  ARROWS_5,
+  ARROWS_5,
+  RED_RUPEE,
 };
-const std::array<Item, 7> BW_Vanilla = {
-  RecoveryHeart,
-  Bombs10,
-  HugeRupee,
-  DekuNuts5,
-  DekuNuts10,
-  I_DekuShield,
-  I_HylianShield,
+const std::array<ItemKey, 7> BW_Vanilla = {
+  RECOVERY_HEART,
+  BOMBS_10,
+  HUGE_RUPEE,
+  DEKU_NUTS_5,
+  DEKU_NUTS_10,
+  DEKU_SHIELD,
+  HYLIAN_SHIELD,
 };
-const std::array<Item, 4> GTG_Vanilla = {
-  Arrows30,
-  Arrows30,
-  Arrows30,
-  HugeRupee,
+const std::array<ItemKey, 4> GTG_Vanilla = {
+  ARROWS_30,
+  ARROWS_30,
+  ARROWS_30,
+  HUGE_RUPEE,
 };
-const std::array<Item, 5> GTG_MQ = {
-  TreasureGameGreenRupee,
-  TreasureGameGreenRupee,
-  Arrows10,
-  GreenRupee,
-  PurpleRupee,
+const std::array<ItemKey, 5> GTG_MQ = {
+  TREASURE_GAME_GREEN_RUPEE,
+  TREASURE_GAME_GREEN_RUPEE,
+  ARROWS_10,
+  GREEN_RUPEE,
+  PURPLE_RUPEE,
 };
-const std::array<Item, 4> GC_Vanilla = {
-  BlueRupee,
-  BlueRupee,
-  BlueRupee,
-  Arrows30,
+const std::array<ItemKey, 4> GC_Vanilla = {
+  BLUE_RUPEE,
+  BLUE_RUPEE,
+  BLUE_RUPEE,
+  ARROWS_30,
 };
-const std::array<Item, 5> GC_MQ = {
-  Arrows10,
-  Arrows10,
-  Bombs5,
-  RedRupee,
-  RecoveryHeart,
+const std::array<ItemKey, 5> GC_MQ = {
+  ARROWS_10,
+  ARROWS_10,
+  BOMBS_5,
+  RED_RUPEE,
+  RECOVERY_HEART,
 };
-const std::array<Item, 11> normalBottles = {
-  I_EmptyBottle,
-  I_MilkBottle,
-  I_RedPotionBottle,
-  I_GreenPotionBottle,
-  I_BluePotionBottle,
-  I_FairyBottle,
-  I_FishBottle,
-  I_BugsBottle,
-  I_PoeBottle,
-  I_BigPoeBottle,
-  I_BlueFireBottle,
+const std::array<ItemKey, 11> normalBottles = {
+  EMPTY_BOTTLE,
+  BOTTLE_WITH_MILK,
+  BOTTLE_WITH_RED_POTION,
+  BOTTLE_WITH_GREEN_POTION,
+  BOTTLE_WITH_BLUE_POTION,
+  BOTTLE_WITH_FAIRY,
+  BOTTLE_WITH_FISH,
+  BOTTLE_WITH_BUGS,
+  BOTTLE_WITH_POE,
+  BOTTLE_WITH_BIG_POE,
+  BOTTLE_WITH_BLUE_FIRE,
 };
-const std::array<Item, 28> normalRupees = {
-  BlueRupee,
-  BlueRupee,
-  BlueRupee,
-  BlueRupee,
-  BlueRupee,
-  BlueRupee,
-  BlueRupee,
-  BlueRupee,
-  BlueRupee,
-  BlueRupee,
-  BlueRupee,
-  BlueRupee,
-  BlueRupee,
-  RedRupee,
-  RedRupee,
-  RedRupee,
-  RedRupee,
-  RedRupee,
-  PurpleRupee,
-  PurpleRupee,
-  PurpleRupee,
-  PurpleRupee,
-  PurpleRupee,
-  PurpleRupee,
-  PurpleRupee,
-  HugeRupee,
-  HugeRupee,
-  HugeRupee,
+const std::array<ItemKey, 28> normalRupees = {
+  BLUE_RUPEE,
+  BLUE_RUPEE,
+  BLUE_RUPEE,
+  BLUE_RUPEE,
+  BLUE_RUPEE,
+  BLUE_RUPEE,
+  BLUE_RUPEE,
+  BLUE_RUPEE,
+  BLUE_RUPEE,
+  BLUE_RUPEE,
+  BLUE_RUPEE,
+  BLUE_RUPEE,
+  BLUE_RUPEE,
+  RED_RUPEE,
+  RED_RUPEE,
+  RED_RUPEE,
+  RED_RUPEE,
+  RED_RUPEE,
+  PURPLE_RUPEE,
+  PURPLE_RUPEE,
+  PURPLE_RUPEE,
+  PURPLE_RUPEE,
+  PURPLE_RUPEE,
+  PURPLE_RUPEE,
+  PURPLE_RUPEE,
+  HUGE_RUPEE,
+  HUGE_RUPEE,
+  HUGE_RUPEE,
 };
-const std::array<Item, 28> shopsanityRupees = {
-  BlueRupee,
-  BlueRupee,
-  RedRupee,
-  RedRupee,
-  RedRupee,
-  RedRupee,
-  RedRupee,
-  RedRupee,
-  RedRupee,
-  RedRupee,
-  RedRupee,
-  RedRupee,
-  PurpleRupee,
-  PurpleRupee,
-  PurpleRupee,
-  PurpleRupee,
-  PurpleRupee,
-  PurpleRupee,
-  PurpleRupee,
-  PurpleRupee,
-  PurpleRupee,
-  PurpleRupee,
-  HugeRupee,
-  HugeRupee,
-  HugeRupee,
-  HugeRupee,
-  HugeRupee,
-  I_ProgressiveWallet,
+const std::array<ItemKey, 28> shopsanityRupees = {
+  BLUE_RUPEE,
+  BLUE_RUPEE,
+  RED_RUPEE,
+  RED_RUPEE,
+  RED_RUPEE,
+  RED_RUPEE,
+  RED_RUPEE,
+  RED_RUPEE,
+  RED_RUPEE,
+  RED_RUPEE,
+  RED_RUPEE,
+  RED_RUPEE,
+  PURPLE_RUPEE,
+  PURPLE_RUPEE,
+  PURPLE_RUPEE,
+  PURPLE_RUPEE,
+  PURPLE_RUPEE,
+  PURPLE_RUPEE,
+  PURPLE_RUPEE,
+  PURPLE_RUPEE,
+  PURPLE_RUPEE,
+  PURPLE_RUPEE,
+  HUGE_RUPEE,
+  HUGE_RUPEE,
+  HUGE_RUPEE,
+  HUGE_RUPEE,
+  HUGE_RUPEE,
+  PROGRESSIVE_WALLET,
 };
-const std::array<Item, 19> dekuScrubItems = {
-  DekuNuts5,
-  DekuNuts5,
-  DekuNuts5,
-  DekuNuts5,
-  DekuNuts5,
-  DekuStick1,
-  Bombs5,
-  Bombs5,
-  Bombs5,
-  Bombs5,
-  Bombs5,
-  RecoveryHeart,
-  RecoveryHeart,
-  RecoveryHeart,
-  RecoveryHeart,
-  BlueRupee,
-  BlueRupee,
-  BlueRupee,
-  BlueRupee,
+const std::array<ItemKey, 19> dekuScrubItems = {
+  DEKU_NUTS_5,
+  DEKU_NUTS_5,
+  DEKU_NUTS_5,
+  DEKU_NUTS_5,
+  DEKU_NUTS_5,
+  DEKU_STICK_1,
+  BOMBS_5,
+  BOMBS_5,
+  BOMBS_5,
+  BOMBS_5,
+  BOMBS_5,
+  RECOVERY_HEART,
+  RECOVERY_HEART,
+  RECOVERY_HEART,
+  RECOVERY_HEART,
+  BLUE_RUPEE,
+  BLUE_RUPEE,
+  BLUE_RUPEE,
+  BLUE_RUPEE,
 };
-const std::array<Item, 12> songList = {
-  I_ZeldasLullaby,
-  I_EponasSong,
-  I_SunsSong,
-  I_SariasSong,
-  I_SongOfTime,
-  I_SongOfStorms,
-  I_MinuetOfForest,
-  I_PreludeOfLight,
-  I_BoleroOfFire,
-  I_SerenadeOfWater,
-  I_NocturneOfShadow,
-  I_RequiemOfSpirit,
+const std::array<ItemKey, 12> songList = {
+  ZELDAS_LULLABY,
+  EPONAS_SONG,
+  SUNS_SONG,
+  SARIAS_SONG,
+  SONG_OF_TIME,
+  SONG_OF_STORMS,
+  MINUET_OF_FOREST,
+  PRELUDE_OF_LIGHT,
+  BOLERO_OF_FIRE,
+  SERENADE_OF_WATER,
+  NOCTURNE_OF_SHADOW,
+  REQUIEM_OF_SPIRIT,
 };
-const std::array<Item, 10> tradeItems = {
-  I_PocketEgg,
-  I_PocketCucco,
-  I_Cojiro,
-  I_OddMushroom,
-  I_PoachersSaw,
-  I_BrokenSword,
-  I_Prescription,
-  I_EyeballFrog,
-  I_Eyedrops,
-  I_ClaimCheck,
+const std::array<ItemKey, 10> tradeItems = {
+  POCKET_EGG,
+  //POCKET_CUCCO,
+  COJIRO,
+  ODD_MUSHROOM,
+  POACHERS_SAW,
+  BROKEN_SWORD,
+  PRESCRIPTION,
+  EYEBALL_FROG,
+  EYEDROPS,
+  CLAIM_CHECK,
 };
 
-void AddItemToPool(std::vector<Item>& pool, const Item& item, size_t count /*= 1*/) {
+void AddItemToPool(std::vector<ItemKey>& pool, ItemKey item, size_t count /*= 1*/) {
   pool.insert(pool.end(), count, item);
 }
 
 template <typename FromPool>
-static void AddItemsToPool(std::vector<Item>& toPool, const FromPool& fromPool) {
+static void AddItemsToPool(std::vector<ItemKey>& toPool, const FromPool& fromPool) {
   AddElementsToPool(toPool, fromPool);
 }
 
-static void AddItemToMainPool(const Item& item, size_t count = 1) {
+static void AddItemToMainPool(const ItemKey item, size_t count = 1) {
   ItemPool.insert(ItemPool.end(), count, item);
 }
 
-static void AddRandomBottle(std::vector<Item>& bottlePool) {
+static void AddRandomBottle(std::vector<ItemKey>& bottlePool) {
   AddItemToMainPool(RandomElement(bottlePool, true));
 }
 
-Item GetJunkItem() {
+ItemKey GetJunkItem() {
   if (IceTrapValue.Is(ICETRAPS_MAYHEM) || IceTrapValue.Is(ICETRAPS_ONSLAUGHT)) {
-    return IceTrap;
+    return ICE_TRAP;
   } else if (IceTrapValue.Is(ICETRAPS_EXTRA)) {
       return RandomElement(JunkPoolItems);
   }
@@ -437,7 +438,7 @@ Item GetJunkItem() {
   return JunkPoolItems[idx];
 }
 
-static Item GetPendingJunkItem() {
+static ItemKey GetPendingJunkItem() {
   if (PendingJunkPool.empty()) {
     return GetJunkItem();
   }
@@ -446,22 +447,22 @@ static Item GetPendingJunkItem() {
 }
 
 //Replace junk items in the pool with pending junk
-static void ReplaceMaxItem(const Item& itemToReplace, int max) {
+static void ReplaceMaxItem(const ItemKey itemToReplace, int max) {
   int itemCount = 0;
-  for (Item& item : ItemPool) {
-    if (item == itemToReplace) {
+  for (size_t i = 0; i < ItemPool.size(); i++) {
+    if (ItemPool[i] == itemToReplace) {
       if (itemCount >= max) {
-        item = GetJunkItem();
+        ItemPool[i] = GetJunkItem();
       }
       itemCount++;
     }
   }
 }
 
-void PlaceJunkInExcludedLocation(ItemLocation * il) {
+void PlaceJunkInExcludedLocation(const LocationKey il) {
   //place a non-advancement item in this location
   for (size_t i = 0; i < ItemPool.size(); i++) {
-    if (!ItemPool[i].IsAdvancement()) {
+    if (!ItemTable(ItemPool[i]).IsAdvancement()) {
       PlaceItemInLocation(il, ItemPool[i]);
       ItemPool.erase(ItemPool.begin() + i);
       return;
@@ -471,60 +472,60 @@ void PlaceJunkInExcludedLocation(ItemLocation * il) {
 }
 
 static void PlaceVanillaDekuScrubItems() {
-    PlaceItemInLocation(&ZR_DekuScrubGrottoRear,           RedPotionRefill);
-    PlaceItemInLocation(&ZR_DekuScrubGrottoFront,          GreenPotionRefill);
-    PlaceItemInLocation(&SFM_DekuScrubGrottoRear,          RedPotionRefill);
-    PlaceItemInLocation(&SFM_DekuScrubGrottoFront,         GreenPotionRefill);
-    PlaceItemInLocation(&LH_DekuScrubGrottoLeft,           DekuNuts5);
-    PlaceItemInLocation(&LH_DekuScrubGrottoRight,          Bombs5);
-    PlaceItemInLocation(&LH_DekuScrubGrottoCenter,         Arrows30);
-    PlaceItemInLocation(&GV_DekuScrubGrottoRear,           RedPotionRefill);
-    PlaceItemInLocation(&GV_DekuScrubGrottoFront,          GreenPotionRefill);
-    PlaceItemInLocation(&LW_DekuScrubNearDekuTheaterRight, DekuNuts5);
-    PlaceItemInLocation(&LW_DekuScrubNearDekuTheaterLeft,  DekuStick1);
-    PlaceItemInLocation(&LW_DekuScrubGrottoRear,           Arrows30);
-    PlaceItemInLocation(&Colossus_DekuScrubGrottoRear,     RedPotionRefill);
-    PlaceItemInLocation(&Colossus_DekuScrubGrottoFront,    GreenPotionRefill);
-    PlaceItemInLocation(&DMC_DekuScrub,                    Bombs5);
-    PlaceItemInLocation(&DMC_DekuScrubGrottoLeft,          DekuNuts5);
-    PlaceItemInLocation(&DMC_DekuScrubGrottoRight,         Bombs5);
-    PlaceItemInLocation(&DMC_DekuScrubGrottoCenter,        Arrows30);
-    PlaceItemInLocation(&GC_DekuScrubGrottoLeft,           DekuNuts5);
-    PlaceItemInLocation(&GC_DekuScrubGrottoRight,          Bombs5);
-    PlaceItemInLocation(&GC_DekuScrubGrottoCenter,         Arrows30);
-    PlaceItemInLocation(&LLR_DekuScrubGrottoLeft,          DekuNuts5);
-    PlaceItemInLocation(&LLR_DekuScrubGrottoRight,         Bombs5);
-    PlaceItemInLocation(&LLR_DekuScrubGrottoCenter,        Arrows30);
+    PlaceItemInLocation(ZR_DEKU_SCRUB_GROTTO_REAR,             RED_POTION_REFILL, false, true);
+    PlaceItemInLocation(ZR_DEKU_SCRUB_GROTTO_FRONT,            GREEN_POTION_REFILL, false, true);
+    PlaceItemInLocation(SFM_DEKU_SCRUB_GROTTO_REAR,            RED_POTION_REFILL, false, true);
+    PlaceItemInLocation(SFM_DEKU_SCRUB_GROTTO_FRONT,           GREEN_POTION_REFILL, false, true);
+    PlaceItemInLocation(LH_DEKU_SCRUB_GROTTO_LEFT,             DEKU_NUTS_5, false, true);
+    PlaceItemInLocation(LH_DEKU_SCRUB_GROTTO_RIGHT,            BOMBS_5, false, true);
+    PlaceItemInLocation(LH_DEKU_SCRUB_GROTTO_CENTER,           DEKU_SEEDS_30, false, true);
+    PlaceItemInLocation(GV_DEKU_SCRUB_GROTTO_REAR,             RED_POTION_REFILL, false, true);
+    PlaceItemInLocation(GV_DEKU_SCRUB_GROTTO_FRONT,            GREEN_POTION_REFILL, false, true);
+    PlaceItemInLocation(LW_DEKU_SCRUB_NEAR_DEKU_THEATER_RIGHT, DEKU_NUTS_5, false, true);
+    PlaceItemInLocation(LW_DEKU_SCRUB_NEAR_DEKU_THEATER_LEFT,  DEKU_STICK_1, false, true);
+    PlaceItemInLocation(LW_DEKU_SCRUB_GROTTO_REAR,             DEKU_SEEDS_30, false, true);
+    PlaceItemInLocation(COLOSSUS_DEKU_SCRUB_GROTTO_REAR,       RED_POTION_REFILL, false, true);
+    PlaceItemInLocation(COLOSSUS_DEKU_SCRUB_GROTTO_FRONT,      GREEN_POTION_REFILL, false, true);
+    PlaceItemInLocation(DMC_DEKU_SCRUB,                        BOMBS_5, false, true);
+    PlaceItemInLocation(DMC_DEKU_SCRUB_GROTTO_LEFT,            DEKU_NUTS_5, false, true);
+    PlaceItemInLocation(DMC_DEKU_SCRUB_GROTTO_RIGHT,           BOMBS_5, false, true);
+    PlaceItemInLocation(DMC_DEKU_SCRUB_GROTTO_CENTER,          DEKU_SEEDS_30, false, true);
+    PlaceItemInLocation(GC_DEKU_SCRUB_GROTTO_LEFT,             DEKU_NUTS_5, false, true);
+    PlaceItemInLocation(GC_DEKU_SCRUB_GROTTO_RIGHT,            BOMBS_5, false, true);
+    PlaceItemInLocation(GC_DEKU_SCRUB_GROTTO_CENTER,           DEKU_SEEDS_30, false, true);
+    PlaceItemInLocation(LLR_DEKU_SCRUB_GROTTO_LEFT,            DEKU_NUTS_5, false, true);
+    PlaceItemInLocation(LLR_DEKU_SCRUB_GROTTO_RIGHT,           BOMBS_5, false, true);
+    PlaceItemInLocation(LLR_DEKU_SCRUB_GROTTO_CENTER,          DEKU_SEEDS_30, false, true);
 
     //Dungeon Scrubs
     if (DekuTree.IsMQ()) {
-      PlaceItemInLocation(&DekuTree_MQ_DekuScrub, I_DekuShield);
+      PlaceItemInLocation(DEKU_TREE_MQ_DEKU_SCRUB, DEKU_SHIELD, false, true);
     }
     if (DodongosCavern.IsMQ()) {
-      PlaceItemInLocation(&DodongosCavern_MQ_DekuScrubLobbyRear,                 DekuStick1);
-      PlaceItemInLocation(&DodongosCavern_MQ_DekuScrubLobbyFront,                DekuSeeds30);
-      PlaceItemInLocation(&DodongosCavern_MQ_DekuScrubStaircase,                 I_DekuShield);
-      PlaceItemInLocation(&DodongosCavern_MQ_DekuScrubSideRoomNearLowerLizalfos, RedPotionRefill);
+      PlaceItemInLocation(DODONGOS_CAVERN_MQ_DEKU_SCRUB_LOBBY_REAR,                    DEKU_STICK_1, false, true);
+      PlaceItemInLocation(DODONGOS_CAVERN_MQ_DEKU_SCRUB_LOBBY_FRONT,                   DEKU_SEEDS_30, false, true);
+      PlaceItemInLocation(DODONGOS_CAVERN_MQ_DEKU_SCRUB_STAIRCASE,                     DEKU_SHIELD, false, true);
+      PlaceItemInLocation(DODONGOS_CAVERN_MQ_DEKU_SCRUB_SIDE_ROOM_NEAR_LOWER_LIZALFOS, RED_POTION_REFILL, false, true);
     } else {
-      PlaceItemInLocation(&DodongosCavern_DekuScrubNearBombBagLeft,      DekuNuts5);
-      PlaceItemInLocation(&DodongosCavern_DekuScrubSideRoomNearDodongos, DekuStick1);
-      PlaceItemInLocation(&DodongosCavern_DekuScrubNearBombBagRight,     DekuSeeds30);
-      PlaceItemInLocation(&DodongosCavern_DekuScrubLobby,                I_DekuShield);
+      PlaceItemInLocation(DODONGOS_CAVERN_DEKU_SCRUB_NEAR_BOMB_BAG_LEFT,      DEKU_NUTS_5, false, true);
+      PlaceItemInLocation(DODONGOS_CAVERN_DEKU_SCRUB_SIDE_ROOM_NEAR_DODONGOS, DEKU_STICK_1, false, true);
+      PlaceItemInLocation(DODONGOS_CAVERN_DEKU_SCRUB_NEAR_BOMB_BAG_RIGHT,     DEKU_SEEDS_30, false, true);
+      PlaceItemInLocation(DODONGOS_CAVERN_DEKU_SCRUB_LOBBY,                   DEKU_SHIELD, false, true);
     }
     if (JabuJabusBelly.IsVanilla()) {
-      PlaceItemInLocation(&JabuJabusBelly_DekuScrub, DekuNuts5);
+      PlaceItemInLocation(JABU_JABUS_BELLY_DEKU_SCRUB, DEKU_NUTS_5);
     }
     if (GanonsCastle.IsMQ()) {
-      PlaceItemInLocation(&GanonsCastle_MQ_DekuScrubRight,       DekuNuts5);
-      PlaceItemInLocation(&GanonsCastle_MQ_DekuScrubCenterLeft,  DekuNuts5);
-      PlaceItemInLocation(&GanonsCastle_MQ_DekuScrubCenter,      DekuNuts5);
-      PlaceItemInLocation(&GanonsCastle_MQ_DekuScrubCenterRight, DekuNuts5);
-      PlaceItemInLocation(&GanonsCastle_MQ_DekuScrubLeft,        DekuNuts5);
+      PlaceItemInLocation(GANONS_CASTLE_MQ_DEKU_SCRUB_LEFT,         GREEN_POTION_REFILL, false, true);
+      PlaceItemInLocation(GANONS_CASTLE_MQ_DEKU_SCRUB_CENTER_LEFT,  BOMBS_5, false, true);
+      PlaceItemInLocation(GANONS_CASTLE_MQ_DEKU_SCRUB_CENTER,       ARROWS_30, false, true);
+      PlaceItemInLocation(GANONS_CASTLE_MQ_DEKU_SCRUB_CENTER_RIGHT, RED_POTION_REFILL, false, true);
+      PlaceItemInLocation(GANONS_CASTLE_MQ_DEKU_SCRUB_RIGHT,        DEKU_NUTS_5, false, true);
     } else {
-      PlaceItemInLocation(&GanonsCastle_DekuScrubCenterLeft,  Bombs5);
-      PlaceItemInLocation(&GanonsCastle_DekuScrubCenterRight, Arrows30);
-      PlaceItemInLocation(&GanonsCastle_DekuScrubRight,       RedPotionRefill);
-      PlaceItemInLocation(&GanonsCastle_DekuScrubLeft,        GreenPotionRefill);
+      PlaceItemInLocation(GANONS_CASTLE_DEKU_SCRUB_CENTER_LEFT,  BOMBS_5, false, true);
+      PlaceItemInLocation(GANONS_CASTLE_DEKU_SCRUB_CENTER_RIGHT, DEKU_SEEDS_30, false, true);
+      PlaceItemInLocation(GANONS_CASTLE_DEKU_SCRUB_RIGHT,        RED_POTION_REFILL, false, true);
+      PlaceItemInLocation(GANONS_CASTLE_DEKU_SCRUB_LEFT,         GREEN_POTION_REFILL, false, true);
     }
 
 
@@ -550,82 +551,142 @@ static void PlaceVanillaBossKeys() {
 }
 
 static void PlaceVanillaCowMilk() {
-  PlaceItemInLocation(&KF_LinksHouseCow,    Milk);
-  PlaceItemInLocation(&HF_CowGrottoCow,     Milk);
-  PlaceItemInLocation(&GV_Cow,              Milk);
-  PlaceItemInLocation(&Kak_ImpasHouseCow,   Milk);
-  PlaceItemInLocation(&DMT_CowGrottoCow,    Milk);
-  PlaceItemInLocation(&LLR_StablesLeftCow,  Milk);
-  PlaceItemInLocation(&LLR_StablesRightCow, Milk);
-  PlaceItemInLocation(&LLR_TowerLeftCow,    Milk);
-  PlaceItemInLocation(&LLR_TowerRightCow,   Milk);
+  PlaceItemInLocation(KF_LINKS_HOUSE_COW,    MILK, false, true);
+  PlaceItemInLocation(HF_COW_GROTTO_COW,     MILK, false, true);
+  PlaceItemInLocation(GV_COW,                MILK, false, true);
+  PlaceItemInLocation(KAK_IMPAS_HOUSE_COW,   MILK, false, true);
+  PlaceItemInLocation(DMT_COW_GROTTO_COW,    MILK, false, true);
+  PlaceItemInLocation(LLR_STABLES_LEFT_COW,  MILK, false, true);
+  PlaceItemInLocation(LLR_STABLES_RIGHT_COW, MILK, false, true);
+  PlaceItemInLocation(LLR_TOWER_LEFT_COW,    MILK, false, true);
+  PlaceItemInLocation(LLR_TOWER_RIGHT_COW,   MILK, false, true);
 
   if (JabuJabusBelly.IsMQ()) {
-    PlaceItemInLocation(&JabuJabusBelly_MQ_Cow, Milk);
+    PlaceItemInLocation(JABU_JABUS_BELLY_MQ_COW, MILK, false, true);
   }
 }
 
 static void SetScarceItemPool() {
-  ReplaceMaxItem(I_ProgressiveBombchus, 3);
-  ReplaceMaxItem(Bombchu5, 1);
-  ReplaceMaxItem(Bombchu10, 2);
-  ReplaceMaxItem(Bombchu20, 0);
-  ReplaceMaxItem(I_ProgressiveMagic, 1);
-  ReplaceMaxItem(I_DoubleDefense, 0);
-  ReplaceMaxItem(I_ProgressiveStickCapacity, 1);
-  ReplaceMaxItem(I_ProgressiveNutCapacity, 1);
-  ReplaceMaxItem(I_ProgressiveBow, 2);
-  ReplaceMaxItem(I_ProgressiveBulletBag, 2);
-  ReplaceMaxItem(I_ProgressiveBombBag, 2);
-  ReplaceMaxItem(HeartContainer, 0);
+  ReplaceMaxItem(PROGRESSIVE_BOMBCHUS, 3);
+  ReplaceMaxItem(BOMBCHU_5, 1);
+  ReplaceMaxItem(BOMBCHU_10, 2);
+  ReplaceMaxItem(BOMBCHU_20, 0);
+  ReplaceMaxItem(PROGRESSIVE_MAGIC_METER, 1);
+  ReplaceMaxItem(DOUBLE_DEFENSE, 0);
+  ReplaceMaxItem(PROGRESSIVE_STICK_UPGRADE, 1);
+  ReplaceMaxItem(PROGRESSIVE_NUT_UPGRADE, 1);
+  ReplaceMaxItem(PROGRESSIVE_BOW, 2);
+  ReplaceMaxItem(PROGRESSIVE_SLINGSHOT, 2);
+  ReplaceMaxItem(PROGRESSIVE_BOMB_BAG, 2);
+  ReplaceMaxItem(HEART_CONTAINER, 0);
 }
 
 static void SetMinimalItemPool() {
-  ReplaceMaxItem(I_ProgressiveBombchus, 1);
-  ReplaceMaxItem(Bombchu5, 1);
-  ReplaceMaxItem(Bombchu10, 0);
-  ReplaceMaxItem(Bombchu20, 0);
-  ReplaceMaxItem(I_NayrusLove, 0);
-  ReplaceMaxItem(I_ProgressiveMagic, 1);
-  ReplaceMaxItem(I_DoubleDefense, 0);
-  ReplaceMaxItem(I_ProgressiveStickCapacity, 0);
-  ReplaceMaxItem(I_ProgressiveNutCapacity, 0);
-  ReplaceMaxItem(I_ProgressiveBow, 1);
-  ReplaceMaxItem(I_ProgressiveBulletBag, 1);
-  ReplaceMaxItem(I_ProgressiveBombBag, 1);
-  ReplaceMaxItem(PieceOfHeart, 0);
-  ReplaceMaxItem(HeartContainer, 0);
+  ReplaceMaxItem(PROGRESSIVE_BOMBCHUS, 1);
+  ReplaceMaxItem(BOMBCHU_5, 1);
+  ReplaceMaxItem(BOMBCHU_10, 0);
+  ReplaceMaxItem(BOMBCHU_20, 0);
+  ReplaceMaxItem(NAYRUS_LOVE, 0);
+  ReplaceMaxItem(PROGRESSIVE_MAGIC_METER, 1);
+  ReplaceMaxItem(DOUBLE_DEFENSE, 0);
+  ReplaceMaxItem(PROGRESSIVE_STICK_UPGRADE, 0);
+  ReplaceMaxItem(PROGRESSIVE_NUT_UPGRADE, 0);
+  ReplaceMaxItem(PROGRESSIVE_BOW, 1);
+  ReplaceMaxItem(PROGRESSIVE_SLINGSHOT, 1);
+  ReplaceMaxItem(PROGRESSIVE_BOMB_BAG, 1);
+  ReplaceMaxItem(PIECE_OF_HEART, 0);
+  // Need an extra heart container when starting with 1 heart to be able to reach 3 hearts
+  ReplaceMaxItem(HEART_CONTAINER, (StartingHealth.Value<u8>() == 18)? 1 : 0);
 }
 
 void GenerateItemPool() {
 
   ItemPool.clear();
+  PendingJunkPool.clear();
+
+  //Initialize ice trap models to always major items
+  IceTrapModels = {
+    GI_SHIELD_MIRROR,
+    GI_BOOMERANG,
+    GI_LENS,
+    GI_HAMMER,
+    GI_BOOTS_IRON,
+    GI_BOOTS_HOVER,
+    GI_STONE_OF_AGONY,
+    GI_DINS_FIRE,
+    GI_FARORES_WIND,
+    GI_NAYRUS_LOVE,
+    GI_ARROW_FIRE,
+    GI_ARROW_ICE,
+    GI_ARROW_LIGHT,
+    0xB8, //Double defense
+    GI_CLAIM_CHECK,
+    0x80, //Progressive hookshot
+    0x81, //Progressive strength
+    0x82, //Progressive bomb bag
+    0x83, //Progressive bow
+    0x84, //Progressive slingshot
+    0x85, //Progressive wallet
+    0x86, //Progressive scale
+    0x8A, //Progressive magic
+  };
+  //Check song shuffle and dungeon reward shuffle just for ice traps
+  if (ShuffleSongs.Is(SONGSHUFFLE_ANYWHERE)) {
+    //Push item ids for songs
+    IceTrapModels.push_back(0xC1);
+    IceTrapModels.push_back(0xC2);
+    IceTrapModels.push_back(0xC3);
+    IceTrapModels.push_back(0xC4);
+    IceTrapModels.push_back(0xC5);
+    IceTrapModels.push_back(0xC6);
+    IceTrapModels.push_back(0xBB);
+    IceTrapModels.push_back(0xBC);
+    IceTrapModels.push_back(0xBD);
+    IceTrapModels.push_back(0xBE);
+    IceTrapModels.push_back(0xBF);
+    IceTrapModels.push_back(0xC0);
+  }
+  if (ShuffleRewards.Is(REWARDSHUFFLE_ANYWHERE)) {
+    //Push item ids for dungeon rewards
+    IceTrapModels.push_back(0xCB);
+    IceTrapModels.push_back(0xCC);
+    IceTrapModels.push_back(0xCD);
+    IceTrapModels.push_back(0xCE);
+    IceTrapModels.push_back(0xCF);
+    IceTrapModels.push_back(0xD0);
+    IceTrapModels.push_back(0xD1);
+    IceTrapModels.push_back(0xD2);
+    IceTrapModels.push_back(0xD3);
+  }
 
   //Fixed item locations
-  PlaceItemInLocation(&HC_ZeldasLetter, I_ZeldasLetter);
-  PlaceItemInLocation(&Ganon, I_Triforce); //The Triforce is only used to make sure Ganon is accessible
-  PlaceItemInLocation(&MK_BombchuBowlingBombchus, I_BombchuDrop);
+  PlaceItemInLocation(HC_ZELDAS_LETTER, ZELDAS_LETTER);
+  PlaceItemInLocation(GANON, TRIFORCE); //The Triforce is only used to make sure Ganon is accessible
+  PlaceItemInLocation(MARKET_BOMBCHU_BOWLING_BOMBCHUS, BOMBCHU_DROP);
 
   if (ShuffleKokiriSword) {
-    AddItemToMainPool(I_KokiriSword);
+    AddItemToMainPool(KOKIRI_SWORD);
+    IceTrapModels.push_back(GI_SWORD_KOKIRI);
   } else {
-    PlaceItemInLocation(&KF_KokiriSwordChest, I_KokiriSword);
+    PlaceItemInLocation(KF_KOKIRI_SWORD_CHEST, KOKIRI_SWORD, false, true);
   }
 
   if (ShuffleWeirdEgg) {
-    AddItemToMainPool(I_WeirdEgg);
+    AddItemToMainPool(WEIRD_EGG);
+    IceTrapModels.push_back(GI_WEIRD_EGG);
   } else {
-    PlaceItemInLocation(&HC_MalonEgg, I_WeirdEgg);
+    PlaceItemInLocation(HC_MALON_EGG, WEIRD_EGG, false, true);
   }
 
   if (ShuffleOcarinas) {
-    AddItemToMainPool(I_ProgressiveOcarina, 2);
+    AddItemToMainPool(PROGRESSIVE_OCARINA, 2);
     if (ItemPoolValue.Is(ITEMPOOL_PLENTIFUL)) {
-      AddItemToPool(PendingJunkPool, I_ProgressiveOcarina);
+      AddItemToPool(PendingJunkPool, PROGRESSIVE_OCARINA);
     }
+    IceTrapModels.push_back(0x8B); //Progressive ocarina
   } else {
-    PlaceItemInLocation(&LW_GiftFromSaria, I_ProgressiveOcarina);
-    PlaceItemInLocation(&HF_OcarinaOfTimeItem, I_ProgressiveOcarina);
+    PlaceItemInLocation(LW_GIFT_FROM_SARIA, PROGRESSIVE_OCARINA, false, true);
+    PlaceItemInLocation(HF_OCARINA_OF_TIME_ITEM, PROGRESSIVE_OCARINA, false, true);
   }
 
   if (ShuffleCows) {
@@ -642,124 +703,235 @@ void GenerateItemPool() {
   }
 
   if (ShuffleMagicBeans) {
-    AddItemToMainPool(I_MagicBeanPack);
+    AddItemToMainPool(MAGIC_BEAN_PACK);
     if (ItemPoolValue.Is(ITEMPOOL_PLENTIFUL)) {
-      AddItemToPool(PendingJunkPool, I_MagicBeanPack);
+      AddItemToPool(PendingJunkPool, MAGIC_BEAN_PACK);
     }
+    IceTrapModels.push_back(0xC9); //Magic bean pack
   } else {
-    PlaceItemInLocation(&ZR_MagicBeanSalesman, I_MagicBean);
+    PlaceItemInLocation(ZR_MAGIC_BEAN_SALESMAN, MAGIC_BEAN, false, true);
   }
 
+  if (ShuffleMerchants.IsNot(SHUFFLEMERCHANTS_OFF)) {
+    if (!ProgressiveGoronSword) {
+      AddItemToMainPool(GIANTS_KNIFE);
+    }
+    if (BombchusInLogic) {
+      AddItemToMainPool(PROGRESSIVE_BOMBCHUS);
+    } else {
+      AddItemToMainPool(BOMBCHU_10);
+    }
+  } else {
+    PlaceItemInLocation(GC_MEDIGORON, GIANTS_KNIFE, false, true);
+    PlaceItemInLocation(WASTELAND_BOMBCHU_SALESMAN, BOMBCHU_10, false, true);
+  }
+
+  if (ShuffleAdultTradeQuest) {
+    AddItemToMainPool(POCKET_EGG);
+    AddItemToMainPool(COJIRO);
+    AddItemToMainPool(ODD_MUSHROOM);
+    AddItemToMainPool(ODD_POULTICE);
+    AddItemToMainPool(POACHERS_SAW);
+    AddItemToMainPool(BROKEN_SWORD);
+    AddItemToMainPool(PRESCRIPTION);
+    AddItemToMainPool(EYEBALL_FROG);
+    AddItemToMainPool(EYEDROPS);
+  } else {
+    PlaceItemInLocation(KAK_TRADE_POCKET_CUCCO, COJIRO, false, true);
+    PlaceItemInLocation(LW_TRADE_COJIRO, ODD_MUSHROOM, false, true);
+    PlaceItemInLocation(KAK_TRADE_ODD_MUSHROOM, ODD_POULTICE, false, true);
+    PlaceItemInLocation(LW_TRADE_ODD_POULTICE, POACHERS_SAW, false, true);
+    PlaceItemInLocation(GV_TRADE_SAW, BROKEN_SWORD, false, true);
+    PlaceItemInLocation(DMT_TRADE_BROKEN_SWORD, PRESCRIPTION, false, true);
+    PlaceItemInLocation(ZD_TRADE_PRESCRIPTION, EYEBALL_FROG, false, true);
+    PlaceItemInLocation(LH_TRADE_FROG, EYEDROPS, false, true);
+    PlaceItemInLocation(DMT_TRADE_EYEDROPS, CLAIM_CHECK, false, true);
+  }
+  AddItemToMainPool(CLAIM_CHECK);
+
+  if (ShuffleChestMinigame.Is(SHUFFLECHESTMINIGAME_SINGLE_KEYS)) {
+    AddItemToMainPool(TREASURE_GAME_SMALL_KEY, 6); // 6 individual keys
+  } else if (ShuffleChestMinigame.Is(SHUFFLECHESTMINIGAME_PACK)) {
+    AddItemToMainPool(TREASURE_GAME_SMALL_KEY); // 1 key which will behave as a pack of 6
+  } else {
+    PlaceItemInLocation(MARKET_TREASURE_CHEST_GAME_ITEM_1, TREASURE_GAME_SMALL_KEY, false, true);
+    PlaceItemInLocation(MARKET_TREASURE_CHEST_GAME_ITEM_2, TREASURE_GAME_SMALL_KEY, false, true);
+    PlaceItemInLocation(MARKET_TREASURE_CHEST_GAME_ITEM_3, TREASURE_GAME_SMALL_KEY, false, true);
+    PlaceItemInLocation(MARKET_TREASURE_CHEST_GAME_ITEM_4, TREASURE_GAME_SMALL_KEY, false, true);
+    PlaceItemInLocation(MARKET_TREASURE_CHEST_GAME_ITEM_5, TREASURE_GAME_SMALL_KEY, false, true);
+  };
+
   if (Tokensanity.Is(TOKENSANITY_OFF)) {
-    for (auto& loc : GetLocations(allLocations, Category::cSkulltula)) {
-      PlaceItemInLocation(loc, GoldSkulltulaToken);
+    for (LocationKey loc : GetLocations(allLocations, Category::cSkulltula)) {
+      PlaceItemInLocation(loc, GOLD_SKULLTULA_TOKEN, false, true);
     }
   } else if (Tokensanity.Is(TOKENSANITY_DUNGEONS)) {
-    for (auto& loc : GetLocations(allLocations, Category::cSkulltula)) {
-      if (loc->IsOverworld()) {
-        PlaceItemInLocation(loc, GoldSkulltulaToken);
+    for (LocationKey loc : GetLocations(allLocations, Category::cSkulltula)) {
+      if (Location(loc)->IsOverworld()) {
+        PlaceItemInLocation(loc, GOLD_SKULLTULA_TOKEN, false, true);
       } else {
-        AddItemToMainPool(GoldSkulltulaToken);
+        AddItemToMainPool(GOLD_SKULLTULA_TOKEN);
       }
     }
   } else if (Tokensanity.Is(TOKENSANITY_OVERWORLD)) {
-    for (auto& loc : GetLocations(allLocations, Category::cSkulltula)) {
-      if (loc->IsDungeon()) {
-        PlaceItemInLocation(loc, GoldSkulltulaToken);
+    for (LocationKey loc : GetLocations(allLocations, Category::cSkulltula)) {
+      if (Location(loc)->IsDungeon()) {
+        PlaceItemInLocation(loc, GOLD_SKULLTULA_TOKEN, false, true);
       } else {
-        AddItemToMainPool(GoldSkulltulaToken);
+        AddItemToMainPool(GOLD_SKULLTULA_TOKEN);
       }
     }
   } else {
-    AddItemToMainPool(GoldSkulltulaToken, 100);
+    AddItemToMainPool(GOLD_SKULLTULA_TOKEN, 100);
   }
 
   if (BombchusInLogic) {
-    AddItemToMainPool(I_ProgressiveBombchus, 5);
+    AddItemToMainPool(PROGRESSIVE_BOMBCHUS, 5);
   } else {
-    AddItemToMainPool(Bombchu5);
-    AddItemToMainPool(Bombchu10, 3);
-    AddItemToMainPool(Bombchu20);
+    AddItemToMainPool(BOMBCHU_5);
+    AddItemToMainPool(BOMBCHU_10, 3);
+    AddItemToMainPool(BOMBCHU_20);
   }
 
   //Ice Traps
-  AddItemToMainPool(IceTrap);
+  AddItemToMainPool(ICE_TRAP);
   if (GerudoTrainingGrounds.IsVanilla()) {
-    AddItemToMainPool(IceTrap);
+    AddItemToMainPool(ICE_TRAP);
   }
   if (GanonsCastle.IsVanilla()) {
-    AddItemToMainPool(IceTrap, 4);
+    AddItemToMainPool(ICE_TRAP, 4);
   }
 
   //Gerudo Fortress
   if (GerudoFortress.Is(GERUDOFORTRESS_OPEN)) {
-    PlaceItemInLocation(&GF_NorthF1Carpenter, RecoveryHeart);
-    PlaceItemInLocation(&GF_NorthF2Carpenter, RecoveryHeart);
-    PlaceItemInLocation(&GF_SouthF1Carpenter, RecoveryHeart);
-    PlaceItemInLocation(&GF_SouthF2Carpenter, RecoveryHeart);
+    PlaceItemInLocation(GF_NORTH_F1_CARPENTER, RECOVERY_HEART, false, true);
+    PlaceItemInLocation(GF_NORTH_F2_CARPENTER, RECOVERY_HEART, false, true);
+    PlaceItemInLocation(GF_SOUTH_F1_CARPENTER, RECOVERY_HEART, false, true);
+    PlaceItemInLocation(GF_SOUTH_F2_CARPENTER, RECOVERY_HEART, false, true);
   } else if (GerudoKeys.IsNot(GERUDOKEYS_VANILLA)) {
     if (GerudoFortress.Is(GERUDOFORTRESS_FAST)) {
-      AddItemToMainPool(GerudoFortress_SmallKey);
-      PlaceItemInLocation(&GF_NorthF2Carpenter, RecoveryHeart);
-      PlaceItemInLocation(&GF_SouthF1Carpenter, RecoveryHeart);
-      PlaceItemInLocation(&GF_SouthF2Carpenter, RecoveryHeart);
+      AddItemToMainPool(GERUDO_FORTRESS_SMALL_KEY);
+      PlaceItemInLocation(GF_NORTH_F2_CARPENTER, RECOVERY_HEART, false, true);
+      PlaceItemInLocation(GF_SOUTH_F1_CARPENTER, RECOVERY_HEART, false, true);
+      PlaceItemInLocation(GF_SOUTH_F2_CARPENTER, RECOVERY_HEART, false, true);
     } else {
-      AddItemToMainPool(GerudoFortress_SmallKey, 4);
+      //Only add key ring if 4 Fortress keys necessary
+      if (RingFortress) {
+        AddItemToMainPool(GERUDO_FORTRESS_KEY_RING);
+        //Add junk to make up for missing keys
+        for (u8 i = 0; i < 3; i++) {
+          AddItemToMainPool(GetJunkItem());
+        }
+      } else {
+        AddItemToMainPool(GERUDO_FORTRESS_SMALL_KEY, 4);
+      }
     }
     if (ItemPoolValue.Is(ITEMPOOL_PLENTIFUL)) {
-      AddItemToPool(PendingJunkPool, GerudoFortress_SmallKey);
+      if (RingFortress && GerudoFortress.Is(GERUDOFORTRESS_NORMAL)) {
+        AddItemToPool(PendingJunkPool, GERUDO_FORTRESS_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, GERUDO_FORTRESS_SMALL_KEY);
+      }
     }
   } else {
     if (GerudoFortress.Is(GERUDOFORTRESS_FAST)) {
-      PlaceItemInLocation(&GF_NorthF1Carpenter, GerudoFortress_SmallKey);
-      PlaceItemInLocation(&GF_NorthF2Carpenter, RecoveryHeart);
-      PlaceItemInLocation(&GF_SouthF1Carpenter, RecoveryHeart);
-      PlaceItemInLocation(&GF_SouthF2Carpenter, RecoveryHeart);
+      PlaceItemInLocation(GF_NORTH_F1_CARPENTER, GERUDO_FORTRESS_SMALL_KEY, false, true);
+      PlaceItemInLocation(GF_NORTH_F2_CARPENTER, RECOVERY_HEART, false, true);
+      PlaceItemInLocation(GF_SOUTH_F1_CARPENTER, RECOVERY_HEART, false, true);
+      PlaceItemInLocation(GF_SOUTH_F2_CARPENTER, RECOVERY_HEART, false, true);
     } else {
-      PlaceItemInLocation(&GF_NorthF1Carpenter, GerudoFortress_SmallKey);
-      PlaceItemInLocation(&GF_NorthF2Carpenter, GerudoFortress_SmallKey);
-      PlaceItemInLocation(&GF_SouthF1Carpenter, GerudoFortress_SmallKey);
-      PlaceItemInLocation(&GF_SouthF2Carpenter, GerudoFortress_SmallKey);
+      PlaceItemInLocation(GF_NORTH_F1_CARPENTER, GERUDO_FORTRESS_SMALL_KEY, false, true);
+      PlaceItemInLocation(GF_NORTH_F2_CARPENTER, GERUDO_FORTRESS_SMALL_KEY, false, true);
+      PlaceItemInLocation(GF_SOUTH_F1_CARPENTER, GERUDO_FORTRESS_SMALL_KEY, false, true);
+      PlaceItemInLocation(GF_SOUTH_F2_CARPENTER, GERUDO_FORTRESS_SMALL_KEY, false, true);
     }
   }
 
   //Gerudo Token
   if (ShuffleGerudoToken && GerudoFortress.IsNot(GERUDOFORTRESS_OPEN)) {
-    AddItemToMainPool(I_GerudoToken);
+    AddItemToMainPool(GERUDO_TOKEN);
+    IceTrapModels.push_back(GI_GERUDO_CARD);
   } else if (ShuffleGerudoToken) {
-    AddItemToPool(PendingJunkPool, I_GerudoToken);
-    PlaceItemInLocation(&GF_GerudoToken, IceTrap);
+    AddItemToPool(PendingJunkPool, GERUDO_TOKEN);
+    PlaceItemInLocation(GF_GERUDO_TOKEN, ICE_TRAP, false, true);
   } else {
-    PlaceItemInLocation(&GF_GerudoToken, I_GerudoToken);
+    PlaceItemInLocation(GF_GERUDO_TOKEN, GERUDO_TOKEN, false, true);
+  }
+
+  //Keys
+
+  //For key rings, need to add as many junk items as "missing" keys
+  if (KeyRings) {
+    u8 ringJunkAmt = 0;
+    for (auto dungeon : dungeonList) {
+      if (dungeon->HasKeyRing()) {
+        ringJunkAmt += dungeon->GetSmallKeyCount() - 1;
+      }
+    }
+    for (u8 i = 0; i < ringJunkAmt; i++) {
+        AddItemToMainPool(GetJunkItem());
+    }
   }
 
   if (ItemPoolValue.Is(ITEMPOOL_PLENTIFUL)) {
     if (ShuffleGerudoToken) {
-      AddItemToPool(PendingJunkPool, I_GerudoToken);
+      AddItemToPool(PendingJunkPool, GERUDO_TOKEN);
     }
 
-    // Plentiful small keys
-    if (Keysanity.Is(KEYSANITY_ANYWHERE)) {
-      AddItemToPool(PendingJunkPool, BottomOfTheWell_SmallKey);
-      AddItemToPool(PendingJunkPool, ForestTemple_SmallKey);
-      AddItemToPool(PendingJunkPool, FireTemple_SmallKey);
-      AddItemToPool(PendingJunkPool, WaterTemple_SmallKey);
-      AddItemToPool(PendingJunkPool, SpiritTemple_SmallKey);
-      AddItemToPool(PendingJunkPool, ShadowTemple_SmallKey);
-      AddItemToPool(PendingJunkPool, GerudoTrainingGrounds_SmallKey);
-      AddItemToPool(PendingJunkPool, GanonsCastle_SmallKey);
+    //Plentiful small keys
+    if (Keysanity.Is(KEYSANITY_ANYWHERE) || Keysanity.Is(KEYSANITY_ANY_DUNGEON) || Keysanity.Is(KEYSANITY_OVERWORLD)) {
+      if (BottomOfTheWell.HasKeyRing()) {
+        AddItemToPool(PendingJunkPool, BOTTOM_OF_THE_WELL_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, BOTTOM_OF_THE_WELL_SMALL_KEY);
+      }
+      if (ForestTemple.HasKeyRing()) {
+        AddItemToPool(PendingJunkPool, FOREST_TEMPLE_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, FOREST_TEMPLE_SMALL_KEY);
+      }
+      if (FireTemple.HasKeyRing()) {
+        AddItemToPool(PendingJunkPool, FIRE_TEMPLE_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, FIRE_TEMPLE_SMALL_KEY);
+      }
+      if (WaterTemple.HasKeyRing()) {
+        AddItemToPool(PendingJunkPool, WATER_TEMPLE_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, WATER_TEMPLE_SMALL_KEY);
+      }
+      if (SpiritTemple.HasKeyRing()) {
+        AddItemToPool(PendingJunkPool, SPIRIT_TEMPLE_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, SPIRIT_TEMPLE_SMALL_KEY);
+      }
+      if (ShadowTemple.HasKeyRing()) {
+        AddItemToPool(PendingJunkPool, SHADOW_TEMPLE_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, SHADOW_TEMPLE_SMALL_KEY);
+      }
+      if (GerudoTrainingGrounds.HasKeyRing()) {
+        AddItemToPool(PendingJunkPool, GERUDO_TRAINING_GROUNDS_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, GERUDO_TRAINING_GROUNDS_SMALL_KEY);
+      }
+      if (GanonsCastle.HasKeyRing()) {
+        AddItemToPool(PendingJunkPool, GANONS_CASTLE_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, GANONS_CASTLE_SMALL_KEY);
+      } 
     }
 
-    if (BossKeysanity.Is(BOSSKEYSANITY_ANYWHERE)) {
-      AddItemToPool(PendingJunkPool, ForestTemple_BossKey);
-      AddItemToPool(PendingJunkPool, FireTemple_BossKey);
-      AddItemToPool(PendingJunkPool, WaterTemple_BossKey);
-      AddItemToPool(PendingJunkPool, SpiritTemple_BossKey);
-      AddItemToPool(PendingJunkPool, ShadowTemple_BossKey);
+    if (BossKeysanity.Is(BOSSKEYSANITY_ANYWHERE) || BossKeysanity.Is(BOSSKEYSANITY_ANY_DUNGEON) || BossKeysanity.Is(BOSSKEYSANITY_OVERWORLD)) {
+      AddItemToPool(PendingJunkPool, FOREST_TEMPLE_BOSS_KEY);
+      AddItemToPool(PendingJunkPool, FIRE_TEMPLE_BOSS_KEY);
+      AddItemToPool(PendingJunkPool, WATER_TEMPLE_BOSS_KEY);
+      AddItemToPool(PendingJunkPool, SPIRIT_TEMPLE_BOSS_KEY);
+      AddItemToPool(PendingJunkPool, SHADOW_TEMPLE_BOSS_KEY);
     }
 
-    if (GanonsBossKey.Is(GANONSBOSSKEY_ANYWHERE)) {
-      AddItemToPool(PendingJunkPool, GanonsCastle_BossKey);
+    if (GanonsBossKey.Is(GANONSBOSSKEY_ANYWHERE) || GanonsBossKey.Is(GANONSBOSSKEY_ANY_DUNGEON) || GanonsBossKey.Is(GANONSBOSSKEY_OVERWORLD)) {
+      AddItemToPool(PendingJunkPool, GANONS_CASTLE_BOSS_KEY);
     }
   }
 
@@ -770,33 +942,33 @@ void GenerateItemPool() {
     AddItemsToPool(ItemPool, shopsanityRupees); //Shopsanity gets extra large rupees
   }
 
-  //scrubsanity
+  //Scrubsanity
   if (Settings::Scrubsanity.IsNot(SCRUBSANITY_OFF)) {
     //Deku Tree
     if (DekuTree.IsMQ()) {
-      AddItemToMainPool(I_DekuShield);
+      AddItemToMainPool(DEKU_SHIELD);
     }
 
     //Dodongos Cavern
-    AddItemToMainPool(DekuStick1);
-    AddItemToMainPool(I_DekuShield);
+    AddItemToMainPool(DEKU_STICK_1);
+    AddItemToMainPool(DEKU_SHIELD);
     if (DodongosCavern.IsMQ()) {
-      AddItemToMainPool(RecoveryHeart);
+      AddItemToMainPool(RECOVERY_HEART);
     } else {
-      AddItemToMainPool(DekuNuts5);
+      AddItemToMainPool(DEKU_NUTS_5);
     }
 
     //Jabu Jabus Belly
     if (JabuJabusBelly.IsVanilla()) {
-      AddItemToMainPool(DekuNuts5);
+      AddItemToMainPool(DEKU_NUTS_5);
     }
 
     //Ganons Castle
-    AddItemToMainPool(Bombs5);
-    AddItemToMainPool(RecoveryHeart);
-    AddItemToMainPool(BlueRupee);
+    AddItemToMainPool(BOMBS_5);
+    AddItemToMainPool(RECOVERY_HEART);
+    AddItemToMainPool(BLUE_RUPEE);
     if (GanonsCastle.IsMQ()) {
-      AddItemToMainPool(DekuNuts5);
+      AddItemToMainPool(DEKU_NUTS_5);
     }
 
     //Overworld Scrubs
@@ -805,9 +977,9 @@ void GenerateItemPool() {
     //I'm not sure what this is for, but it was in ootr so I copied it
     for (u8 i = 0; i < 7; i++) {
       if (Random(0, 3)) {
-        AddItemToMainPool(Arrows30);
+        AddItemToMainPool(ARROWS_30);
       } else {
-        AddItemToMainPool(DekuSeeds30);
+        AddItemToMainPool(DEKU_SEEDS_30);
       }
     }
   } else {
@@ -817,7 +989,7 @@ void GenerateItemPool() {
   AddItemsToPool(ItemPool, alwaysItems);
   AddItemsToPool(ItemPool, dungeonRewards);
 
-  //dungeon pools
+  //Dungeon pools
   if (DekuTree.IsMQ()) {
     AddItemsToPool(ItemPool, DT_MQ);
   } else {
@@ -872,19 +1044,16 @@ void GenerateItemPool() {
 
   //Add 4 total bottles
   u8 bottleCount = 4;
-  std::vector<Item> bottles;
+  std::vector<ItemKey> bottles;
   bottles.assign(normalBottles.begin(), normalBottles.end());
-
+  IceTrapModels.push_back(ItemTable(RandomElement(bottles)).GetItemID()); //Get one random bottle type for ice traps
   for (u8 i = 0; i < bottleCount; i++) {
     if (i >= rutoBottles) {
       AddRandomBottle(bottles);
     } else {
-      AddItemToMainPool(I_RutosLetter);
+      AddItemToMainPool(RUTOS_LETTER);
     }
   }
-
-  //TODO: trade item logic
-  AddItemToMainPool(I_ClaimCheck);
 
   //add extra songs only if song shuffle is anywhere
   AddItemsToPool(ItemPool, songList);
@@ -903,11 +1072,11 @@ void GenerateItemPool() {
     PlaceVanillaMapsAndCompasses();
   } else  {
     for (auto dungeon : dungeonList) {
-      if (dungeon->GetMap() != NoItem) {
+      if (dungeon->GetMap() != NONE) {
         AddItemToMainPool(dungeon->GetMap());
       }
 
-      if (dungeon->GetCompass() != NoItem) {
+      if (dungeon->GetCompass() != NONE) {
         AddItemToMainPool(dungeon->GetCompass());
       }
     }
@@ -917,8 +1086,12 @@ void GenerateItemPool() {
     PlaceVanillaSmallKeys();
   } else {
     for (auto dungeon : dungeonList) {
-      if (dungeon->GetSmallKeyCount() > 0) {
-        AddItemToMainPool(dungeon->GetSmallKey(), dungeon->GetSmallKeyCount());
+      if (dungeon->HasKeyRing() && Keysanity.IsNot(KEYSANITY_START_WITH)) {
+        AddItemToMainPool(dungeon->GetKeyRing());
+      } else {
+        if (dungeon->GetSmallKeyCount() > 0) {
+          AddItemToMainPool(dungeon->GetSmallKey(), dungeon->GetSmallKeyCount());
+        }
       }
     }
   }
@@ -926,19 +1099,19 @@ void GenerateItemPool() {
   if (BossKeysanity.Is(BOSSKEYSANITY_VANILLA)) {
     PlaceVanillaBossKeys();
   } else {
-    AddItemToMainPool(ForestTemple_BossKey);
-    AddItemToMainPool(FireTemple_BossKey);
-    AddItemToMainPool(WaterTemple_BossKey);
-    AddItemToMainPool(SpiritTemple_BossKey);
-    AddItemToMainPool(ShadowTemple_BossKey);
+    AddItemToMainPool(FOREST_TEMPLE_BOSS_KEY);
+    AddItemToMainPool(FIRE_TEMPLE_BOSS_KEY);
+    AddItemToMainPool(WATER_TEMPLE_BOSS_KEY);
+    AddItemToMainPool(SPIRIT_TEMPLE_BOSS_KEY);
+    AddItemToMainPool(SHADOW_TEMPLE_BOSS_KEY);
   }
 
   if (GanonsBossKey.Value<u8>() >= GANONSBOSSKEY_LACS_VANILLA) {
-    PlaceItemInLocation(&ToT_LightArrowCutscene, GanonsCastle_BossKey);
+    PlaceItemInLocation(TOT_LIGHT_ARROWS_CUTSCENE, GANONS_CASTLE_BOSS_KEY);
   } else if (GanonsBossKey.Is(GANONSBOSSKEY_VANILLA)) {
-    PlaceItemInLocation(&GanonsCastle_BossKeyChest, GanonsCastle_BossKey);
+    PlaceItemInLocation(GANONS_TOWER_BOSS_KEY_CHEST, GANONS_CASTLE_BOSS_KEY);
   } else {
-    AddItemToMainPool(GanonsCastle_BossKey);
+    AddItemToMainPool(GANONS_CASTLE_BOSS_KEY);
   }
 
   if (ItemPoolValue.Is(ITEMPOOL_PLENTIFUL)) {
@@ -948,12 +1121,20 @@ void GenerateItemPool() {
   }
 
   if (!ShuffleKokiriSword) {
-    ReplaceMaxItem(I_KokiriSword, 0);
+    ReplaceMaxItem(KOKIRI_SWORD, 0);
+  }
+
+  if (ProgressiveGoronSword) {
+    ReplaceMaxItem(BIGGORON_SWORD, 0);
+    AddItemToMainPool(PROGRESSIVE_GORONSWORD, 2);
+    IceTrapModels.push_back(0xD4); // Progressive Goron Sword
+  } else {
+    IceTrapModels.push_back(GI_SWORD_BGS);
   }
 
   //Replace ice traps with junk from the pending junk pool if necessary
   if (IceTrapValue.Is(ICETRAPS_OFF)) {
-    ReplaceMaxItem(IceTrap, 0);
+    ReplaceMaxItem(ICE_TRAP, 0);
   }
   //Replace all junk items with ice traps for onslaught mode
   else if (IceTrapValue.Is(ICETRAPS_ONSLAUGHT)) {
@@ -966,16 +1147,18 @@ void GenerateItemPool() {
     SetScarceItemPool();
   } else if (ItemPoolValue.Is(ITEMPOOL_MINIMAL)) {
     SetMinimalItemPool();
+  } else if (RemoveDoubleDefense) {
+    ReplaceMaxItem(DOUBLE_DEFENSE, 0);
   }
 
   //this feels ugly and there's probably a better way, but
   //it replaces random junk with pending junk.
   bool junkSet;
-  for (Item pendingJunk : PendingJunkPool) {
+  for (ItemKey pendingJunk : PendingJunkPool) {
     junkSet = false;
-    for (Item& item : ItemPool) {
-      for (const Item& junk : JunkPoolItems) {
-        if (item == junk && item != HugeRupee && item != DekuNuts10) {
+    for (ItemKey& item : ItemPool) {
+      for (ItemKey junk : JunkPoolItems) {
+        if (item == junk && item != HUGE_RUPEE && item != DEKU_NUTS_10) {
           item = pendingJunk;
           junkSet = true;
           break;
@@ -984,6 +1167,7 @@ void GenerateItemPool() {
       if (junkSet) break;
     }
   }
+  PendingJunkPool.clear();
 }
 
 void AddJunk() {

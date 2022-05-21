@@ -10,8 +10,8 @@
 // #include "hid.h"
 
 typedef struct {
-    /* 0x00 */ u8 buttonItems[5]; //B,Y,X,I,II
-    /* 0x05 */ u8 buttonSlots[4]; //Y,X,I,II
+    /* 0x00 */ u8  buttonItems[5]; //B,Y,X,I,II
+    /* 0x05 */ u8  buttonSlots[4]; //Y,X,I,II
     /* 0x0A */ u16 equipment;
 } ItemEquips; // size = 0x0C
 
@@ -60,7 +60,7 @@ typedef struct {
     /* 0x0008 */ s32          cutsceneIndex;
     /* 0x000C */ u16          dayTime; // "zelda_time"
     /* 0x000E */ u8           masterQuestFlag;
-    /* 0x000F */ char         unk_F[0x0001];
+    /* 0x000F */ u8           motionControlSetting;
     /* 0x0010 */ s32          nightFlag;
     /* 0x0014 */ s32          unk_14;
     /* 0x0018 */ s32          unk_18;
@@ -79,7 +79,7 @@ typedef struct {
     /* 0x004A */ u16          bgsHitsLeft;
     /* 0x004C */ u16          naviTimer;
     /* 0x004E */ u8           magicAcquired;
-    /* 0x004F */ char         unk_4F;
+    /* 0x004F */ char         unk_4F[0x0001];
     /* 0x0050 */ u8           doubleMagic;
     /* 0x0051 */ u8           doubleDefense;
     /* 0x0052 */ s8           bgsFlag;
@@ -89,11 +89,12 @@ typedef struct {
     /* 0x007E */ u16          sceneIndex;
     /* 0x0080 */ ItemEquips   equips;
     /* 0x008C */ u8           items[26];
-    /* 0x00A6 */ s8           ammo[16];
+    /* 0x00A6 */ s8           ammo[15];
+    /* 0x00B5 */ u8           magic_beans_available; //counts bought
     /* 0x00B6 */ u16          equipment; //bits: swords 0-3, shields 4-6, tunics 8-10, boots 12-14
     /* 0x00B8 */ u32          upgrades; //bits: quiver 0-2, bombs 3-5, strength 6-8, dive 9-11, wallet 12-13, seeds 14-16, sticks 17-19, nuts 20-22
     /* 0x00BC */ u32          questItems; //bits: medallions 0-5, warp songs 6-11, songs 12-17, stones 18-20, shard 21, token 22, skull 23, heart pieces 24-31
-    /* 0x00C0 */ u8           dungeonItems[20];
+    /* 0x00C0 */ u8           dungeonItems[20]; //bits: boss key 0, compass 1, map 2
     /* 0x00D4 */ s8           dungeonKeys[19];
     /* 0x00E7 */ char         unk_E7[0x0001]; //in oot: defenseHearts. seems not here.
     /* 0x00E8 */ s16          gsTokens;
@@ -112,7 +113,13 @@ typedef struct {
     /* 0x0EB4 */ u8           gsFlags[22]; //due to reordering, array is smaller
     /* 0x0ECA */ char         unk_ECA[0x0006]; //the extra two bytes move here
     /* 0x0ED0 */ u32          unk_ED0; //horseback archery highscore?
-    /* 0x0ED4 */ char         unk_ED4[0x0008];
+    /* 0x0ED4 */ u32          bigPoePoints; //number of big poes sold * 100
+    struct {
+        /* 0x0ED4 */ u8 recordFishChild; //seems to be unique ID of fish, this is copied into adult value if player has not yet fished as adult
+        /* 0x0ED5 */ u8 flags; //bits: 0 - ever fished as child, 1 - ever fished as adult, 2 - caught record as child, 3 - caught record as adult
+        /* 0x0ED6 */ u8 timesPaidToFish;
+        /* 0x0ED7 */ u8 recordFishAdult; //seems to be unique ID of fish
+    }                         fishingStats;
     /* 0x0EDC */ u32          unk_EDC; //horse race record time?
     /* 0x0EE0 */ u32          unk_EE0; //marathon race record time?
     /* 0x0EE4 */ char         unk_EE4[0x0008];
@@ -135,7 +142,9 @@ typedef struct {
         /* 0x13C8 */ u32 hour;
         /* 0x13CC */ u32 minute;
     }                         saveTime;
-    /* 0x13D0 */ char         unk_13D0[0x0080];
+    /* 0x13D0 */ char         unk_13D0[0x0008];
+    /* 0x13D8 */ u8           cameraControlSetting;
+    /* 0x13D9 */ char         unk_13D9[0x0077];
     /* 0x1450 */ u32          bossBattleVictories[9];
     /* 0x1474 */ u32          bossBattleScores[9];
     /* 0x1498 */ char         unk_1498[0x0040]; //sheikah stone flags?
@@ -160,12 +169,15 @@ typedef struct {
     /* 0x156F */ u8           buttonStatus[5];
     /* 0x1574 */ char         unk_1574[0x000F];
     /* 0x1584 */ u16          magicMeterSize;
-    /* 0x1586 */ char         unk_1586[0x000C];
+    /* 0x1586 */ char         unk_1586[0x0004];
+    /* 0x158A */ u16          eventInf[4];
     /* 0x1592 */ u16          dungeonIndex;
     /* 0x1594 */ char         unk_1594[0x000C];
     /* 0x15A0 */ u16          nextCutsceneIndex;
     /* 0x15A2 */ u8           cutsceneTrigger;
-    /* 0x15A3 */ char         unk_15A3[0x00F];
+    /* 0x15A3 */ char         unk_15A3[0x008];
+    /* 0x15AB */ u8           nextTransition;
+    /* 0x15AC */ char         unk_15AC[0x006];
     /* 0x15B2 */ s16          healthAccumulator;
 
 //stuff below is from z64.h
@@ -244,15 +256,15 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u8*  texture;
-    /* 0x04 */ s16  unk_04;
-    /* 0x06 */ s16  unk_06;
-    /* 0x08 */ s16  unk_08;
-    /* 0x0A */ s16  unk_0A;
+    /* 0x04 */ s16  x;
+    /* 0x06 */ s16  y;
+    /* 0x08 */ s16  width;
+    /* 0x0A */ s16  height;
     /* 0x0C */ s32  unk_0C;
-    /* 0x10 */ u8   delayA;
-    /* 0x11 */ u8   delayB;
-    /* 0x12 */ s16  unk_12;
-    /* 0x14 */ s16  unk_14;
+    /* 0x10 */ u8   durationTimer;
+    /* 0x11 */ u8   delayTimer;
+    /* 0x12 */ s16  alpha;
+    /* 0x14 */ s16  intensity;
     /* 0x16 */ s16  unk_16;
 } TitleCardContext; // size = 0x18
 
@@ -260,6 +272,18 @@ typedef struct {
     /* 0x00 */ u32    length; // number of actors loaded of this type
     /* 0x04 */ Actor* first;  // pointer to first actor of this type
 } ActorListEntry; // size = 0x08
+
+typedef struct {
+    /* 0x00 */ u32    swch;
+    /* 0x04 */ u32    tempSwch;
+    /* 0x08 */ u32    unk0;
+    /* 0x0C */ u32    unk1;
+    /* 0x10 */ u32    chest;
+    /* 0x14 */ u32    clear;
+    /* 0x18 */ u32    tempClear;
+    /* 0x1C */ u32    collect;
+    /* 0x20 */ u32    tempCollect;
+} ActorFlags; // size = 0x24
 
 typedef struct {
     /* 0x0000 */ u8     unk_00;
@@ -272,17 +296,7 @@ typedef struct {
     /* 0x000C */ ActorListEntry actorList[12];
     // /* 0x006C */ TargetContext targetCtx;
     /* 0x006C */ char   unk_6C[0x130];
-    struct {
-        /* 0x019C */ u32    swch;
-        /* 0x01A0 */ u32    tempSwch;
-        /* 0x01A4 */ u32    unk0;
-        /* 0x01A8 */ u32    unk1;
-        /* 0x01AC */ u32    chest;
-        /* 0x01B0 */ u32    clear;
-        /* 0x01B4 */ u32    tempClear;
-        /* 0x01B8 */ u32    collect;
-        /* 0x01BC */ u32    tempCollect;
-    }                   flags;
+    /* 0x019C */ ActorFlags flags;
     /* 0x01C0 */ TitleCardContext titleCtx;
 } ActorContext; // TODO: size = 0x1D8
 
@@ -388,13 +402,21 @@ typedef struct GlobalContext {
     /* 0x208C */ ActorContext          actorCtx;
     /* 0x2264 */ char                  unk_2264[0x0034];
     /* 0x2298 */ CutsceneContext       csCtx; // "demo_play"
-    /* 0x2304 */ char                  unk_2304[0x087A];
+    /* 0x2304 */ char                  unk_2304[0x078C];
+    /* 0x2A90 */ u8                    msgMode; //seems to be used primarily for the ocarina
+    /* 0x2A91 */ char                  unk_2A91[0xED];
     /* 0x2B7E */ s16                   unk_2B7E; // msgCtx.unk_E3EE in OoT
-    /* 0x2B80 */ char                  unk_2B80[0x0ED8];
+    /* 0x2B80 */ char                  unk_2B80[0x06B0];
+    /* 0x3230 */ u32                   lightSettingsList_addr;
+    /* 0x3234 */ char                  unk_3234[0x0824];
     /* 0x3A58 */ ObjectContext         objectCtx;
-    /* 0x43DC */ char                  unk_43DC[0x1824];
+    /* 0x43DC */ char                  unk_43DC[0x0854];
+    /* 0x4C30 */ u8                    roomNum;
+    /* 0x4C31 */ char                  unk_4C31[0x0FCF];
     /* 0x5C00 */ u8                    linkAgeOnLoad;
-    /* 0x5C01 */ char                  unk_5C01[0x002C];
+    /* 0x5C01 */ char                  unk_5C01[0x001B];
+    /* 0x5C1C */ s16*                  setupExitList;
+    /* 0x5C20 */ char                  unk_5C20[0x000D];
     /* 0x5C2D */ s8                    sceneLoadFlag; // "fade_direction"
     /* 0x5C2E */ char                  unk_5C2E[0x0004];
     /* 0x5C32 */ s16                   nextEntranceIndex;
@@ -406,10 +428,12 @@ typedef struct GlobalContext {
 _Static_assert(sizeof(GlobalContext) == 0x5F14, "Global Context size");
 
 typedef struct StaticContext {
-    /* 0x0000 */ char unk_0[0x0E72];
-    /* 0x0E72 */ u16 collisionDisplay;
+    /* 0x0000 */ char unk_0[0x0E60];
+    /* 0x0E60 */ u16  spawnOnEpona;
+    /* 0x0E62 */ char unk_E72[0x0010];
+    /* 0x0E72 */ u16  collisionDisplay;
     /* 0x0E74 */ char unk_E74[0x015C];
-    /* 0x0FD0 */ u16 renderGeometryDisable;
+    /* 0x0FD0 */ u16  renderGeometryDisable;
     /* 0x0FD2 */ char unk_FD2[0x0602];
 } StaticContext; //size 0x15D4
 // _Static_assert(sizeof(StaticContext) == 0x15D4, "Static Context size");
@@ -449,6 +473,7 @@ extern const char DungeonNames[][25];
 #define gObjectTable ((ObjectFile*)0x53CCF4)
 #define gEntranceTable ((EntranceInfo*)0x543BB8)
 #define gItemUsabilityTable ((u8*)0x506C58)
+#define gGearUsabilityTable ((u32*)0x4D47C8)
 #define gDungeonSceneTable ((Scene*)0x4DC400)
 #define gMQDungeonSceneTable ((Scene*)0x4DCBA8)
 #define gSceneTable ((Scene*)0x545484)
@@ -457,6 +482,8 @@ extern const char DungeonNames[][25];
 #define gDrawItemTable ((DrawItemTableEntry*)0x4D88C8)
 #define gRestrictionFlags ((RestrictionFlags*)0x539DC4)
 #define PLAYER ((Player*)gGlobalContext->actorCtx.actorList[ACTORTYPE_PLAYER].first)
+
+#define GearSlot(X) (X - ITEM_SWORD_KOKIRI)
 
 typedef enum {
     DUNGEON_DEKU_TREE = 0,
@@ -500,11 +527,11 @@ typedef void (*DisplayTextbox_proc)(GlobalContext* globalCtx, u16 textId, Actor*
 #define DisplayTextbox_addr 0x367C7C
 #define DisplayTextbox ((DisplayTextbox_proc)DisplayTextbox_addr)
 
-typedef u32 (*EventCheck_proc)(u32 param_1);
+typedef u32 (*EventCheck_proc)(u32 flag);
 #define EventCheck_addr 0x350CF4
 #define EventCheck ((EventCheck_proc)EventCheck_addr)
 
-typedef void (*EventSet_proc)(u32 param_1);
+typedef void (*EventSet_proc)(u32 flag);
 #define EventSet_addr 0x34CBF8
 #define EventSet ((EventSet_proc)EventSet_addr)
 
@@ -524,8 +551,50 @@ typedef void (*PlaySound_proc)(u32);
 #define PlaySound_addr 0x35C528
 #define PlaySound ((PlaySound_proc)PlaySound_addr) //this function plays sound effects and music tracks, overlaid on top of the current BGM
 
-typedef Actor* (*Actor_Spawn_proc)(ActorContext *actorCtx,GlobalContext *globalCtx,s16 actorId,float posX,float posY,float posZ,s16 rotX,s16 rotY,s16 rotZ,s16 params);
+typedef Actor* (*Actor_Spawn_proc)(ActorContext *actorCtx,GlobalContext *globalCtx,s16 actorId,float posX,float posY,float posZ,s16 rotX,s16 rotY,s16 rotZ,s16 params)
+    __attribute__((pcs("aapcs-vfp")));;
 #define Actor_Spawn_addr 0x3738D0
 #define Actor_Spawn ((Actor_Spawn_proc)Actor_Spawn_addr)
+
+typedef void (*FireDamage_proc)(Actor* player, GlobalContext* globalCtx, int flamesColor);
+#define FireDamage_addr 0x35D8D8
+#define FireDamage ((FireDamage_proc)FireDamage_addr)
+
+typedef void (*Flags_SetEnv_proc)(GlobalContext* globalCtx, s16 flag);
+#define Flags_SetEnv_addr 0x366704
+#define Flags_SetEnv ((Flags_SetEnv_proc)Flags_SetEnv_addr)
+
+typedef void (*GiveItem_proc)(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzRange, f32 yRange)
+    __attribute__((pcs("aapcs-vfp")));
+#define GiveItem_addr 0x3724DC
+#define GiveItem ((GiveItem_proc)GiveItem_addr)
+
+typedef void (*Message_CloseTextbox_proc)(GlobalContext* globalCtx);
+#define Message_CloseTextbox_addr 0x3725E0
+#define Message_CloseTextbox ((Message_CloseTextbox_proc)Message_CloseTextbox_addr)
+
+typedef void (*SetupItemInWater_proc)(Player* player, GlobalContext* globalCtx);
+#define SetupItemInWater_addr 0x354894
+#define SetupItemInWater ((SetupItemInWater_proc)SetupItemInWater_addr)
+
+typedef void (*Health_ChangeBy_proc)(GlobalContext* arg1, u32 arg2);
+#define Health_ChangeBy_addr 0x352DBC
+#define Health_ChangeBy ((Health_ChangeBy_proc)Health_ChangeBy_addr)
+
+typedef void (*PlaySFX_proc)(u32 sfxId, Vec3f* pos, u32 token, f32* freqScale, f32* a4, s8* reverbAdd);
+#define PlaySFX_addr 0x37547C
+#define PlaySFX ((PlaySFX_proc)PlaySFX_addr)
+
+typedef void (*Flags_SetSwitch_proc)(GlobalContext* globalCtx, u32 flag);
+#define Flags_SetSwitch_addr 0x375C10
+#define Flags_SetSwitch ((Flags_SetSwitch_proc)Flags_SetSwitch_addr)
+
+typedef u32 (*Flags_GetSwitch_proc)(GlobalContext* globalCtx, u32 flag);
+#define Flags_GetSwitch_addr 0x36E864
+#define Flags_GetSwitch ((Flags_GetSwitch_proc)Flags_GetSwitch_addr)
+
+typedef u32 (*Flags_GetCollectible_proc)(GlobalContext* globalCtx, u32 flag);
+#define Flags_GetCollectible_addr 0x36405C
+#define Flags_GetCollectible ((Flags_GetCollectible_proc)Flags_GetCollectible_addr)
 
 #endif //_Z3D_H_

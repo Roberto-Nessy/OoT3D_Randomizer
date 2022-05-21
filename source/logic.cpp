@@ -8,6 +8,8 @@
 #include <vector>
 
 #include "settings.hpp"
+#include "dungeon.hpp"
+#include "setting_descriptions.hpp"
 
 using namespace Settings;
 
@@ -52,7 +54,6 @@ namespace Logic {
 
   //Trade Quest
   bool PocketEgg     = false;
-  bool PocketCucco   = false;
   bool Cojiro        = false;
   bool OddMushroom   = false;
   bool OddPoultice   = false;
@@ -129,6 +130,9 @@ namespace Logic {
   u8 ProgressiveStrength  = 0;
   u8 ProgressiveOcarina   = 0;
 
+  //Logical keysanity
+  bool IsKeysanity = false;
+
   //Keys
   u8 ForestTempleKeys          = 0;
   u8 FireTempleKeys            = 0;
@@ -139,6 +143,7 @@ namespace Logic {
   u8 GerudoFortressKeys        = 0;
   u8 GerudoTrainingGroundsKeys = 0;
   u8 BottomOfTheWellKeys       = 0;
+  u8 TreasureGameKeys          = 0;
 
   //Boss Keys
   bool BossKeyForestTemple = false;
@@ -175,10 +180,17 @@ namespace Logic {
   bool FreeFairies      = false;
   bool FairyPond        = false;
   bool BombchuDrop      = false;
+  bool AmmoCanDrop      = false;
 
   bool BuyBombchus5     = false;
   bool BuyBombchus10    = false;
   bool BuyBombchus20    = false;
+  bool BuySeed          = false;
+  bool BuyArrow         = false;
+  bool BuyBomb          = false;
+  bool BuyGPotion       = false;
+  bool BuyBPotion       = false;
+  bool MagicRefill      = false;
 
   /* --- HELPERS, EVENTS, AND LOCATION ACCESS --- */
   /* These are used to simplify reading the logic, but need to be updated
@@ -186,6 +198,7 @@ namespace Logic {
 
   bool Slingshot        = false;
   bool Ocarina          = false;
+  bool OcarinaOfTime    = false;
   bool BombBag          = false;
   bool MagicMeter       = false;
   bool Hookshot         = false;
@@ -196,6 +209,7 @@ namespace Logic {
   bool GoldenGauntlets  = false;
   bool SilverScale      = false;
   bool GoldScale        = false;
+  bool AdultsWallet     = false;
 
   bool ScarecrowSong    = false;
   bool Scarecrow        = false;
@@ -212,12 +226,12 @@ namespace Logic {
   bool Fairy            = false;
   bool BottleWithBigPoe = false;
 
-  bool HasBombchus      = false;
   bool FoundBombchus    = false;
+  bool CanPlayBowling   = false;
+  bool HasBombchus      = false;
   bool HasExplosives    = false;
   bool IsChild          = false;
   bool IsAdult          = false;
-//bool IsGlitched       = false;
   bool CanBlastOrSmash  = false;
   bool CanChildAttack   = false;
   bool CanChildDamage   = false;
@@ -230,7 +244,7 @@ namespace Logic {
   bool CanSummonGossipFairy = false;
   bool CanSummonGossipFairyWithoutSuns = false;
   bool CanTakeDamage       = false;
-  bool CanPlantBean        = false;
+  //bool CanPlantBean        = false;
   bool CanOpenBombGrotto   = false;
   bool CanOpenStormGrotto  = false;
   bool BigPoeKill          = false;
@@ -267,6 +281,7 @@ namespace Logic {
   bool ShowedMidoSwordAndShield  = false;
   bool CarpenterRescue           = false;
   bool GF_GateOpen               = false;
+  bool GtG_GateOpen              = false;
   bool DampesWindmillAccess      = false;
   bool DrainWell                 = false;
   bool GoronCityChildFire        = false;
@@ -316,72 +331,72 @@ namespace Logic {
     return Ocarina && song;
   }
 
-  static bool IsMagicItem(CanUseItem item) {
-    return item == CanUseItem::Dins_Fire    ||
-           item == CanUseItem::Farores_Wind ||
-           item == CanUseItem::Nayrus_Love  ||
-           item == CanUseItem::Lens_of_Truth;
+  static bool IsMagicItem(ItemKey item) {
+    return item == DINS_FIRE    ||
+           item == FARORES_WIND ||
+           item == NAYRUS_LOVE  ||
+           item == LENS_OF_TRUTH;
   }
 
-  static bool IsAdultItem(CanUseItem item) {
-    return item == CanUseItem::Bow              ||
-           item == CanUseItem::Hammer           ||
-           item == CanUseItem::Iron_Boots       ||
-           item == CanUseItem::Hover_Boots      ||
-           item == CanUseItem::Hookshot         ||
-           item == CanUseItem::Longshot         ||
-           item == CanUseItem::Silver_Gauntlets ||
-           item == CanUseItem::Golden_Gauntlets ||
-           item == CanUseItem::Goron_Tunic      ||
-           item == CanUseItem::Zora_Tunic       ||
-           item == CanUseItem::Scarecrow        ||
-           item == CanUseItem::Distant_Scarecrow;
+  static bool IsAdultItem(ItemKey item) {
+    return item == BOW              ||
+           item == MEGATON_HAMMER   ||
+           item == IRON_BOOTS       ||
+           item == HOVER_BOOTS      ||
+           item == HOOKSHOT         ||
+           item == LONGSHOT         ||
+           item == SILVER_GAUNTLETS ||
+           item == GOLDEN_GAUNTLETS ||
+           item == GORON_TUNIC      ||
+           item == ZORA_TUNIC       ||
+           item == SCARECROW        ||
+           item == DISTANT_SCARECROW;
   }
 
-  static bool IsChildItem(CanUseItem item) {
-    return item == CanUseItem::Slingshot    ||
-           item == CanUseItem::Boomerang    ||
-           item == CanUseItem::Kokiri_Sword ||
-           item == CanUseItem::Sticks       ||
-           item == CanUseItem::Deku_Shield;
+  static bool IsChildItem(ItemKey item) {
+    return item == SLINGSHOT    ||
+           item == BOOMERANG    ||
+           item == KOKIRI_SWORD ||
+           item == STICKS       ||
+           item == DEKU_SHIELD;
   }
 
-  static bool IsMagicArrow(CanUseItem item) {
-    return item == CanUseItem::Fire_Arrows ||
-           item == CanUseItem::Ice_Arrows  ||
-           item == CanUseItem::Light_Arrows;
+  static bool IsMagicArrow(ItemKey item) {
+    return item == FIRE_ARROWS ||
+           item == ICE_ARROWS  ||
+           item == LIGHT_ARROWS;
   }
 
-  bool HasItem(CanUseItem itemName) {
-    return (itemName == CanUseItem::Dins_Fire         && DinsFire)        ||
-           (itemName == CanUseItem::Farores_Wind      && FaroresWind)     ||
-           (itemName == CanUseItem::Nayrus_Love       && NayrusLove)      ||
-           (itemName == CanUseItem::Lens_of_Truth     && LensOfTruth)     ||
-           (itemName == CanUseItem::Bow               && Bow)             ||
-           (itemName == CanUseItem::Hammer            && Hammer)          ||
-           (itemName == CanUseItem::Iron_Boots        && IronBoots)       ||
-           (itemName == CanUseItem::Hover_Boots       && HoverBoots)      ||
-           (itemName == CanUseItem::Hookshot          && Hookshot)        ||
-           (itemName == CanUseItem::Longshot          && Longshot)        ||
-           (itemName == CanUseItem::Silver_Gauntlets  && SilverGauntlets) ||
-           (itemName == CanUseItem::Golden_Gauntlets  && GoldenGauntlets) ||
-           (itemName == CanUseItem::Goron_Tunic       && GoronTunic)      ||
-           (itemName == CanUseItem::Zora_Tunic        && ZoraTunic)       ||
-           (itemName == CanUseItem::Scarecrow         && Scarecrow)       ||
-           (itemName == CanUseItem::Distant_Scarecrow && DistantScarecrow)||
-           (itemName == CanUseItem::Slingshot         && Slingshot)       ||
-           (itemName == CanUseItem::Boomerang         && Boomerang)       ||
-           (itemName == CanUseItem::Kokiri_Sword      && KokiriSword)     ||
-           (itemName == CanUseItem::Sticks            && Sticks)          ||
-           (itemName == CanUseItem::Deku_Shield       && DekuShield)      ||
-           (itemName == CanUseItem::Fire_Arrows       && FireArrows)      ||
-           (itemName == CanUseItem::Ice_Arrows        && IceArrows)       ||
-           (itemName == CanUseItem::Light_Arrows      && LightArrows);
+  bool HasItem(ItemKey itemName) {
+    return (itemName == DINS_FIRE         && DinsFire)        ||
+           (itemName == FARORES_WIND      && FaroresWind)     ||
+           (itemName == NAYRUS_LOVE       && NayrusLove)      ||
+           (itemName == LENS_OF_TRUTH     && LensOfTruth)     ||
+           (itemName == BOW               && Bow)             ||
+           (itemName == MEGATON_HAMMER    && Hammer)          ||
+           (itemName == IRON_BOOTS        && IronBoots)       ||
+           (itemName == HOVER_BOOTS       && HoverBoots)      ||
+           (itemName == HOOKSHOT          && Hookshot)        ||
+           (itemName == LONGSHOT          && Longshot)        ||
+           (itemName == SILVER_GAUNTLETS  && SilverGauntlets) ||
+           (itemName == GOLDEN_GAUNTLETS  && GoldenGauntlets) ||
+           (itemName == GORON_TUNIC       && GoronTunic)      ||
+           (itemName == ZORA_TUNIC        && ZoraTunic)       ||
+           (itemName == SCARECROW         && Scarecrow)       ||
+           (itemName == DISTANT_SCARECROW && DistantScarecrow)||
+           (itemName == SLINGSHOT         && Slingshot)       ||
+           (itemName == BOOMERANG         && Boomerang)       ||
+           (itemName == KOKIRI_SWORD      && KokiriSword)     ||
+           (itemName == STICKS            && Sticks)          ||
+           (itemName == DEKU_SHIELD       && DekuShield)      ||
+           (itemName == FIRE_ARROWS       && FireArrows)      ||
+           (itemName == ICE_ARROWS        && IceArrows)       ||
+           (itemName == LIGHT_ARROWS      && LightArrows);
 
   }
 
   //Can the passed in item be used?
-  bool CanUse(CanUseItem itemName) {
+  bool CanUse(ItemKey itemName) {
     return (IsMagicItem(itemName)  && HasItem(itemName) && MagicMeter) ||
            (IsAdultItem(itemName)  && HasItem(itemName) && IsAdult)    ||
            (IsMagicArrow(itemName) && HasItem(itemName) && MagicMeter  && IsAdult && Bow) ||
@@ -396,27 +411,102 @@ namespace Logic {
            (age == HasProjectileAge::Either && (Slingshot || Boomerang   ||  Hookshot || Bow));
   }
 
+  u8 GetDifficultyValueFromString(Option& glitchOption) {
+    for (size_t i = 0; i < GlitchDifficulties.size(); i++) {
+      if (glitchOption.GetSelectedOptionText() == GlitchDifficulties[i]) {
+        return i + 1;
+      }
+    }
+    return 0;
+  }
+
+  bool CanDoGlitch(GlitchType glitch, GlitchDifficulty difficulty) {
+    u8 setDifficulty;
+    switch (glitch) {
+    //Infinite Sword Glitch
+    case GlitchType::ISG:
+      setDifficulty = GetDifficultyValueFromString(GlitchISG);
+      if (setDifficulty < static_cast<u8>(difficulty)) {
+        return false;
+      }
+      return HasShield && (IsAdult || (IsChild && (KokiriSword || Sticks)));
+    //Bomb Hover
+    case GlitchType::BombHover:
+      setDifficulty = GetDifficultyValueFromString(GlitchHover);
+      if (setDifficulty < static_cast<u8>(difficulty)) {
+        return false;
+      }
+      return CanDoGlitch(GlitchType::ISG, GlitchDifficulty::NOVICE) && (HasBombchus || (Bombs && setDifficulty >= static_cast<u8>(GlitchDifficulty::ADVANCED)));
+    //Megaflip
+    case GlitchType::Megaflip:
+      setDifficulty = GetDifficultyValueFromString(GlitchMegaflip);
+      if (setDifficulty < static_cast<u8>(difficulty)) {
+        return false;
+      }
+      return HasShield && Bombs;
+    //Hookshot Clip
+    case GlitchType::HookshotClip:
+      setDifficulty = GetDifficultyValueFromString(GlitchHookshotClip);
+      if (setDifficulty < static_cast<u8>(difficulty)) {
+        return false;
+      }
+      return IsAdult && Hookshot;
+    //Hookshot Jump: Bonk
+    case GlitchType::HookshotJump_Bonk:
+      setDifficulty = GetDifficultyValueFromString(GlitchHookshotJump_Bonk);
+      if (setDifficulty < static_cast<u8>(difficulty)) {
+        return false;
+      }
+      return IsAdult && Hookshot;
+    //Hookshot Jump: Boots
+    case GlitchType::HookshotJump_Boots:
+      setDifficulty = GetDifficultyValueFromString(GlitchHookshotJump_Boots);
+      if (setDifficulty < static_cast<u8>(difficulty)) {
+        return false;
+      }
+      return IsAdult && Hookshot && (IronBoots || HoverBoots);
+    //Ledge Clip
+    case GlitchType::LedgeClip:
+      setDifficulty = GetDifficultyValueFromString(GlitchLedgeClip);
+      if (setDifficulty < static_cast<u8>(difficulty)) {
+        return false;
+      }
+      return IsAdult;
+    //Triple Slash Clip
+    case GlitchType::TripleSlashClip:
+      setDifficulty = GetDifficultyValueFromString(GlitchTripleSlashClip);
+      if (setDifficulty < static_cast<u8>(difficulty)) {
+        return false;
+      }
+      return IsAdult || (IsChild && KokiriSword);
+    }
+    //Shouldn't be reached
+    return false;
+  }
+
   //Updates all logic helpers. Should be called whenever a non-helper is changed
   void UpdateHelpers() {
-    Slingshot       = ProgressiveBulletBag >= 1;
+    Slingshot       = (ProgressiveBulletBag >= 1) && (BuySeed || AmmoCanDrop);
     Ocarina         = ProgressiveOcarina   >= 1;
-    MagicMeter      = ProgressiveMagic     >= 1;
-    BombBag         = ProgressiveBombBag   >= 1;
+    OcarinaOfTime   = ProgressiveOcarina   >= 2;
+    MagicMeter      = (ProgressiveMagic     >= 1) && (AmmoCanDrop || (HasBottle && (BuyGPotion || BuyBPotion)));
+    BombBag         = (ProgressiveBombBag   >= 1) && (BuyBomb || AmmoCanDrop);
     Hookshot        = ProgressiveHookshot  >= 1;
     Longshot        = ProgressiveHookshot  >= 2;
-    Bow             = ProgressiveBow       >= 1;
+    Bow             = (ProgressiveBow       >= 1) && (BuyArrow || AmmoCanDrop);
     GoronBracelet   = ProgressiveStrength  >= 1;
     SilverGauntlets = ProgressiveStrength  >= 2;
     GoldenGauntlets = ProgressiveStrength  >= 3;
     SilverScale     = ProgressiveScale     >= 1;
     GoldScale       = ProgressiveScale     >= 2;
+    AdultsWallet    = ProgressiveWallet    >= 1;
 
     Scarecrow        = Hookshot && CanPlay(ScarecrowSong);
     DistantScarecrow = Longshot && CanPlay(ScarecrowSong);
 
     //Drop Access
     DekuStickDrop = StickPot || DekuBabaSticks;
-    DekuNutDrop   = NutPot   || NutCrate         || DekuBabaNuts;
+    DekuNutDrop   = (NutPot  || NutCrate         || DekuBabaNuts) && AmmoCanDrop;
     BugsAccess    = BugShrub || WanderingBugs    || BugRock;
     FishAccess    = LoneFish || FishGroup;
     FairyAccess   = FairyPot || GossipStoneFairy || BeanPlantFairy || ButterflyFairy || FreeFairies || FairyPond;
@@ -431,36 +521,49 @@ namespace Logic {
     Fish         = HasBottle && FishAccess;
     Fairy        = HasBottle && FairyAccess;
 
-    HasBombchus   = (BuyBombchus5 || BuyBombchus10 || BuyBombchus20 /*|| BombchuDrop*/) && (BombchusInLogic || BombBag);
-    FoundBombchus = (BombchusInLogic && (Bombchus || Bombchus5 || Bombchus10 || Bombchus20)) || (!BombchusInLogic && BombBag);
+    FoundBombchus   = (BombchuDrop || Bombchus || Bombchus5 || Bombchus10 || Bombchus20);
+    CanPlayBowling  = (BombchusInLogic && FoundBombchus) || (!BombchusInLogic && BombBag);
+    HasBombchus     = (BuyBombchus5 || BuyBombchus10 || BuyBombchus20 || (AmmoDrops.Is(AMMODROPS_BOMBCHU) && FoundBombchus));
+
     HasExplosives =  Bombs || (BombchusInLogic && HasBombchus);
 
-    IsChild = Age == AGE_CHILD;
-    IsAdult = Age == AGE_ADULT;
+    //Unshuffled adult trade quest
+    Eyedrops     = Eyedrops     || (!ShuffleAdultTradeQuest && ClaimCheck);
+    EyeballFrog  = EyeballFrog  || (!ShuffleAdultTradeQuest && Eyedrops);
+    Prescription = Prescription || (!ShuffleAdultTradeQuest && EyeballFrog);
+    BrokenSword  = BrokenSword  || (!ShuffleAdultTradeQuest && Prescription);
+    PoachersSaw  = PoachersSaw  || (!ShuffleAdultTradeQuest && BrokenSword);
+    OddPoultice  = OddPoultice  || (!ShuffleAdultTradeQuest && PoachersSaw);
+    OddMushroom  = OddMushroom  || (!ShuffleAdultTradeQuest && OddPoultice);
+    Cojiro       = Cojiro       || (!ShuffleAdultTradeQuest && OddMushroom);
+    PocketEgg    = PocketEgg    || (!ShuffleAdultTradeQuest && Cojiro);
 
-  //IsGlitched = false;
+    // IsChild = Age == AGE_CHILD;
+    // IsAdult = Age == AGE_ADULT;
 
-    CanBlastOrSmash = HasExplosives || CanUse(CanUseItem::Hammer);
-    CanChildAttack  = IsChild && (Slingshot || Boomerang || Sticks || KokiriSword || HasExplosives || CanUse(CanUseItem::Dins_Fire));
-    CanChildDamage  = IsChild && (Slingshot ||              Sticks || KokiriSword || HasExplosives || CanUse(CanUseItem::Dins_Fire));
-    CanStunDeku     = IsAdult || (Slingshot || Boomerang || Sticks || KokiriSword || HasExplosives || CanUse(CanUseItem::Dins_Fire) || Nuts || DekuShield);
-    CanCutShrubs    = IsAdult || Sticks || KokiriSword || Boomerang || HasExplosives;
+    //IsGlitched = false;
+
+    CanBlastOrSmash = HasExplosives || CanUse(MEGATON_HAMMER);
+    CanChildAttack  = IsChild && (Slingshot || Boomerang || Sticks || KokiriSword || HasExplosives || CanUse(DINS_FIRE));
+    CanChildDamage  = IsChild && (Slingshot ||              Sticks || KokiriSword || HasExplosives || CanUse(DINS_FIRE));
+    CanStunDeku     = IsAdult || (Slingshot || Boomerang || Sticks || KokiriSword || HasExplosives || CanUse(DINS_FIRE) || Nuts || DekuShield);
+    CanCutShrubs    = IsAdult /*|| Sticks*/ || KokiriSword || Boomerang || HasExplosives;
     CanDive         = ProgressiveScale >= 1;
     CanLeaveForest  = OpenForest.IsNot(OPENFOREST_CLOSED) || IsAdult || DekuTreeClear;
     CanPlantBugs    = IsChild && Bugs;
     CanRideEpona    = IsAdult && Epona && CanPlay(EponasSong);
     CanSummonGossipFairy            = Ocarina && (ZeldasLullaby || EponasSong || SongOfTime || SunsSong);
     CanSummonGossipFairyWithoutSuns = Ocarina && (ZeldasLullaby || EponasSong || SongOfTime);
-    CanTakeDamage       = DamageMultiplier.IsNot(DAMAGEMULTIPLIER_OHKO) || Fairy || CanUse(CanUseItem::Nayrus_Love);
-    CanPlantBean        = IsChild && (MagicBean || MagicBeanPack);
+    CanTakeDamage       = DamageMultiplier.IsNot(DAMAGEMULTIPLIER_OHKO) || DamageMultiplier.IsNot(DAMAGEMULTIPLIER_OCTUPLE) || DamageMultiplier.IsNot(DAMAGEMULTIPLIER_SEXDECUPLE) || Fairy || CanUse(NAYRUS_LOVE);
+    //CanPlantBean        = IsChild && (MagicBean || MagicBeanPack);
     CanOpenBombGrotto   = CanBlastOrSmash       && (ShardOfAgony || LogicGrottosWithoutAgony);
     CanOpenStormGrotto  = CanPlay(SongOfStorms) && (ShardOfAgony || LogicGrottosWithoutAgony);
-    HookshotOrBoomerang = CanUse(CanUseItem::Hookshot) || CanUse(CanUseItem::Boomerang);
+    HookshotOrBoomerang = CanUse(HOOKSHOT) || CanUse(BOOMERANG);
     CanGetNightTimeGS = (CanPlay(SunsSong) || !NightGSExpectSuns);
 
     GuaranteeTradePath     = ShuffleInteriorEntrances || ShuffleOverworldEntrances || LogicBiggoronBolero || CanBlastOrSmash || StopGCRollingGoronAsAdult;
   //GuaranteeHint          = (hints == "Mask" && MaskofTruth) || (hints == "Agony") || (hints != "Mask" && hints != "Agony");
-    HasFireSource          = CanUse(CanUseItem::Dins_Fire) || CanUse(CanUseItem::Fire_Arrows);
+    HasFireSource          = CanUse(DINS_FIRE) || CanUse(FIRE_ARROWS);
     HasFireSourceWithTorch = HasFireSource || (IsChild && Sticks);
 
     //Gerudo Fortress
@@ -501,6 +604,14 @@ namespace Logic {
     return (dungeonKeyCount >= requiredAmount);
   }
 
+  bool SmallKeys_ShadowTemple(u8 dungeonKeyCount, u8 requiredAmountGlitchless, u8 requiredAmountGlitched) {
+    if (Settings::Logic.Is(LOGIC_GLITCHED) && GetDifficultyValueFromString(GlitchHookshotClip) >= static_cast<u8>(GlitchDifficulty::NOVICE)) {
+      return (dungeonKeyCount >= requiredAmountGlitched);
+    } else {
+      return (dungeonKeyCount >= requiredAmountGlitchless);
+    }
+  }
+
   bool EventsUpdated() {
 
       if (DekuTreeClearPast        != DekuTreeClear        ||
@@ -533,6 +644,10 @@ namespace Logic {
 
    //Reset All Logic to false
    void LogicReset() {
+     //Settings-dependent variables
+     IsKeysanity = Keysanity.Is(KEYSANITY_ANYWHERE) || Keysanity.Is(KEYSANITY_OVERWORLD) || Keysanity.Is(KEYSANITY_ANY_DUNGEON);
+     AmmoCanDrop = AmmoDrops.IsNot(AMMODROPS_NONE);
+
      //Child item logic
      KokiriSword   = false;
      ZeldasLetter  = false;
@@ -570,7 +685,6 @@ namespace Logic {
 
      //Trade Quest
      PocketEgg     = false;
-     PocketCucco   = false;
      Cojiro        = false;
      OddMushroom   = false;
      OddPoultice   = false;
@@ -649,7 +763,8 @@ namespace Logic {
 
      //Keys
      ForestTempleKeys          = 0;
-     FireTempleKeys            = 0;
+     //If not keysanity, start with 1 logical key to account for automatically unlocking the basement door in vanilla FiT
+     FireTempleKeys            = IsKeysanity || Dungeon::FireTemple.IsMQ() ? 0 : 1;
      WaterTempleKeys           = 0;
      SpiritTempleKeys          = 0;
      ShadowTempleKeys          = 0;
@@ -657,6 +772,7 @@ namespace Logic {
      GerudoFortressKeys        = 0;
      GerudoTrainingGroundsKeys = 0;
      BottomOfTheWellKeys       = 0;
+     TreasureGameKeys          = 0;
 
      //Boss Keys
      BossKeyForestTemple = 0;
@@ -699,6 +815,12 @@ namespace Logic {
      BuyBombchus5     = false;
      BuyBombchus10    = false;
      BuyBombchus20    = false;
+     BuySeed          = false;
+     BuyArrow         = false;
+     BuyBomb          = false;
+     BuyGPotion       = false;
+     BuyBPotion       = false;
+     MagicRefill      = false;
 
      /* --- HELPERS, EVENTS, AND LOCATION ACCESS --- */
      /* These are used to simplify reading the logic, but need to be updated
@@ -706,6 +828,7 @@ namespace Logic {
 
      Slingshot        = false;
      Ocarina          = false;
+     OcarinaOfTime    = false;
      BombBag          = false;
      MagicMeter       = false;
      Hookshot         = false;
@@ -716,6 +839,7 @@ namespace Logic {
      GoldenGauntlets  = false;
      SilverScale      = false;
      GoldScale        = false;
+     AdultsWallet     = false;
 
      ScarecrowSong    = false;
      Scarecrow        = false;
@@ -732,8 +856,9 @@ namespace Logic {
      Fairy            = false;
      BottleWithBigPoe = false;
 
-     HasBombchus      = false;
      FoundBombchus    = false;
+     CanPlayBowling   = false;
+     HasBombchus      = false;
      HasExplosives    = false;
      IsChild          = false;
      IsAdult          = false;
@@ -749,7 +874,7 @@ namespace Logic {
      CanStunDeku      = false;
      CanSummonGossipFairy = false;
      CanSummonGossipFairyWithoutSuns = false;
-     CanPlantBean        = false;
+     //CanPlantBean        = false;
      CanOpenBombGrotto   = false;
      CanOpenStormGrotto  = false;
      BigPoeKill          = false;
@@ -782,6 +907,7 @@ namespace Logic {
      ShowedMidoSwordAndShield  = false;
      CarpenterRescue           = false;
      GF_GateOpen               = false;
+     GtG_GateOpen              = false;
      DampesWindmillAccess      = false;
      DrainWell                 = false;
      GoronCityChildFire        = false;

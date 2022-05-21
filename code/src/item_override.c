@@ -5,14 +5,19 @@
 #include "settings.h"
 #include "custom_models.h"
 #include "objects.h"
+#include "entrance.h"
+#include "savefile.h"
+#include "common.h"
 #include <stddef.h>
-void svcBreak(u32 breakReason); //TODO: remove
 
 #include "z3D/z3D.h"
 #include "z3D/actors/z_en_box.h"
 #include "z3D/actors/z_en_item00.h"
 
-static ItemOverride rItemOverrides[512] = { 0 };
+#define READY_ON_LAND 1
+#define READY_IN_WATER 2
+
+static ItemOverride rItemOverrides[640] = { 0 };
 static s32 rItemOverrides_Count = 0;
 
 static ItemOverride rPendingOverrideQueue[3] = { 0 };
@@ -28,9 +33,10 @@ u32 rActiveItemGraphicId = 0;
 u32 rActiveItemFastChest = 0;
 
 static u8 rSatisfiedPendingFrames = 0;
+static u8 rSatisfiedPendingFramesWater = 0;
 
 void ItemOverride_Init(void) {
-    while(rItemOverrides[rItemOverrides_Count].key.all != 0) {
+    while (rItemOverrides[rItemOverrides_Count].key.all != 0) {
         rItemOverrides_Count++;
     }
 
@@ -41,13 +47,66 @@ void ItemOverride_Init(void) {
 
     // Enable items by age as determined by settings
     if (gSettingsContext.stickAsAdult) {
-        gItemUsabilityTable[ITEM_STICK] = 0x09;
+        gItemUsabilityTable[ITEM_STICK]           = 0x09;
     }
     if (gSettingsContext.boomerangAsAdult) {
-        gItemUsabilityTable[ITEM_BOOMERANG] = 0x09;
+        gItemUsabilityTable[ITEM_BOOMERANG]       = 0x09;
     }
     if (gSettingsContext.hammerAsChild) {
-        gItemUsabilityTable[ITEM_HAMMER] = 0x09;
+        gItemUsabilityTable[ITEM_HAMMER]          = 0x09;
+    }
+    if (gSettingsContext.slingshotAsAdult) {
+        gItemUsabilityTable[ITEM_SLINGSHOT]       = 0x09;
+    }
+    if (gSettingsContext.bowAsChild) {
+        gItemUsabilityTable[ITEM_BOW]             = 0x09;
+        gItemUsabilityTable[ITEM_ARROW_FIRE]      = 0x09;
+        gItemUsabilityTable[ITEM_ARROW_ICE]       = 0x09;
+        gItemUsabilityTable[ITEM_ARROW_LIGHT]     = 0x09;
+        gItemUsabilityTable[ITEM_BOW_ARROW_FIRE]  = 0x09;
+        gItemUsabilityTable[ITEM_BOW_ARROW_ICE]   = 0x09;
+        gItemUsabilityTable[ITEM_BOW_ARROW_LIGHT] = 0x09;
+    }
+    if (gSettingsContext.ironbootsAsChild) {
+        gItemUsabilityTable[ITEM_BOOTS_IRON]      = 0x09;
+    }
+    if (gSettingsContext.hoverbootsAsChild) {
+        gItemUsabilityTable[ITEM_BOOTS_HOVER]     = 0x09;
+    }
+    if (gSettingsContext.masksAsAdult) {
+        gItemUsabilityTable[ITEM_MASK_KEATON]     = 0x09;
+        gItemUsabilityTable[ITEM_MASK_SKULL]      = 0x09;
+        gItemUsabilityTable[ITEM_MASK_SPOOKY]     = 0x09;
+        gItemUsabilityTable[ITEM_MASK_BUNNY]      = 0x09;
+        gItemUsabilityTable[ITEM_MASK_GORON]      = 0x09;
+        gItemUsabilityTable[ITEM_MASK_ZORA]       = 0x09;
+        gItemUsabilityTable[ITEM_MASK_GERUDO]     = 0x09;
+        gItemUsabilityTable[ITEM_MASK_TRUTH]      = 0x09;
+    }
+    if (gSettingsContext.hookshotAsChild) {
+        gItemUsabilityTable[ITEM_HOOKSHOT]        = 0x09;
+        gItemUsabilityTable[ITEM_LONGSHOT]        = 0x09;
+    }
+    if (gSettingsContext.kokiriSwordAsAdult) {
+        gGearUsabilityTable[GearSlot(ITEM_SWORD_KOKIRI)]  = 0x09;
+    }
+    if (gSettingsContext.masterSwordAsChild) {
+        gGearUsabilityTable[GearSlot(ITEM_SWORD_MASTER)]  = 0x09;
+    }
+    if (gSettingsContext.biggoronSwordAsChild) {
+        gGearUsabilityTable[GearSlot(ITEM_SWORD_BGS)]     = 0x09;
+    }
+    if (gSettingsContext.dekuShieldAsAdult) {
+        gGearUsabilityTable[GearSlot(ITEM_SHIELD_DEKU)]   = 0x09;
+    }
+    if (gSettingsContext.mirrorShieldAsChild) {
+        gGearUsabilityTable[GearSlot(ITEM_SHIELD_MIRROR)] = 0x09;
+    }
+    if (gSettingsContext.goronTunicAsChild) {
+        gGearUsabilityTable[GearSlot(ITEM_TUNIC_GORON)]   = 0x09;
+    }
+    if (gSettingsContext.zoraTunicAsChild) {
+        gGearUsabilityTable[GearSlot(ITEM_TUNIC_ZORA)]    = 0x09;
     }
 }
 
@@ -128,13 +187,18 @@ ItemOverride ItemOverride_Lookup(Actor* actor, u8 scene, u8 itemId) {
 static void ItemOverride_Activate(ItemOverride override) {
     u16 resolvedItemId = ItemTable_ResolveUpgrades(override.value.itemId);
     ItemRow* itemRow = ItemTable_GetItemRow(resolvedItemId);
+    u8 looksLikeItemId = override.value.looksLikeItemId;
+
+    if (override.value.itemId == 0x7C) { // Ice trap
+        looksLikeItemId = 0;
+    }
 
     rActiveItemOverride = override;
     rActiveItemRow = itemRow;
     rActiveItemActionId = itemRow->actionId;
     rActiveItemTextId = itemRow->textId;
     rActiveItemObjectId = itemRow->objectId;
-    rActiveItemGraphicId = itemRow->graphicId;
+    rActiveItemGraphicId = looksLikeItemId ? ItemTable_GetItemRow(looksLikeItemId)->graphicId : itemRow->graphicId;
     rActiveItemFastChest = itemRow->chestType & 0x01;
 }
 
@@ -159,6 +223,10 @@ static void ItemOverride_PushPendingOverride(ItemOverride override) {
             break;
         }
     }
+}
+
+s32 ItemOverride_IsAPendingOverride(void) {
+    return (rPendingOverrideQueue[0].key.all != 0);
 }
 
 void ItemOverride_PushDelayedOverride(u8 flag) {
@@ -188,13 +256,32 @@ static void ItemOverride_AfterKeyReceived(ItemOverride_Key key) {
     if (key.all == fireArrowKey.all) {
         gGlobalContext->actorCtx.flags.chest |= 0x1;
     }
+
+    // If we override an adult trade item, we should remove the previous item from being owned
+    if ((key.type == OVR_BASE_ITEM) && ((key.flag == GI_COJIRO) || ((key.flag > GI_POCKET_EGG) && (key.flag <= GI_CLAIM_CHECK)))) {
+        u8 itemId;
+        switch (key.flag) {
+            case GI_COJIRO:       itemId = 46; break;
+            case GI_POCKET_CUCCO: itemId = 45; break;
+            case GI_ODD_MUSHROOM: itemId = 47; break;
+            case GI_ODD_POTION:   itemId = 48; break;
+            case GI_SAW:          itemId = 49; break;
+            case GI_SWORD_BROKEN: itemId = 50; break;
+            case GI_PERSCRIPTION: itemId = 51; break;
+            case GI_FROG:         itemId = 52; break;
+            case GI_EYEDROPS:     itemId = 53; break;
+            case GI_CLAIM_CHECK:  itemId = 54; break;
+        }
+        SaveFile_UnsetTradeItemAsOwned(itemId);
+        SaveFile_SetOwnedTradeItemEquipped();
+    }
 }
 
 static void ItemOverride_PopIceTrap(void) {
     ItemOverride_Key key = rPendingOverrideQueue[0].key;
     ItemOverride_Value value = rPendingOverrideQueue[0].value;
     if (value.itemId == 0x7C) {
-        IceTrap_Push();
+        IceTrap_Push(key.all);
         ItemOverride_PopPendingOverride();
         ItemOverride_AfterKeyReceived(key);
     }
@@ -209,25 +296,56 @@ void ItemOverride_AfterItemReceived(void) {
     ItemOverride_Clear();
 }
 
-static u32 ItemOverride_PlayerIsReady(void) {
-    if ((PLAYER->stateFlags1 & 0xFCAC2485) == 0 &&
-        (PLAYER->actor.bgCheckFlags & 0x0001) &&
-        (PLAYER->stateFlags2 & 0x000C0000) == 0 &&
-        PLAYER->actor.draw != NULL &&
-        gGlobalContext->actorCtx.titleCtx.delayB == 0 &&
-        gGlobalContext->actorCtx.titleCtx.delayA == 0 &&
-        gGlobalContext->actorCtx.titleCtx.unk_12 == 0
+static u32 ItemOverride_PlayerIsReadyOnLand(void) {
+    if ((PLAYER->stateFlags1 & 0xFCAC2485) == 0 && (PLAYER->actor.bgCheckFlags & 0x0001) &&
+        (PLAYER->stateFlags2 & 0x000C0000) == 0 && PLAYER->actor.draw != NULL &&
+        gGlobalContext->actorCtx.titleCtx.delayTimer == 0 && gGlobalContext->actorCtx.titleCtx.durationTimer == 0 &&
+        gGlobalContext->actorCtx.titleCtx.alpha == 0
         // && (z64_event_state_1 & 0x20) == 0 //TODO
         // && (z64_game.camera_2 == 0) //TODO
-        ) {
+    ) {
         rSatisfiedPendingFrames++;
-    }
-    else {
+    } else {
         rSatisfiedPendingFrames = 0;
     }
     if (rSatisfiedPendingFrames >= 2) {
         rSatisfiedPendingFrames = 0;
         return 1;
+    }
+    return 0;
+}
+
+static u32 ItemOverride_PlayerIsReadyInWater(void) {
+    if ((PLAYER->stateFlags1 & 0xF4AC2085) == 0 /*&& (PLAYER->actor.bgCheckFlags & 0x0001)*/ &&
+        (PLAYER->stateFlags2 & 0x000C0000) == 0 && PLAYER->actor.draw != NULL &&
+        gGlobalContext->actorCtx.titleCtx.delayTimer == 0 && gGlobalContext->actorCtx.titleCtx.durationTimer == 0 &&
+        gGlobalContext->actorCtx.titleCtx.alpha == 0 &&
+        (PLAYER->stateFlags1 & 0x08000000) != 0 && // Player is Swimming
+        (PLAYER->stateFlags2 & 0x400) != 0 && // Player is underwater
+        (PLAYER->stateFlags1 & 0x400) == 0 && // Player is not already receiving an item when surfacing
+        gGlobalContext->sceneLoadFlag == 0 && // Another scene isn't about to be loaded
+        rPendingOverrideQueue[0].key.type == OVR_TEMPLE // Must be an item received for completing a dungeon
+        // && Multiworld is off
+        // && (z64_event_state_1 & 0x20) == 0 //TODO
+        // && (z64_game.camera_2 == 0) //TODO
+    ) {
+        rSatisfiedPendingFramesWater++;
+    } else {
+        rSatisfiedPendingFramesWater = 0;
+    }
+    if (rSatisfiedPendingFramesWater >= 2) {
+        rSatisfiedPendingFramesWater = 0;
+        return 1;
+    }
+    return 0;
+}
+
+static u32 ItemOverride_PlayerIsReady(void) {
+    if (ItemOverride_PlayerIsReadyOnLand()) {
+        return READY_ON_LAND;
+    }
+    if (ItemOverride_PlayerIsReadyInWater()) {
+        return READY_IN_WATER;
     }
     return 0;
 }
@@ -254,12 +372,18 @@ void ItemOverride_Update(void) {
     ItemOverride_CheckZeldasLetter();
     IceTrap_Update();
     CustomModel_Update();
-    if (ItemOverride_PlayerIsReady()) {
+    u8 readyStatus = ItemOverride_PlayerIsReady();
+    if (readyStatus) {
         ItemOverride_PopIceTrap();
         if (IceTrap_IsPending()) {
             IceTrap_Give();
         } else {
             ItemOverride_TryPendingItem();
+            if (readyStatus == READY_IN_WATER) {
+                SetupItemInWater(PLAYER, gGlobalContext);
+                rDummyActor->parent = NULL;
+                ItemOverride_PopPendingOverride();
+            }
         }
     }
 }
@@ -274,16 +398,20 @@ void ItemOverride_GetItem(Actor* fromActor, Player* player, s8 incomingItemId) {
     }
 
     if (override.key.all == 0) {
-        // No override, use base game's item code
-        ItemOverride_Clear();
-        player->getItemId = incomingItemId;
-        return;
-    }
-
-    // Hack for scrubsanity off
-    if ((gSettingsContext.scrubsanity == SCRUBSANITY_OFF) && (override.key.type == OVR_GROTTO_SCRUB)) {
-        if (override.value.itemId == GI_ARROWS_LARGE) {
-            override.value.itemId = GI_SEEDS_30;
+        // Hack for Scrubsanity Off
+        // The game will spawn different scrub actors in grottos depending on if
+        // Link is child or adult (one for deku seeds and another for arrows
+        // respectively). Since we only override the child deku scrubs when
+        // scrubsanity is off, the adult ones will return the Gold Scale getItemID
+        // and not find an override in the overrid table. This is where we fix that
+        // so adult Link will receive arrows properly.
+        if (incomingItemId == GI_SCALE_GOLD && gSettingsContext.scrubsanity == SCRUBSANITY_OFF) {
+            override.value.itemId = GI_ARROWS_LARGE;
+        } else {
+            // No override, use base game's item code
+            ItemOverride_Clear();
+            player->getItemId = incomingItemId;
+            return;
         }
     }
 
@@ -297,6 +425,9 @@ void ItemOverride_GetItem(Actor* fromActor, Player* player, s8 incomingItemId) {
             baseItemId = 0x7C;
         }
         fromActor->params = (fromActor->params & 0xF01F) | (baseItemId << 5);
+    } else if (override.value.itemId == 0x7C) {
+        rActiveItemRow->effectArg1 = override.key.all >> 16;
+        rActiveItemRow->effectArg2 = override.key.all & 0xFFFF;
     }
 
     player->getItemId = incomingNegative ? -baseItemId : baseItemId;
@@ -331,6 +462,10 @@ void ItemOverride_GetSkulltulaToken(Actor* tokenActor) {
 
     u16 resolvedItemId = ItemTable_ResolveUpgrades(itemId);
     ItemRow* itemRow = ItemTable_GetItemRow(resolvedItemId);
+    if (override.value.itemId == 0x7C) {
+        itemRow->effectArg1 = override.key.all >> 16;
+        itemRow->effectArg2 = override.key.all & 0xFFFF;
+    }
 
     ItemTable_CallEffect(itemRow);
 
@@ -364,6 +499,10 @@ void ItemOverride_EditDrawGetItemBeforeModelSpawn(void) {
             cmb = (void*)(((char*)PLAYER->giDrawSpace) + 0x74);
             CustomModel_ApplyColorEditsToSmallKey(cmb, rActiveItemRow->special);
             break;
+        case GID_CUSTOM_BOSS_KEYS:
+            cmb = (void*)(((char*)PLAYER->giDrawSpace) + 0x78);
+            CustomModel_SetBossKeyToRGBA565(cmb);
+            break;
     }
 }
 
@@ -385,12 +524,19 @@ void ItemOverride_EditDrawGetItemAfterModelSpawn(SkeletonAnimationModel* model) 
             model->unk_0C->animMode = 0;
             model->unk_0C->curFrame = rActiveItemRow->special;
             break;
+        case GID_CUSTOM_BOSS_KEYS:
+            cmabMan = ExtendedObject_GetCMABByIndex(OBJECT_CUSTOM_GENERAL_ASSETS, TEXANIM_BOSS_KEY);
+            TexAnim_Spawn(model->unk_0C, cmabMan);
+            model->unk_0C->animSpeed = 0.0f;
+            model->unk_0C->animMode = 0;
+            model->unk_0C->curFrame = rActiveItemRow->special;
+            break;
     }
 }
 
 s32 ItemOverride_GiveSariasGift(void) {
     u32 receivedGift = EventCheck(0xC1);
-    if (receivedGift == 0) {
+    if (receivedGift == 0 && Entrance_SceneAndSpawnAre(0x5B, 0x09)) { // Kokiri Forest -> LW Bridge, index 05E0 in the entrance table
         ItemOverride_PushDelayedOverride(0x02);
         EventSet(0xC1);
     }
@@ -399,17 +545,17 @@ s32 ItemOverride_GiveSariasGift(void) {
     return 1;
 }
 
-//If we haven't obtained Zelda's Letter and are in the castle courtyard, push it
+// If we haven't obtained Zelda's Letter and are in the castle courtyard, push it
 void ItemOverride_CheckZeldasLetter() {
-  if (EventCheck(0x40) == 0 && gGlobalContext->sceneNum == 0x4A) {
-      ItemOverride_Key key = { .all = 0 };
-      key.scene = 0x4A;
-      key.type = OVR_BASE_ITEM;
-      key.flag = 0x0B;
-      ItemOverride override = ItemOverride_LookupByKey(key);
-      ItemOverride_PushPendingOverride(override);
-      EventSet(0x40);
-  }
+    if (EventCheck(0x40) == 0 && gGlobalContext->sceneNum == 0x4A) {
+        ItemOverride_Key key = { .all = 0 };
+        key.scene = 0x4A;
+        key.type = OVR_BASE_ITEM;
+        key.flag = 0x0B;
+        ItemOverride override = ItemOverride_LookupByKey(key);
+        ItemOverride_PushPendingOverride(override);
+        EventSet(0x40);
+    }
 }
 
 void ItemOverride_PushDungeonReward(u8 dungeon) {
@@ -422,10 +568,10 @@ void ItemOverride_PushDungeonReward(u8 dungeon) {
 }
 
 void ItemOverride_CheckStartingItem() {
-    //use eventChkInf[0] |= 0x0001 as the check for this
+    // use eventChkInf[0] |= 0x0001 as the check for this
     if (EventCheck(0x00) == 0) {
         if (gSettingsContext.linksPocketItem != LINKSPOCKETITEM_DUNGEON_REWARD) {
-            ItemOverride_PushDungeonReward(0xFF); //Push Link's Pocket Reward
+            ItemOverride_PushDungeonReward(0xFF); // Push Link's Pocket Reward
         }
         EventSet(0x00);
     }

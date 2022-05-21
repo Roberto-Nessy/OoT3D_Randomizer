@@ -3,21 +3,34 @@
 //Setting descriptions are mostly copied from OoT Randomizer tooltips with minor edits
 
 /*------------------------------
-|      RANDOMIZE SETTINGS      |
-------------------------------*/
-string_view openRandomize             = "Randomize all Open Settings except for Logic rules.";
-string_view worldRandomize            = "Randomize all World Settings except for MQ dungeons";
-string_view shuffleRandomize          = "Randomize all Shuffle Settings";
-string_view dungeonRandomize          = "Randomize all Dungeon Shuffle Settings";
-
-/*------------------------------
-|            LOGIC             |                           *SCREEN WIDTH*
+|      RANDOMIZE SETTINGS      |                            *SCREEN WIDTH*
 ------------------------------*/       /*--------------------------------------------------*/
+string_view openRandomize             = "Randomize all Open Settings.";                    //
+string_view worldRandomize            = "Randomize all World Settings except for MQ\n"     //
+                                        "dungeons.";                                       //
+string_view shuffleRandomize          = "Randomize all Shuffle Settings.";                 //
+string_view dungeonRandomize          = "Randomize all Dungeon Shuffle Settings.";         //
+                                                                                           //
+/*------------------------------                                                           //
+|            LOGIC             |                                                           //
+------------------------------*/                                                           //
 string_view logicGlitchless           = "No glitches are required, but may require some\n" //
                                         "minor tricks. Add minor tricks to consider for\n" //
-                                        "logic in Detailed Logic Settings.";               //
+                                        "logic in Logical Tricks.";                        //
+string_view logicGlitched             = "The glitches you enable at the set difficulty\n"  //
+                                        "or below may be required.\n"                      //
+                                        "\n"                                               //
+                                        "In development, but still usable.";               //
 string_view logicNoLogic              = "Maximize randomization, All locations are\n"      //
                                         "considered available. MAY BE IMPOSSIBLE TO BEAT.";//
+string_view logicVanilla              = "For those who want to play the game normally but\n"
+                                        "with the improvements of the randomizer. All\n"   //
+                                        "locations will contain their vanilla items. This\n"
+                                        "supercedes all item shuffle, logic, hint, and\n"  //
+                                        "item pool settings. You can still use non-vanilla\n"
+                                        "world settings such as adult start or entrance\n" //
+                                        "shuffle, but the game may require glitches to\n"  //
+                                        "complete if you do.";                             //
 /*------------------------------                                                           //
 |           FOREST             |                                                           //
 ------------------------------*/                                                           //
@@ -31,6 +44,10 @@ string_view forestClosed              = "Beating Deku Tree is logically required
                                         "Tree. Items needed for this will be guaranteed\n" //
                                         "inside the forest area. This setting is\n"        //
                                         "incompatible with starting as adult.";            //
+string_view forestClosedDeku          = "The Kokiri boy no longer blocks the path out of\n"//
+                                        "the forest, but Mido still blocks the path to the\n"
+                                        "Deku Tree, requiring Kokiri Sword and Deku Shield\n"
+                                        "to access the Deku Tree.";                        //
 /*------------------------------                                                           //
 |        KAKARIKO GATE         |                                                           //
 ------------------------------*/                                                           //
@@ -44,9 +61,12 @@ string_view kakGateClosed             = "The gate and the Happy Mask Shop both r
 /*------------------------------                                                           //
 |        DOOR OF TIME          |                                                           //
 ------------------------------*/                                                           //
-string_view doorOfTimeDesc            = "The Door of Time starts opened instead of needing\n"
-                                        "to play the Song of Time. If closed, only an\n"   //
-                                        "Ocarina and the Song of Time need to be found to\n"
+string_view doorOfTimeOpen            = "The Door of Time starts opened instead of needing\n"
+                                        "to play the Song of Time.";                       //
+string_view doorOfTimeClosed          = "Only an Ocarina and the Song of Time need to be\n"//
+                                        "found to open the Door of Time.";                 //
+string_view doorOfTimeIntended        = "The Ocarina of Time, the Song of Time, and\n"     //
+                                        "all Spiritual Stones need to be found to\n"       //
                                         "open the Door of Time.";                          //
 /*------------------------------                                                           //
 |       ZORA'S FOUNTAIN        |                                                           //
@@ -124,30 +144,100 @@ string_view ageDesc                   = "Choose which age Link will start as.\n"
                                         "Only the child option is compatible with Closed\n"//
                                         "Forest.";                                         //
 /*------------------------------                                                           //
+|      SHUFFLE ENTRANCES       |                                                           //
+------------------------------*/                                                           //
+string_view shuffleEntrancesDesc      = "Shuffle where the entrances between areas lead to."
+                                        "If turned on, select which kinds of entrances you\n"
+                                        "want shuffled in the options below. Note that some"
+                                        "types of entrances can have wildly varying\n"     //
+                                        "generation times.";                               //
+                                                                                           //
+/*------------------------------                                                           //
+|       DUNGEON ENTRANCES      |                                                           //
+------------------------------*/                                                           //
+string_view dungeonEntrancesDesc      = "Shuffle the pool of dungeon entrances, including\n"
+                                        "Bottom of the Well, Ice Cavern, and Gerudo\n"     //
+                                        "Training Grounds. Shuffling Ganon's Castle can\n" //
+                                        "be enabled separately.\n"                         //
+                                        "\n"                                               //
+                                        "Additionally, the entrances of Deku Tree, Fire\n" //
+                                        "Temple, Bottom of the Well and Gerudo Training\n" //
+                                        "Ground are opened for both adult and child.";     //
+/*------------------------------                                                           //
+|      OVERWORLD ENTRANCES     |                                                           //
+------------------------------*/                                                           //
+string_view overworldEntrancesDesc    = "Shuffle the pool of Overworld entrances, which\n" //
+                                        "corresponds to almost all loading zones between\n"//
+                                        "Overworld areas.\n"                               //
+                                        "\n"                                               //
+                                        "Some entrances are unshuffled to avoid issues:\n" //
+                                        "- Hyrule Castle Courtyard and Garden entrance\n"  //
+                                        "- Both Market Back Alley entrances\n"             //
+                                        "- Gerudo Valley to Lake Hylia (unless entrances\n"//
+                                        "  are decoupled)";                                //
+/*------------------------------                                                           //
+|      INTERIOR ENTRANCES      |                                                           //
+------------------------------*/                                                           //
+string_view interiorEntrancesOff      = "Interior entrances will not be shuffled.";        //
+string_view interiorEntrancesSimple   = "Shuffle the pool of interior entrances which\n"   //
+                                        "contains most Houses and all Great Fairies.";     //
+string_view interiorEntrancesAll      = "An extended version of 'Simple' with some extra\n"//
+                                        "places:\n"                                        //
+                                        "- Windmill\n"                                     //
+                                        "- Link's House\n"                                 //
+                                        "- Temple of Time\n"                               //
+                                        "- Kakariko Potion Shop.";                         //
+/*------------------------------                                                           //
+|       GROTTO ENTRANCES       |                                                           //
+------------------------------*/                                                           //
+string_view grottoEntrancesDesc       = "Shuffle the pool of grotto entrances, including\n"//
+                                        "all graves, small Fairy Fountains and the Lost\n" //
+                                        "Woods Stage.";                                    //
+/*------------------------------                                                           //
 |      BOMBCHUS IN LOGIC       |                                                           //
 ------------------------------*/                                                           //
-string_view bombchuLogicDesc          = "Bombchus are properly considered in logic and\n"  //
-                                        "bombchu drops are forced on to guarentee a\n"     //
-                                        "replenishable source.\n"                          //
+string_view bombchuLogicDesc          = "Bombchus are properly considered in logic.\n"     //
+                                        "They can be replenished in shops, or through\n"   //
+                                        "bombchu drops, if those are enabled.\n"           //
                                         "\n"                                               //
                                         "Bombchu Bowling is opened by bombchus.";          //
 /*------------------------------                                                           //
-|        BOMBCHU DROPS         |                                                           //
+|          AMMO DROPS          |                                                           //
 ------------------------------*/                                                           //
-string_view bombchuDropDesc           = "Bombchu drops can appear from cutting grass and\n"//
-                                        "breaking rocks just like bomb drops can.\n";      //
+string_view defaultAmmoDropsDesc      = "Bombs, arrows, seeds, nuts, sticks and\n"         //
+                                        "magic jars appear as normal.\n";                  //
+string_view bombchuDropsDesc          = "Bombs, arrows, seeds, nuts, sticks and\n"         //
+                                        "magic jars appear as normal.\n"                   //
+                                        "Bombchus can sometimes replace bomb drops.";      //
+string_view noAmmoDropsDesc           = "All ammo drops will be replaced by blue rupees,\n"//
+                                        "except for Deku Sticks.\n"                        //
+                                        "Ammo upgrades will only refill ammo by 10 units.";//
 /*------------------------------                                                           //
-|      RANDOM MQ DUNGEONS      |                                                           //
+|    HEART DROPS AND REFILLS   |                                                           //
 ------------------------------*/                                                           //
-string_view randomMQDungeonsDesc      = "If set, a random number of dungeons will have\n"  //
-                                        "Master Quest designs.";                           //
-                                                                                           //
+string_view defaultHeartDropsDesc     = "Heart drops will appear as normal.\n"             //
+                                        "Health upgrades fully heal Link when picked up.\n"//
+                                        "Fairies heal Link as normal.";                    //
+string_view noHeartDropsDesc          = "Heart drops will be replaced by green rupees.\n"  //
+                                        "Health upgrades fully heal Link when picked up.\n"//
+                                        "Fairies heal Link as normal.";                    //
+string_view noHeartRefillDesc         = "Heart drops will appear as normal.\n"             //
+                                        "Health upgrades don't heal Link when picked up.\n"//
+                                        "Fairies heal Link by only 3 hearts.";             //
+string_view scarceHeartsDesc          = "Heart drops will be replaced by green rupees.\n"  //
+                                        "Health upgrades don't heal Link when picked up.\n"//
+                                        "Fairies heal Link by only 3 hearts.";             //
 /*------------------------------                                                           //
 |       MQ DUNGEON COUNT       |                                                           //
 ------------------------------*/                                                           //
-string_view mqDungeonCountDesc        = "Specify the number of Master Quest dungeons to\n"
+string_view mqDungeonCountDesc        = "Specify the number of Master Quest dungeons to\n" //
                                         "appear in the game. Which dungeons become Master\n"
                                         "Quest will be chosen at random.";                 //
+/*------------------------------                                                           //
+|        SET MQ DUNGEONS       |                                                           //
+------------------------------*/                                                           //
+string_view setDungeonTypesDesc       = "If set, you can choose specific dungeons to be\n" //
+                                        "vanilla, MQ, or random";                          //
 /*------------------------------                                                           //
 |   SHUFFLE DUNGEON REWARDS    |                                                           //
 ------------------------------*/                                                           //
@@ -230,7 +320,7 @@ string_view scrubsAffordable          = "All Scrub prices will be reduced to 10 
 string_view scrubsExpensive           = "All Scrub prices will be their vanilla prices.\n" //
                                         "This will require spending over 1000 rupees on\n" //
                                         "Scrubs.";                                         //
-string_view scrubsRandomPrices        = "All Scrub prices will be between 0-99 rupees. This"
+string_view scrubsRandomPrices        = "All Scrub prices will be between 0-95 rupees. This"
                                         "will on average be very, very expensive overall.";//
 /*------------------------------                                                           //
 |         SHUFFLE COWS         |                                                           //
@@ -281,6 +371,40 @@ string_view gerudoTokenDesc           = "Enabling this shuffles the Gerudo Token
 string_view magicBeansDesc            = "Enabling this adds a pack of 10 beans to the item\n"
                                         "pool and changes the Magic Bean Salesman to sell a"
                                         "random item at a price of 60 rupees.";            //
+/*------------------------------                                                           //
+|       SHUFFLE MERCHANTS      |                                                           //
+------------------------------*/                                                           //
+string_view merchantsDesc             = "Enabling this adds a Giant's Knife and a pack\n"  //
+                                        "of Bombchus to the item pool and changes both\n"  //
+                                        "Medigoron and the Haunted Wasteland Carpet\n"     //
+                                        "Salesman to sell a random item once at the price\n"
+                                        "of 200 rupees.";                                  //
+string_view merchantsHintsDesc        = "These hints will make Medigoron and the Carpet\n" //
+                                        "Salesman tell you which item they're selling.\n"  //
+                                        "\n"                                               //
+                                        "The Clearer Hints setting will affect how they\n" //
+                                        "refer to the item.";                              //
+/*------------------------------                                                           //
+|     SHUFFLE ADULT TRADE      |                                                           //
+------------------------------*/                                                           //
+string_view adultTradeDesc            = "Enabling this adds all of the adult trade quest\n"//
+                                        "items to the pool, each of which can be traded\n" //
+                                        "for a unique reward. You will be able to choose\n"//
+                                        "which of your owned adult trade items is visible\n"
+                                        "in the inventory by selecting the item and using\n"
+                                        "the L and R buttons. If disabled, only the Claim\n"
+                                        "Check will be found in the pool.";                //
+/*------------------------------                                                           //
+|    SHUFFLE CHEST MINIGAME    |                                                           //
+------------------------------*/                                                           //
+string_view chestMinigameDesc         = "The 5 key chests in the Treasure Chest Shop will\n"
+                                        "be randomized, and the 6 keys will be added to the"//
+                                        "pool. The rupee chests will be replaced by traps.\n"
+                                        "Also, the shop owner is on vacation, so he can't\n"
+                                        "close any chests or doors once you leave.\n"      //
+                                        "\n"                                               //
+                                        "If you choose the \"pack\" option, you will get\n"//
+                                        "all the keys at once, in a single item.";         //
 /*------------------------------                                                           //
 |      MAPS AND COMPASSES      |                                                           //
 ------------------------------*/                                                           //
@@ -334,6 +458,15 @@ string_view gerudoKeysOverworld       = "Gerudo Fortress Keys can only appear ou
                                         "dungeons.";                                       //
 string_view gerudoKeysAnywhere        = "Gerudo Fortress Keys can appear anywhere in the\n"//
                                         "world.";                                          //
+/*------------------------------                                                           //
+|           Key Rings          |                                                           //
+------------------------------*/                                                           //
+string_view keyRingDesc               = "Selected key ring dungeons will have all of their\n"
+                                        "keys found at once in a ring rather than\n"       //
+                                        "individually.\n\n"                                //
+                                        "For example, instead of shuffling 5 Forest Temple\n"
+                                        "small keys into the pool, you will find a single\n"
+                                        "key ring which will give you all 5 keys at once.\n";
 /*------------------------------                                                           //
 |          BOSS KEYS           |                                                           //
 ------------------------------*/                                                           //
@@ -423,12 +556,11 @@ string_view fourPoesDesc              = "The cutscene with the 4 poes in Forest 
                                         "be skipped. If the cutscene is not skipped, it can"
                                         "be exploited to reach the basement early.";       //
 /*------------------------------                                                           //
-|     TEMPLE OF TIME INTRO     |                                                           //
+|        LAKE HYLIA OWL        |                                                           //
 ------------------------------*/                                                           //
-string_view templeOfTimeIntroDesc     = "The introduction cutscene to Temple of Time will\n"
-                                        "be skipped. This cutscene is helpful for\n"       //
-                                        "performing Door of Time Skip should the Door of\n"//
-                                        "Time be closed.";                                 //
+string_view lakeHyliaOwlDesc          = "The owl flight cutscene in Lake Hylia will be\n"  //
+                                        "skipped. This cutscene lets you see what item\n"  //
+                                        "is on top of the laboratory roof.";               //
 /*------------------------------                                                           //
 |     BIG POE TARGET COUNT     |                                                           //
 ------------------------------*/                                                           //
@@ -439,6 +571,49 @@ string_view bigPoeTargetCountDesc     = "The Poe buyer will give a reward for tu
 ------------------------------*/                                                           //
 string_view numRequiredCuccosDesc     = "The cucco lady will give a reward for returning\n"//
                                         "this many of her cuccos to the pen.";             //
+/*------------------------------                                                           //
+|        KING ZORA SPEED        |                                                          //
+-------------------------------*/                                                          //
+string_view kingZoraSpeedFast         = "King Zora will move out of the way in 1 shuffle"; //
+                                                                                           //
+string_view kingZoraSpeedVanilla      = "King Zora will move out of the way in 26 shuffles";
+                                                                                           //
+string_view kingZoraSpeedRandom       = "King Zora will move out of the way in 1 to 128\n" //
+                                        "shuffles, with lower numbers being more common";  //
+/*------------------------------                                                           //
+|      COMPLETE MASK QUEST     |                                                           //
+------------------------------*/                                                           //
+string_view completeMaskDesc          = "Once the happy mask shop is opened, all masks\n"  //
+                                        "will be available to be borrowed.";               //
+/*------------------------------                                                           //
+|          QUICK TEXT          |                                                           //
+------------------------------*/                                                           //
+string_view quickTextDesc0            = "Quick text will be unchanged, requiring\n"        //
+                                        "frame-perfect inputs like in the vanilla game.";  //
+string_view quickTextDesc1            = "Every text box will be completable by pressing B\n"
+                                        "at any point while it's scrolling.";              //
+string_view quickTextDesc2            = "Every text box will auto-complete instantly.\n"   //
+                                        "No scrolling allowed!";                           //
+string_view quickTextDesc3            = "Holding B will advance and close text boxes\n"    //
+                                        "automatically, except for choice selections.";    //
+/*------------------------------                                                           //
+|       SKIP SONG REPLAYS      |                                                           //
+------------------------------*/                                                           //
+string_view skipSongReplaysDesc       = "The automatic replay after you play a song will\n"//
+                                        "be skipped.\n"                                    //
+                                        "You can choose to keep the sfx anyway, but you\n" //
+                                        "will have control of Link during it.";            //
+/*------------------------------                                                           //
+|      KEEP FW WARP POINT      |                                                           //
+------------------------------*/                                                           //
+string_view keepFWWarpPointDesc       = "The Farore's Wind warp point will stay active\n"  //
+                                        "after having been warped to. The old point will\n"//
+                                        "need to be dispelled before setting a new one.";  //
+/*------------------------------                                                           //
+|       FAST BUNNY HOOD        |                                                           //
+------------------------------*/                                                           //
+string_view fastBunnyHoodDesc         = "The Bunny Hood mask behaves like it does in\n"    //
+                                        "Majora's Mask and makes you run 50% faster.";     //
 /*------------------------------                                                           //
 |     GOSSIP STONE HINTS       |                                                           //
 ------------------------------*/                                                           //
@@ -453,10 +628,20 @@ string_view gossipStonesHintsDesc     = "Gossip Stones can be made to give hints
                                         "game.";                                           //
                                                                                            //
 /*------------------------------                                                           //
-|        CLEARER HINTS         |                                                           //
+|        HINT CLARITY          |                                                           //
 ------------------------------*/                                                           //
-string_view clearerHintsDesc          = "The hints provided by Gossip Stones will be very\n"
-                                        "direct if this option is enabled.";               //
+string_view obscureHintsDesc          = "Sets the difficulty of hints.\n"                  //
+                                        "Obscure: Hints are unique for each thing, but\n"  //
+                                        "the writing may be confusing.\n"                  //
+                                        "E.g. Kokiri Sword > a butter knife";              //
+string_view ambiguousHintsDesc        = "Sets the difficulty of hints.\n"                  //
+                                        "Ambiguous: Hints are clearly written, but may\n"  //
+                                        "refer to more than one thing.\n"                  //
+                                        "E.g. Kokiri Sword > a sword";                     //
+string_view clearHintsDesc            = "Sets the difficulty of hints.\n"                  //
+                                        "Clear: Hints are clearly written and are unique\n"//
+                                        "for each thing.\n"                                //
+                                        "E.g. Kokiri Sword > the Kokiri Sword";            //
 /*------------------------------                                                           //
 |      HINT DISTRIBUTION       |                                                           //
 ------------------------------*/                                                           //
@@ -465,6 +650,23 @@ string_view balancedHintsDesc         = "Recommended hint spread.";             
 string_view strongHintsDesc           = "More useful hints.";                              //
 string_view veryStrongHintsDesc       = "Many powerful hints.";                            //
                                                                                            //
+/*------------------------------                                                           //
+|  MAP AND COMPASS GIVES INFO  |                                                           //
+------------------------------*/                                                           //
+string_view compassesShowRewardsDesc  = "If dungeon rewards are set to be shuffled at the\n"
+                                        "end of dungeons, the in-game menu will reveal\n"  //
+                                        "which reward is in each dungeon, if the compass\n"//
+                                        "for that dungeon has been collected.";            //
+string_view compassesShowWotHDesc     = "The in-game menu will reveal whether each\n"      //
+                                        "dungeon is on the Way of the Hero, a barren\n"    //
+                                        "location, or neither, if the compass for that\n"  //
+                                        "dungeon has been collected.";                     //
+string_view mapsShowDungeonModesDesc  = "If any Master Quest dungeons will be randomly\n"  //
+                                        "shuffled, the in-game menu will reveal whether\n" //
+                                        "it is in its Vanilla or Master Quest form, if\n"  //
+                                        "the map for the dungeon has been collected.\n"    //
+                                        "Ganon's Castle and Gerudo Training Grounds are\n" //
+                                        "always revealed, as they do not have maps.";      //
 /*------------------------------                                                           //
 |       DAMAGE MULTIPLIER      |                                                           //
 ------------------------------*/                                                           //
@@ -476,6 +678,14 @@ string_view damageMultiDesc           = "Changes the amount of damage taken.\n" 
 ------------------------------*/                                                           //
 string_view startingTimeDesc          = "Change up Link's sleep routine.";                 //
                                                                                            //
+/*------------------------------                                                           //
+|   ALL LOCATIONS REACHABLE    |                                                           //
+------------------------------*/                                                           //
+string_view locationsReachableDesc    = "When this options is enabled, the randomizer will\n"
+                                        "guarantee that every item is obtainable and every\n"
+                                        "location is reachable. When disabled, only\n"     //
+                                        "required items and locations to beat the game\n"  //
+                                        "will be guaranteed reachable.";                   //
 /*------------------------------                                                           //
 |     NIGHT GS EXPECT SUNS     |                                                           //
 ------------------------------*/                                                           //
@@ -499,6 +709,13 @@ string_view chestSizeDesc             = "This option will change the appearance 
                                         "Lesser Items   =    Small Wooden Chests\n"        //
                                         "Boss Keys      =    Big Fancy Chests\n"           //
                                         "Small Keys     =    Small Fancy Chests";          //
+                                                                                           //
+/*------------------------------                                                           //
+|        INGAME SPOILERS       |                                                           //
+------------------------------*/                                                           //
+string_view ingameSpoilersShowDesc    = "Every spoiler is shown.";                         //
+string_view ingameSpoilersHideDesc    = "Hides the spheres page and only shows a\n"        //
+                                        "location's item after it has been found.";        //
                                                                                            //
 /*------------------------------                                                           //
 |      MENU OPENING BUTTON     |                                                           //
@@ -539,6 +756,36 @@ string_view iceTrapsMayhem            = "All added junk items will be Ice Traps.
 string_view iceTrapsOnslaught         = "All junk items will be replaced by Ice Traps, even"
                                         "those in the base pool.";                         //
 /*------------------------------                                                           //
+|    REMOVE DOUBLE DEFENSE     |                                                           //
+------------------------------*/                                                           //
+string_view removeDDDesc              = "If set the double defense item will be removed\n" //
+                                        "from the item pool for balanced and plentiful.";  //
+/*------------------------------                                                           //
+|   PROGRESSSIVE GORON SOWRD   |                                                           //
+------------------------------*/                                                           //
+string_view progGoronSword            = "Giant's Knife will always be found\n"             //
+                                        "before Biggoron's Sword. Medigoron only starts\n" //
+                                        "selling new knives once the Giant's Knife\n"      //
+                                        "has been found and broken.";                      //
+/*------------------------------                                                           //
+|  USE FARORE'S WIND ANYWHERE  |                                                           //
+------------------------------*/                                                           //
+string_view faroresWindAnywhereDesc   = "Farore's Wind can be used outside of dungeons.\n" //
+                                        "\n"                                               //
+                                        "This setting will not change the logic.";         //
+                                                                                           //
+/*------------------------------                                                           //
+|    LIFT AGE RESTRICTIONS     |                                                           //
+------------------------------*/                                                           //
+string_view ageRestrictionsDesc       = "Remove age restrictions for inventory items.\n"   //
+                                        "Select \"Choose\" to open the list of individual\n"
+                                        "options.\n\n"                                     //
+                                        "Most of the items won't appear correctly when\n"  //
+                                        "used as the wrong version of Link, but they'll be\n"
+                                        "fully functional otherwise.\n"                    //
+                                        "These settings will not change the logic.";       //
+                                                                                           //
+/*------------------------------                                                           //
 |    ENABLE ADULT DEKU STICK   |                                                           //
 ------------------------------*/                                                           //
 string_view adultStickDesc            = "Adult Link can wield a deku stick. In game Adult\n"
@@ -560,83 +807,302 @@ string_view adultBoomerangDesc        = "Adult Link can throw the boomerang.\n" 
 string_view childHammerDesc           = "Child Link can swing the Megaton Hammer.\n"       //
                                         "\n"                                               //
                                         "This setting will not change the logic.";         //
+/*------------------------------                                                           //
+|    ENABLE ADULT SLINGSHOT    |                                                           //
+------------------------------*/                                                           //
+string_view adultSlingshotDesc        = "Adult Link can use the Slingshot (but it looks\n" //
+                                        "like the Bow).\n"                                 //
+                                        "\n"                                               //
+                                        "This setting will not change the logic.";         //
                                                                                            //
+/*------------------------------                                                           //
+|      ENABLE CHILD BOW        |                                                           //
+------------------------------*/                                                           //
+string_view childBowDesc              = "Child Link can use the Bow. It will look like the\n"
+                                        "Slingshot, but will shoot arrows.\n"              //
+                                        "\n"                                               //
+                                        "This setting will not change the logic.";         //
+                                                                                           //
+/*------------------------------                                                           //
+|    ENABLE CHILD HOOKSHOT     |                                                           //
+------------------------------*/                                                           //
+string_view childHookshotDesc         = "Child Link can use the Hookshot/Longshot.\n"      //
+                                        "It will be difficult to aim, the red dot and\n"   //
+                                        "laser won't appear and the hook will look like\n" //
+                                        "a small bomb.\n"                                  //
+                                        "\n"                                               //
+                                        "This setting will not change the logic.";         //
+/*------------------------------                                                           //
+|   ENABLE CHILD IRON BOOTS    |                                                           //
+------------------------------*/                                                           //
+string_view childIronBootsDesc        = "Child Link can equip the Iron Boots.\n"           //
+                                        "\n"                                               //
+                                        "This setting will not change the logic.";         //
+                                                                                           //
+/*------------------------------                                                           //
+|   ENABLE CHILD HOVER BOOTS   |                                                           //
+------------------------------*/                                                           //
+string_view childHoverBootsDesc       = "Child Link can equip the Hover Boots. The yellow\n"
+                                        "circle beneath Link's feet won't appear.\n"       //
+                                        "\n"                                               //
+                                        "This setting will not change the logic.";         //
+                                                                                           //
+/*------------------------------                                                           //
+|     ENABLE ADULT MASKS       |                                                           //
+------------------------------*/                                                           //
+string_view adultMasksDesc            = "Adult Link can equip masks.\n"                    //
+                                        "\n"                                               //
+                                        "This setting will not change the logic.";         //
+                                                                                           //
+/*------------------------------                                                           //
+|  ENABLE ADULT KOKIRI SWORD   |                                                           //
+------------------------------*/                                                           //
+string_view adultKokiriSwordDesc      = "Adult Link can equip the Kokiri Sword.\n"         //
+                                        "\n"                                               //
+                                        "This setting will not change the logic.";         //
+                                                                                           //
+/*------------------------------                                                           //
+|  ENABLE CHILD MASTER SWORD   |                                                           //
+------------------------------*/                                                           //
+string_view childMasterSwordDesc      = "Child Link can equip the Master Sword.\n"         //
+                                        "\n"                                               //
+                                        "This setting will not change the logic.";         //
+                                                                                           //
+/*------------------------------                                                           //
+|  ENABLE CHILD BIGGORON SWORD |                                                           //
+------------------------------*/                                                           //
+string_view childBiggoronSwordDesc    = "Child Link can equip the Biggoron Sword and the\n"//
+                                        "Giant's Knife.\n"                                 //
+                                        "\n"                                               //
+                                        "This setting will not change the logic.";         //
+                                                                                           //
+/*------------------------------                                                           //
+|   ENABLE ADULT DEKU SHIELD   |                                                           //
+------------------------------*/                                                           //
+string_view adultDekuShieldDesc       = "Adult Link can equip the Deku Shield.\n"          //
+                                        "\n"                                               //
+                                        "This setting will not change the logic.";         //
+                                                                                           //
+/*------------------------------                                                           //
+|  ENABLE CHILD MIRROR SHIELD  |                                                           //
+------------------------------*/                                                           //
+string_view childMirrorShieldDesc     = "Child Link can equip the Mirror Shield.\n"        //
+                                        "\n"                                               //
+                                        "This setting will not change the logic.";         //
+                                                                                           //
+/*------------------------------                                                           //
+|   ENABLE CHILD GORON TUNIC   |                                                           //
+------------------------------*/                                                           //
+string_view childGoronTunicDesc       = "Child Link can equip the Goron Tunic.\n"          //
+                                        "\n"                                               //
+                                        "This setting will not change the logic.";         //
+                                                                                           //
+/*------------------------------                                                           //
+|    ENABLE CHILD ZORA TUNIC   |                                                           //
+------------------------------*/                                                           //
+string_view childZoraTunicDesc        = "Child Link can equip the Zora Tunic.\n"           //
+                                        "\n"                                               //
+                                        "This setting will not change the logic.";         //
+                                                                                           //
+/*------------------------------                                                           //
+|         GK DURABILITY        |                                                           //
+------------------------------*/                                                           //
+string_view gkDurabilityVanilla       = "The durability will always be set to 8.";         //
+string_view gkDurabilityRandomRisk    = "Each Giant's Knife will get a random durability\n"//
+                                        "between 1 and 128, with low being more common,\n" //
+                                        "and with an average of 15.";                      //
+string_view gkDurabilityRandomSafe    = "Each Giant's Knife will get a random durability\n"//
+                                        "between 10 and 50, with an average of 30.";       //
+                                                                                           //
+/*------------------------------                                                           //
+|         MULTIPLAYER          |                                                           //
+------------------------------*/                                                           //
+string_view mp_EnabledDesc            = "Enables multiplayer.\n"                           //
+                                        "Other players will always be seen and heard\n"    //
+                                        "regardless of the other settings.";               //
+string_view mp_SharedProgressDesc     = "Progress and certain actors will be synced between"
+                                        "everyone in the network that has this option on,\n"
+                                        "the same seed hash, and the same sync id.";       //
+string_view mp_SyncIdDesc             = "Limits shared progress to only sync with other\n" //
+                                        "players that have the same sync ID. This is only\n"
+                                        "necessary to set if multiple groups of players\n" //
+                                        "play on the same seed hash, but only want to share"
+                                        "their progress with certan people.\n"             //
+                                        "For example, when doing a 2v2 race.";             //
+string_view mp_SharedHealthDesc       = "Syncs health when shared progress is on,\n"       //
+                                        "otherwise just shares the damage and recovery.";  //
+string_view mp_SharedRupeesDesc       = "Syncs rupees when shared progress is on,\n"       //
+                                        "otherwise just shares the gain and loss.";        //
+string_view mp_SharedAmmoDesc         = "Syncs ammo when shared progress is on,\n"         //
+                                        "otherwise just shares the gain and loss.";        //
+                                                                                           //
+/*------------------------------                                                           //
+|       INGAME DEFAULTS        |                                                           //
+------------------------------*/                                                           //
+string_view zTargetingDesc            = "Sets L-Targeting to start as switch or hold.";    //
+string_view cameraControlDesc         = "Sets the camera controls to start as normal or\n" //
+                                        "with the y-axis inverted.";                       //
+string_view motionControlDesc         = "Sets the motion controls to start on or off.";    //
+string_view togglePlayMusicDesc       = "Starts the game with the music on or off.";       //
+string_view togglePlaySFXDesc         = "Starts the game with the sound effects on or off.";
+string_view silenceNaviDesc           = "Sets whether Navi should start silenced or not."; //
+string_view ignoreMaskReactionDesc    = "Sets whether NPCs ignore the worn mask or not.\n" //
+                                        "Does not apply when trading masks.";              //
+                                                                                           //
+/*------------------------------                                                           //
+|         COLORED KEYS         |                                                           //
+------------------------------*/                                                           //
+string_view coloredKeysDesc           = "If set, small key models will be colored\n"       //
+                                        "differently depending on which dungeon they can be"
+                                        "used in. Forest Temple keys are green. Fire Temple"
+                                        "keys are red. etc.";                              //
+string_view coloredBossKeysDesc       = "If set, boss key models will be colored\n"        //
+                                        "differently depending on which dungeon they can be"
+                                        "used in. The Forest Temple boss key is green. The "
+                                        "Fire Temple boss key is red. etc.";               //
 /*------------------------------                                                           //
 |         MIRROR WORLD         |                                                           //
 ------------------------------*/                                                           //
 string_view mirrorWorldDesc           = "If set, the world will be mirrored.";             //
+                                                                                           //
+/*------------------------------                                                           //
+|        SHUFFLE MUSIC         |                                                           //
+------------------------------*/                                                           //
+string_view musicRandoDesc            = "Randomize the music in the game.";                //
+string_view shuffleBGMDesc            = "Randomize area background music, either\n"        //
+                                        "grouped into categories or all mixed together.";  //
+string_view fanfaresOffDesc           = "Fanfares are not shuffled.";                      //
+string_view onlyFanfaresDesc          = "Fanfares and ocarina songs are shuffled in\n"     //
+                                        "separate pools.";                                 //
+string_view fanfaresOcarinaDesc       = "Fanfares and ocarina songs are shuffled together\n"
+                                        "in the same pool.";                               //
+string_view shuffleOcaMusicDesc       = "The music that plays back after you play an"      //
+                                        "ocarina song is randomized.";                     //
+/*------------------------------                                                           //
+|         SHUFFLE SFX          |                                                           //
+------------------------------*/                                                           //
+string_view shuffleSFXOff             = "Sound effects will stay vanilla.";                //
+string_view shuffleSFXAll             = "All sound effects will be shuffled.";             //
+string_view shuffleSFXSceneSpecific   = "All sound effects will be shuffled, but will also\n"
+                                        "be different in each scene.";                     //
+string_view shuffleSFXChaos           = "Each sound effect will become random about\n"     //
+                                        "every second.";                                   //
+string_view shuffleSFXCategorically   = "Sound effects will be shuffled in categories.\n"  //
+                                        "\n"                                               //
+                                        "The sound may get annoying fast when disabled.";  //
+/*------------------------------                                                           //
+|    RANDOM TRAP DAMAGE TYPE   |                                                           //
+------------------------------*/                                                           //
+string_view randomTrapDmgDesc         = "All traps will be the base game ice trap";        //
+                                                                                           //
+string_view basicTrapDmgDesc          = "All alternative traps will cause a small damage\n"//
+                                        "and no other negative effects";                   //
+                                                                                           //
+string_view advancedTrapDmgDesc       = "Some chest traps will burn your Deku Shield or\n" //
+                                        "cause a lot of damage (with one-hit protection)"; //
                                                                                            //--------------//
 /*------------------------------                                                                           //
 |  DETAILED LOGIC EXPLANATIONS |                                                                           //
-------------------------------*/                                                                           //
-string_view ToggleAllDetailedLogicDesc                = "Enable or Disable all Detailed Logic tricks at\n" //
-                                                        "once.";                                           //
-string_view LogicGrottosWithoutAgonyDesc              = "Allows entering hidden grottos without the Shard\n"
-                                                        "of Agony.";                                       //
-string_view LogicVisibleCollisionDesc                 = "Allows going through the Kakariko Village Gate as\n"
-                                                        "child when coming from the Mountain Trail side."; //
-string_view LogicFewerTunicRequirementsDesc           = "Allows the following possible without Tunics:\n"  //
+------------------------------*/
+string_view ToggleLogicNoneDesc                       = "Disables all the Detailed Logic tricks.";         //
+string_view ToggleLogicNoviceDesc                     = "Enables only the easier Detailed Logic tricks";   //
+string_view ToggleLogicIntermediateDesc               = "Enables all but the harder Detailed Logic tricks.";
+string_view ToggleLogicExpertDesc                     = "Enables all the Detailed Logic tricks.";          //
+                                                                                                           //
+string_view LogicGrottosWithoutAgonyDesc              = "Difficulty: Novice\n"                             //
+                                                        "Grottos can be accessed without Shard of Agony,\n"//
+                                                        "simply by knowing where they are located.";       //
+string_view LogicVisibleCollisionDesc                 = "Difficulty: Novice\n"                             //
+                                                        "The closed Kakariko Village Gate can be crossed\n"//
+                                                        "when coming from Death Mountain Trail.\n"         //
+                                                        "Useful for Entrance Randomiser.";                 //
+string_view LogicFewerTunicRequirementsDesc           = "Difficulty: Novice\n"                             //
+                                                        "Allows the following possible without Tunics:\n"  //
                                                         "- Enter Water Temple.\n"                          //
                                                         "- Enter Fire Temple. Only the first floor\n"      //
                                                         "  is accessible, and not Volvagia.\n"             //
                                                         "- Zora's Fountain Bottom Freestanding PoH.\n"     //
                                                         "- Gerudo Training Grounds Underwater Silver Rupee\n"
                                                         "Chest. May need to make multiple trips.";         //
-string_view LogicLostWoodsGSBeanDesc                  = "You can collect the token with a precise Hookshot\n"
-                                                        "use, as long as you can kill the Skulltula somehow"
-                                                        "first. It can be killed using Longshot, Bow,\n"   //
-                                                        "Bombchus or Din's Fire.";                         //
-string_view LogicLabDivingDesc                        = "Remove the Iron Boots in the midst of Hookshotting"
+string_view LogicLostWoodsGSBeanDesc                  = "Difficulty: Novice\n"                             //
+                                                        "You can collect the token with a precise Hookshot\n"
+                                                        "use, as long as you can kill the Skulltula first.\n"
+                                                        "It can be killed using Longshot, Bow, Bombchus\n" //
+                                                        "or Din's Fire.";                                  //
+string_view LogicLabDivingDesc                        = "Difficulty: Novice\n"                             //
+                                                        "Remove the Iron Boots in the midst of Hookshotting"
                                                         "the underwater crate";                            //
-string_view LogicLabWallGSDesc                        = "The jump slash to actually collect the token is\n"//
+string_view LogicLabWallGSDesc                        = "Difficulty: Intermediate\n"                       //
+                                                        "The jump slash to actually collect the token is\n"//
                                                         "somewhat precise";                                //
-string_view LogicGraveyardPoHDesc                     = "Using a precise moving setup you can obtain the\n"//
+string_view LogicGraveyardPoHDesc                     = "Difficulty: Novice\n"                             //
+                                                        "Using a precise moving setup you can obtain the\n"//
                                                         "Piece of Heart by having the Boomerang interact\n"//
                                                         "with it along the return path.";                  //
-string_view LogicChildDampeRacePoHDesc                = "It is possible to complete the second dampe race\n"
+string_view LogicChildDampeRacePoHDesc                = "Difficulty: Intermediate\n"                       //
+                                                        "It is possible to complete the second dampe race\n"
                                                         "as child in under a minute, but it is a strict\n" //
                                                         "time limit.";                                     //
-string_view LogicGerudoKitchenDesc                    = "The logic normally guarantees one of Bow,\n"      //
+string_view LogicGVHammerChestDesc                    = "Difficulty: Novice\n"                             //
+                                                        "The chest can be reached by sidehopping between\n"//
+                                                        "the wall and the east most hammer rock.";         //
+string_view LogicGerudoKitchenDesc                    = "Difficulty: Intermediate\n"                       //
+                                                        "The logic normally guarantees one of Bow,\n"      //
                                                         "Hookshot, or Hover Boots.";                       //
-string_view LogicLensWastelandDesc                    = "By memorizing the path, you can travel through the"
+string_view LogicLensWastelandDesc                    = "Difficulty: Expert\n"                             //
+                                                        "By memorizing the path, you can travel through the"
                                                         "Wasteland without using the Lens of Truth to see\n"
                                                         "the Poe. The equivalent trick for going in reverse"
                                                         "through the Wasteland is \"Reverse Wasteland\"."; //
-string_view LogicReverseWastelandDesc                 = "By memorizing the path, you can travel through the"
+string_view LogicReverseWastelandDesc                 = "Difficulty: Expert\n"                             //
+                                                        "By memorizing the path, you can travel through the"
                                                         "Wasteland in reverse.";                           //
-string_view LogicColossusGSDesc                       = "Somewhat precise. If you kill enough Leevers you\n"
+string_view LogicColossusGSDesc                       = "Difficulty: Expert\n"                             //
+                                                        "Somewhat precise. If you kill enough Leevers you\n"
                                                         "can get enough of a break to take some time to aim"
                                                         "more carefully.";                                 //
-string_view LogicOutsideGanonsGSDesc                  = "Can be killed with a precise sidehop jumpslash\n" //
+string_view LogicOutsideGanonsGSDesc                  = "Difficulty: Intermediate\n"                       //
+                                                        "Can be killed with a precise sidehop jumpslash\n" //
                                                         "from the top of the broken arch.";                //
-string_view LogicManOnRoofDesc                        = "Can be reached by side-hopping off the watchtower.";
-string_view LogicDMTBombableDesc                      = "Child Link can blow up the wall using a nearby\n" //
+string_view LogicManOnRoofDesc                        = "Difficulty: Novice\n"                             //
+                                                        "Can be reached by side-hopping off the watchtower.";
+string_view LogicDMTBombableDesc                      = "Difficulty: Expert\n"                             //
+                                                        "Child Link can blow up the wall using a nearby\n" //
                                                         "bomb flower. You must backwalk with the flower and"
                                                         "then quickly throw it toward the wall.";          //
-string_view LogicDMTSoilGSDesc                        = "Bugs will go into the soft soil even while the\n" //
+string_view LogicDMTSoilGSDesc                        = "Difficulty: Intermediate\n"                       //
+                                                        "Bugs will go into the soft soil even while the\n" //
                                                         "boulder is still blocking the entrance. Then,\n"  //
                                                         "using a precise moving setup you can kill the Gold"
                                                         "Skulltula and obtain the token by having the\n"   //
                                                         "Boomerang interact with it along the return path.";
-string_view LogicLinkGoronDinsDesc                    = "The timing is quite awkward.";                    //
-string_view LogicGoronCityLeftMostDesc                = "A precise backwalk starting from on top of the\n" //
+string_view LogicLinkGoronDinsDesc                    = "Difficulty: Intermediate\n"                       //
+                                                        "The timing is quite awkward.";                    //
+string_view LogicGoronCityLeftMostDesc                = "Difficulty: Novice\n"                             //
+                                                        "A precise backwalk starting from on top of the\n" //
                                                         "crate and ending with a precisely-timed backflip\n"
                                                         "can reach this chest without needing either the\n"//
                                                         "Hammer or Silver Gauntlets.";                     //
-string_view LogicGoronCityPotDesc                     = "A Bombchu can be used to stop the spinning pot,\n"//
+string_view LogicGoronCityPotDesc                     = "Difficulty: Expert\n"                             //
+                                                        "A Bombchu can be used to stop the spinning pot,\n"//
                                                         "but it can be quite finicky to get it to work.";  //
-string_view LogicGoronCityPotWithStrengthDesc         = "Allows for stopping the Goron City Spinning Pot\n"//
+string_view LogicGoronCityPotWithStrengthDesc         = "Difficulty: Intermediate\n"                       //
+                                                        "Allows for stopping the Goron City Spinning Pot\n"//
                                                         "using a bomb flower alone, requiring strength in\n"
                                                         "lieu of inventory explosives.";                   //
-string_view LogicChildRollingWithStrengthDesc         = "Use the bombflower on the stairs or near\n"       //
+string_view LogicChildRollingWithStrengthDesc         = "Difficulty: Expert\n"                             //
+                                                        "Use the bombflower on the stairs or near\n"       //
                                                         "Medigoron. Timing is tight, especially without\n" //
                                                         "backwalking.";                                    //
-string_view LogicCraterUpperToLowerDesc               = "With the Hammer, you can jump slash the rock twice"
+string_view LogicCraterUpperToLowerDesc               = "Difficulty: Intermediate\n"                       //
+                                                        "With the Hammer, you can jump slash the rock twice"
                                                         "in the same jump in order to destroy it before you"
                                                         "fall into the lava.";                             //
-string_view LogicCraterBeanPoHWithHoversDesc          = "Hover from the base of the bridge near Goron City\n"
+string_view LogicCraterBeanPoHWithHoversDesc          = "Difficulty: Expert\n"                             //
+                                                        "Hover from the base of the bridge near Goron City\n"
                                                         "and walk up the very steep slope.";               //
-string_view LogicBiggoronBoleroDesc                   = "Playing a warp song normally causes a trade item\n"
+string_view LogicBiggoronBoleroDesc                   = "Difficulty: Intermediate\n"                       //
+                                                        "Playing a warp song normally causes a trade item\n"
                                                         "to spoil immediately, however, it is possible use\n"
                                                         "Bolero to reach Biggoron and still deliver the Eye"
                                                         "Drops before they spoil. If you do not wear the\n"
@@ -644,11 +1110,14 @@ string_view LogicBiggoronBoleroDesc                   = "Playing a warp song nor
                                                         "override the trade item's timer. When you exit to\n"
                                                         "Death Mountain Trail you will have one second to\n"
                                                         "show the Eye Drops before they expire.";          //
-string_view LogicZoraRiverLowerDesc                   = "Adult can reach this PoH with a precise jump, no\n"
+string_view LogicZoraRiverLowerDesc                   = "Difficulty: Novice\n"                             //
+                                                        "Adult can reach this PoH with a precise jump, no\n"
                                                         "Hover Boots required.";                           //
-string_view LogicZoraRiverUpperDesc                   = "Adult can reach this PoH with a precise jump, no\n"
+string_view LogicZoraRiverUpperDesc                   = "Difficulty: Novice\n"                             //
+                                                        "Adult can reach this PoH with a precise jump, no\n"
                                                         "Hover Boots required.";                           //
-string_view LogicDekuB1WebsWithBowDesc                = "All spider web walls in the Deku Tree basement can"
+string_view LogicDekuB1WebsWithBowDesc                = "Difficulty: Novice\n"                             //
+                                                        "All spider web walls in the Deku Tree basement can"
                                                         "be burnt as adult with just a bow by shooting\n"  //
                                                         "through torches. This trick only applies to the\n"//
                                                         "circular web leading to Gohma; the two vertical\n"//
@@ -656,41 +1125,51 @@ string_view LogicDekuB1WebsWithBowDesc                = "All spider web walls in
                                                         "near the torch at the bottom of the vine wall.\n" //
                                                         "With precise positioning you can shoot through the"
                                                         "torch to the right edge of the circular web.";    //
-string_view LogicDekuB1SkipDesc                       = "A precise jump can be used to skip needing to use\n"
+string_view LogicDekuB1SkipDesc                       = "Difficulty: Intermediate\n"                       //
+                                                        "A precise jump can be used to skip needing to use\n"
                                                         "the Slingshot to go around B1 of the Deku Tree. If"
                                                         "used with the \"Closed Forest\" setting, a\n"     //
                                                         "Slingshot will not be guaranteed to exist\n"      //
                                                         "somewhere inside the Forest. This trick applies to"
                                                         "both Vanilla and Master Quest.";                  //
-string_view LogicDekuBasementGSDesc                   = "Can be defeated by doing a precise jump slash.";  //
-string_view LogicDCStaircaseDesc                      = "The Bow can be used to knock down the stairs with\n"
+string_view LogicDekuBasementGSDesc                   = "Difficulty: Intermediate\n"                       //
+                                                        "Can be defeated by doing a precise jump slash.";  //
+string_view LogicDCStaircaseDesc                      = "Difficulty: Intermediate\n"                       //
+                                                        "The Bow can be used to knock down the stairs with\n"
                                                         "two well-timed shots.";                           //
-string_view LogicDCJumpDesc                           = "Jump is adult only.";                             //
-string_view LogicDCSlingshotSkipDesc                  = "With precise platforming, child can cross the\n"  //
+string_view LogicDCJumpDesc                           = "Difficulty: Novice\n"                             //
+                                                        "Jump is adult only.";                             //
+string_view LogicDCSlingshotSkipDesc                  = "Difficulty: Expert\n"                             //
+                                                        "With precise platforming, child can cross the\n"  //
                                                         "platforms while the flame circles are there. When\n"
                                                         "enabling this trick, it's recommended that you\n" //
                                                         "also enable the Adult variant: \"Dodongo's Cavern\n"
                                                         "Spike Trap Room Jump without Hover Boots\".";     //
-string_view LogicDCScarecrowGSDesc                    = "You can jump off an Armos Statue to reach the\n"  //
+string_view LogicDCScarecrowGSDesc                    = "Difficulty: Intermediate\n"                       //
+                                                        "You can jump off an Armos Statue to reach the\n"  //
                                                         "alcove with the Gold Skulltula. It takes quite a\n"
                                                         "long time to pull the statue the entire way. The\n"
                                                         "jump to the alcove can be a bit picky when done\n"//
                                                         "as child.";                                       //
-string_view LogicJabuBossGSAdultDesc                  = "You can easily get over to the door to the near\n"//
+string_view LogicJabuBossGSAdultDesc                  = "Difficulty: Intermediate\n"                       //
+                                                        "You can easily get over to the door to the near\n"//
                                                         "boss area early with Hover Boots. The tricky part\n"
                                                         "is getting through the door without being able to\n"
                                                         "use a box to keep the switch pressed. One way is\n"
                                                         "to quickly roll from the switch and open the door\n"
                                                         "before it closes.";                               //
-string_view LogicJabuScrubJumpDiveDesc                = "Standing above the underwater tunnel leading to\n"//
+string_view LogicJabuScrubJumpDiveDesc                = "Difficulty: Intermediate\n"                       //
+                                                        "Standing above the underwater tunnel leading to\n"//
                                                         "the scrub, jump down and swim through the tunnel.\n"
                                                         "This allows adult to access the scrub with no\n"  //
                                                         "Scale or Iron Boots.";                            //
-string_view LogicForestOutsideBackdoorDesc            = "With a precise jump slash from above, you can\n"  //
+string_view LogicForestOutsideBackdoorDesc            = "Difficulty: Intermediate\n"                       //
+                                                        "With a precise jump slash from above, you can\n"  //
                                                         "reach the backdoor to the west courtyard without\n"
                                                         "Hover Boots. Applies to both Vanilla and Master\n"//
                                                         "Quest.";                                          //
-string_view LogicForestDoorFrameDesc                  = "A precise Hover Boots movement from the upper\n"  //
+string_view LogicForestDoorFrameDesc                  = "Difficulty: Intermediate\n"                       //
+                                                        "A precise Hover Boots movement from the upper\n"  //
                                                         "balconies in this courtyard can be used to get on\n"
                                                         "top of the door frame. Applies to both Vanilla and"
                                                         "Master Quest. In Vanilla, from on top the door\n" //
@@ -699,24 +1178,31 @@ string_view LogicForestDoorFrameDesc                  = "A precise Hover Boots m
                                                         "Quest, this allows you to obtain the GS on the\n" //
                                                         "door frame as adult without Hookshot or Song of\n"//
                                                         "Time.";                                           //
-string_view LogicForestOutdoorEastGSDesc              = "Precise Boomerang throws can allow child to kill\n"
+string_view LogicForestOutdoorEastGSDesc              = "Difficulty: Novice\n"                             //
+                                                        "Precise Boomerang throws can allow child to kill\n"
                                                         "the Skulltula and collect the token.";            //
-string_view LogicFireBossDoorJumpDesc                 = "The Fire Temple Boss Door can be reached with a\n"//
+string_view LogicFireBossDoorJumpDesc                 = "Difficulty: Intermediate\n"                       //
+                                                        "The Fire Temple Boss Door can be reached with a\n"//
                                                         "precise jump. You must be touching the side wall\n"
                                                         "of the room so that Link will grab the ledge from\n"
                                                         "farther away than is normally possible.";         //
-string_view LogicFireStrengthDesc                     = "A precise jump can be used to skip pushing the\n" //
+string_view LogicFireStrengthDesc                     = "Difficulty: Expert\n"                             //
+                                                        "A precise jump can be used to skip pushing the\n" //
                                                         "block.";                                          //
-string_view LogicFireScarecrowDesc                    = "Also known as \"Pixelshot\". The Longshot can\n"  //
+string_view LogicFireScarecrowDesc                    = "Difficulty: Novice\n"                             //
+                                                        "Also known as \"Pixelshot\". The Longshot can\n"  //
                                                         "reach the target on the elevator itself, allowing\n"
                                                         "you to skip needing to spawn the scarecrow.";     //
-string_view LogicFireFlameMazeDesc                    = "If you move quickly you can sneak past the edge of"
+string_view LogicFireFlameMazeDesc                    = "Difficulty: Expert\n"                             //
+                                                        "If you move quickly you can sneak past the edge of"
                                                         "a flame wall before it can rise up to block you.\n"
                                                         "To do it without taking damage is more precise.\n"//
                                                         "Allows you to progress without needing either a\n"//
                                                         "Small Key or Hover Boots.";                       //
-string_view LogicFireSongOfTimeDesc                   = "A precise jump can be used to reach this room.";  //
-string_view LogicWaterTempleTorchLongshotDesc         = "Stand on the eastern side of the central pillar\n"//
+string_view LogicFireSongOfTimeDesc                   = "Difficulty: Intermediate\n"                       //
+                                                        "A precise jump can be used to reach this room.";  //
+string_view LogicWaterTempleTorchLongshotDesc         = "Difficulty: Novice\n"                             //
+                                                        "Stand on the eastern side of the central pillar\n"//
                                                         "and longshot the torches on the bottom level.\n"  //
                                                         "Swim through the corridor and float up to the top\n"
                                                         "level. This allows access to this area and lower\n"
@@ -724,48 +1210,57 @@ string_view LogicWaterTempleTorchLongshotDesc         = "Stand on the eastern si
                                                         "the tricks that allow you to skip Iron Boots in\n"//
                                                         "the Water Temple are not going to be relevant\n"  //
                                                         "unless this trick is first enabled.";             //
-string_view LogicWaterTempleUpperBoostDesc            = "Stand on the corner closest to the upper ledge\n" //
+string_view LogicWaterTempleUpperBoostDesc            = "Difficulty: Expert\n"                             //
+                                                        "Stand on the corner closest to the upper ledge\n" //
                                                         "where you play Zelda's Lullaby to raise the water\n"
                                                         "and put a bomb down behind you. Hold forward when\n"
                                                         "the bomb explodes and Link should jump just far\n"//
                                                         "enough to grab the ledge.";                       //
-string_view LogicWaterCentralBowDesc                  = "A very precise Bow shot can hit the eye switch\n" //
+string_view LogicWaterCentralBowDesc                  = "Difficulty: Intermediate\n"                       //
+                                                        "A very precise Bow shot can hit the eye switch\n" //
                                                         "from the floor above. Then, you can jump down into"
                                                         "the hallway and make through it before the gate\n"//
                                                         "closes. It can also be done as child, using the\n"//
                                                         "Slingshot instead of the Bow.";                   //
-string_view LogicWaterCentralGSFWDesc                 = "If you set Farore's Wind inside the central pillar"
+string_view LogicWaterCentralGSFWDesc                 = "Difficulty: Novice\n"                             //
+                                                        "If you set Farore's Wind inside the central pillar"
                                                         "and then return to that warp point after raising\n"
                                                         "the water to the highest level, you can obtain\n" //
                                                         "this Skulltula Token with Hookshot or Boomerang.";//
-string_view LogicWaterCrackedWallNothingDesc          = "A precise jump slash (among other methods) will\n"//
+string_view LogicWaterCrackedWallNothingDesc          = "Difficulty: Expert\n"                             //
+                                                        "A precise jump slash (among other methods) will\n"//
                                                         "get you to the cracked wall without needing the\n"//
                                                         "Hover Boots or to raise the water to the middle\n"//
                                                         "level. This trick supersedes \"Water Temple\n"    //
                                                         "Cracked Wall with Hover Boots\".";                //
-string_view LogicWaterCrackedWallHoversDesc           = "With a midair side-hop while wearing the Hover\n" //
+string_view LogicWaterCrackedWallHoversDesc           = "Difficulty: Expert\n"                             //
+                                                        "With a midair side-hop while wearing the Hover\n" //
                                                         "Boots, you can reach the cracked wall without\n"  //
                                                         "needing to raise the water up to the middle level.";
-string_view LogicWaterBossKeyRegionDesc               = "With precise Hover Boots movement it is possible\n"
+string_view LogicWaterBossKeyRegionDesc               = "Difficulty: Intermediate\n"                       //
+                                                        "With precise Hover Boots movement it is possible\n"
                                                         "to reach the boss key chest's region without\n"   //
                                                         "needing the Longshot. It is not necessary to take\n"
                                                         "damage from the spikes. The Gold Skulltula Token\n"
                                                         "in the following room can also be obtained with\n"//
                                                         "just the Hover Boots.";                           //
-string_view LogicWaterBKJumpDiveDesc                  = "Stand on the very edge of the raised corridor\n"  //
+string_view LogicWaterBKJumpDiveDesc                  = "Difficulty: Intermediate\n"                       //
+                                                        "Stand on the very edge of the raised corridor\n"  //
                                                         "leading from the push block room to the rolling\n"//
                                                         "boulder corridor. Face the gold skulltula on the\n"
                                                         "waterfall and jump over the boulder corridor floor"
                                                         "into the pool of water, swimming right once\n"    //
                                                         "underwater. This allows access to the boss key\n" //
                                                         "room without Iron boots.";                        //
-string_view LogicWaterNorthBasementLedgeJumpDesc      = "In the northern basement there's a ledge from\n"  //
+string_view LogicWaterNorthBasementLedgeJumpDesc      = "Difficulty: Novice\n"                             //
+                                                        "In the northern basement there's a ledge from\n"  //
                                                         "where, in vanilla Water Temple, boulders roll out\n"
                                                         "into the room. Normally to jump directly to this\n"
                                                         "ledge logically requires the Hover Boots, but with"
                                                         "precise jump, it can be done without them. This\n"//
                                                         "trick applies to both Vanilla and Master Quest."; //
-string_view LogicWaterDragonAdultDesc                 = "Normally you need both Hookshot and Iron Boots to\n"
+string_view LogicWaterDragonAdultDesc                 = "Difficulty: Expert\n"                             //
+                                                        "Normally you need both Hookshot and Iron Boots to\n"
                                                         "hit the switch and swim through the tunnel to get\n"
                                                         "to the chest. But by hitting the switch from dry\n"
                                                         "land, using one of Bombchus, Hookshot, or Bow, it\n"
@@ -773,7 +1268,8 @@ string_view LogicWaterDragonAdultDesc                 = "Normally you need both 
                                                         "requirements. After the gate has been opened, a\n"//
                                                         "well-timed dive with at least the Silver Scale\n" //
                                                         "could be used to swim through the tunnel.";       //
-string_view LogicWaterDragonJumpDiveDesc              = "If you come into the dragon statue room from the\n"
+string_view LogicWaterDragonJumpDiveDesc              = "Difficulty: Expert\n"                             //
+                                                        "If you come into the dragon statue room from the\n"
                                                         "serpent river, you can jump down from above and\n"//
                                                         "get into the tunnel without needing either Iron\n"//
                                                         "Boots or a Scale. This trick applies to both\n"   //
@@ -781,85 +1277,183 @@ string_view LogicWaterDragonJumpDiveDesc              = "If you come into the dr
                                                         "shoot the switch from above with the Bow, and then"
                                                         "quickly get through the tunnel before the gate\n" //
                                                         "closes.";                                         //
-string_view LogicWaterRiverGSDesc                     = "Standing on the exposed ground toward the end of\n"
+string_view LogicWaterRiverGSDesc                     = "Difficulty: Novice\n"                             //
+                                                        "Standing on the exposed ground toward the end of\n"
                                                         "the river, a precise Longshot use can obtain the\n"
                                                         "token.";                                          //
-string_view LogicWaterFallingPlatformGSDesc           = "If you stand on the very edge of the platform,\n" //
+string_view LogicWaterFallingPlatformGSDesc           = "Difficulty: Intermediate\n"                       //
+                                                        "If you stand on the very edge of the platform,\n" //
                                                         "this Gold Skulltula can be obtained with only the\n"
                                                         "Hookshot.";                                       //
-string_view LogicSpiritLowerAdultSwitchDesc           = "A bomb can be used to hit the switch on the\n"    //
+string_view LogicSpiritLowerAdultSwitchDesc           = "Difficulty: Novice\n"                             //
+                                                        "A bomb can be used to hit the switch on the\n"    //
                                                         "ceiling, but it must be thrown from a particular\n"
                                                         "distance away and with precise timing.";          //
-string_view LogicSpiritChildBombchuDesc               = "A carefully-timed Bombchu can hit the switch.";   //
-string_view LogicSpiritWallDesc                       = "The logic normally guarantees a way of dealing\n" //
+string_view LogicSpiritChildBombchuDesc               = "Difficulty: Intermediate\n"                       //
+                                                        "A carefully-timed Bombchu can hit the switch.";   //
+string_view LogicSpiritWallDesc                       = "Difficulty: Expert\n"                             //
+                                                        "The logic normally guarantees a way of dealing\n" //
                                                         "with both the Beamos and the Walltula before\n"   //
                                                         "climbing the wall.";                              //
-string_view LogicSpiritLobbyGSDesc                    = "Standing on the highest part of the arm of the\n" //
+string_view LogicSpiritLobbyGSDesc                    = "Difficulty: Intermediate\n"                       //
+                                                        "Standing on the highest part of the arm of the\n" //
                                                         "statue, a precise Boomerang throw can kill and\n" //
                                                         "obtain this Gold Skulltula. You must throw the\n" //
                                                         "Boomerang slightly off to the side so that it\n"  //
                                                         "curves into the Skulltula, as aiming directly at\n"
                                                         "it will clank off of the wall in front.";         //
-string_view LogicSpiritMapChestDesc                   = "To get a line of sight from the upper torch to the"
+string_view LogicSpiritMapChestDesc                   = "Difficulty: Intermediate\n"                       //
+                                                        "To get a line of sight from the upper torch to the"
                                                         "map chest torches, you must pull an Armos statue\n"
                                                         "all the way up the stairs.";                      //
-string_view LogicSpiritSunChestDesc                   = "Using the blocks in the room as platforms you can\n"
+string_view LogicSpiritSunChestDesc                   = "Difficulty: Expert\n"                             //
+                                                        "Using the blocks in the room as platforms you can\n"
                                                         "get lines of sight to all three torches. The timer"
                                                         "on the torches is quite short so you must move\n" //
                                                         "quickly in order to light all three.";            //
-string_view LogicShadowFireArrowEntryDesc             = "It is possible to light all of the torches to open"
+string_view LogicShadowFireArrowEntryDesc             = "Difficulty: Expert\n"                             //
+                                                        "It is possible to light all of the torches to open"
                                                         "the Shadow Temple entrance with just Fire Arrows,\n"
                                                         "but you must be very quick, precise, and strategic"
                                                         "with how you take your shots.";                   //
-string_view LogicShadowUmbrellaDesc                   = "A very precise Hover Boots movement from off of\n"//
+string_view LogicShadowUmbrellaDesc                   = "Difficulty: Expert\n"                             //
+                                                        "A very precise Hover Boots movement from off of\n"//
                                                         "the lower chest can get you on top of the crushing\n"
                                                         "spikes without needing to pull the block. Applies\n"
                                                         "to both Vanilla and Master Quest.";               //
-string_view LogicShadowFreestandingKeyDesc            = "Release the Bombchu with good timing so that it\n"//
+string_view LogicShadowFreestandingKeyDesc            = "Difficulty: Intermediate\n"                       //
+                                                        "Release the Bombchu with good timing so that it\n"//
                                                         "explodes near the bottom of the pot.";            //
-string_view LogicShadowStatueDesc                     = "By sending a Bombchu around the edge of the gorge,"
+string_view LogicShadowStatueDesc                     = "Difficulty: Novice\n"                             //
+                                                        "By sending a Bombchu around the edge of the gorge,"
                                                         "you can knock down the statue without needing a\n"//
                                                         "Bow. Applies in both vanilla and MQ Shadow.";     //
-string_view LogicChildDeadhandDesc                    = "Requires 9 sticks or 5 jump slashes.";            //
-string_view LogicGtgWithoutHookshotDesc               = "After collecting the rest of the silver rupees in\n"
-                                                        "the room, you can reach the final silver rupee on\n"
-                                                        "the ceiling by being pulled up into it after\n"   //
-                                                        "getting grabbed by the Wallmaster. Then, you must\n"
-                                                        "also reach the exit of the room without the use of"
-                                                        "the Hookshot. If you move quickly you can sneak\n"//
-                                                        "past the edge of a flame wall before it can rise\n"
-                                                        "up to block you. To do so without taking damage is"
-                                                        "more precise.";                                   //
-string_view LogicGtgFakeWallDesc                      = "A precise Hover Boots use from the top of the\n"  //
+string_view LogicChildDeadhandDesc                    = "Difficulty: Novice\n"                             //
+                                                        "Requires 9 sticks or 5 jump slashes.";            //
+string_view LogicGtgWithoutHookshotDesc               = "Difficulty: Expert\n"                             //
+                                                        "The final silver rupee on the ceiling can be\n"   //
+                                                        "reached by being pulled up into it by the\n"      //
+                                                        "Wallmaster.\n"                                    //
+                                                        "Then, you must also reach the exit of the room\n" //
+                                                        "without the use of the Hookshot. If you move\n"   //
+                                                        "quickly, you can sneak past the edge of a\n"      //
+                                                        "flame wall before it can rise up to block you.\n" //
+                                                        "To do so without taking damage is more precise";  //
+string_view LogicGtgFakeWallDesc                      = "Difficulty: Novice\n"                             //
+                                                        "A precise Hover Boots use from the top of the\n"  //
                                                         "chest can allow you to grab the ledge without\n"  //
                                                         "needing the usual requirements.";                 //
-string_view LogicLensSpiritDesc                       = "Removes the requirements for the Lens of Truth in\n"
+string_view LogicLensSpiritDesc                       = "Difficulty: Novice\n"                             //
+                                                        "Removes the requirements for the Lens of Truth in\n"
                                                         "Spirit Temple.";                                  //
-string_view LogicLensShadowDesc                       = "Removes the requirements for the Lens of Truth in\n"
+string_view LogicLensShadowDesc                       = "Difficulty: Novice\n"                             //
+                                                        "Removes the requirements for the Lens of Truth in\n"
                                                         "Shadow Temple before the invisible moving platform";
-string_view LogicLensShadowBackDesc                   = "Removes the requirements for the Lens of Truth in\n"
+string_view LogicLensShadowBackDesc                   = "Difficulty: Intermediate\n"                       //
+                                                        "Removes the requirements for the Lens of Truth in\n"
                                                         "Shadow Temple beyond the invisible moving platform";
-string_view LogicLensBotwDesc                         = "Removes the requirements for the Lens of Truth in\n"
+string_view LogicLensBotwDesc                         = "Difficulty: Intermediate\n"                       //
+                                                        "Removes the requirements for the Lens of Truth in\n"
                                                         "Bottom of the Well.";                             //
-string_view LogicLensGtgDesc                          = "Removes the requirements for the Lens of Truth in\n"
+string_view LogicLensGtgDesc                          = "Difficulty: Novice\n"                             //
+                                                        "Removes the requirements for the Lens of Truth in\n"
                                                         "Gerudo Training Grounds.";                        //
-string_view LogicLensCastleDesc                       = "Removes the requirements for the Lens of Truth in\n"
+string_view LogicLensCastleDesc                       = "Difficulty: Intermediate\n"                       //
+                                                        "Removes the requirements for the Lens of Truth in\n"
                                                         "Ganon's Castle.";                                 //
-string_view LogicLensJabuMQDesc                       = "Removes the requirements for the Lens of Truth in\n"
+string_view LogicLensJabuMQDesc                       = "Difficulty: Novice\n"                             //
+                                                        "Removes the requirements for the Lens of Truth in\n"
                                                         "Jabu Jabu's Belly MQ.";                           //
-string_view LogicLensSpiritMQDesc                     = "Removes the requirements for the Lens of Truth in\n"
+string_view LogicLensSpiritMQDesc                     = "Difficulty: Novice\n"                             //
+                                                        "Removes the requirements for the Lens of Truth in\n"
                                                         "Spirit Temple MQ.";                               //
-string_view LogicLensShadowMQDesc                     = "Removes the requirements for the Lens of Truth in\n"
+string_view LogicLensShadowMQDesc                     = "Difficulty: Novice\n"                             //
+                                                        "Removes the requirements for the Lens of Truth in\n"
                                                         "Shadow Temple MQ before the invisible moving \n"  //
                                                         "platform";                                        //
-string_view LogicLensShadowMQBackDesc                 = "Removes the requirements for the Lens of Truth in\n"
+string_view LogicLensShadowMQBackDesc                 = "Difficulty: Intermediate\n"                       //
+                                                        "Removes the requirements for the Lens of Truth in\n"
                                                         "Shadow Temple MQ beyond the invisible moving \n"  //
                                                         "platform";                                        //
-string_view LogicLensBotwMQDesc                       = "Removes the requirements for the Lens of Truth in\n"
+string_view LogicLensBotwMQDesc                       = "Difficulty: Novice\n"                             //
+                                                        "Removes the requirements for the Lens of Truth in\n"
                                                         "Bottom of the Well MQ.";                          //
-string_view LogicLensGtgMQDesc                        = "Removes the requirements for the Lens of Truth in\n"
+string_view LogicLensGtgMQDesc                        = "Difficulty: Novice\n"                             //
+                                                        "Removes the requirements for the Lens of Truth in\n"
                                                         "Gerudo Training Grounds MQ.";                     //
-string_view LogicLensCastleMQDesc                     = "Removes the requirements for the Lens of Truth in\n"
+string_view LogicLensCastleMQDesc                     = "Difficulty: Intermediate\n"                       //
+                                                        "Removes the requirements for the Lens of Truth in\n"
                                                         "Ganon's Castle MQ.";                              //
-string_view LogicSpiritTrialHookshotDesc              = "A precise jump off of an Armos can collect the\n" //
+string_view LogicSpiritTrialHookshotDesc              = "Difficulty: Intermediate\n"                       //
+                                                        "A precise jump off of an Armos can collect the\n" //
                                                         "highest rupee.";                                  //
+                                                                                                           //
+string_view LogicFlamingChestsDesc                    = "Difficulty: Novice\n"                             //
+                                                        "The chests encircled in flames in Gerudo Training\n"
+                                                        "Grounds and in Spirit Temple can be opened by\n"  //
+                                                        "running into the flames while Link is invincible\n"
+                                                        "after taking damage.";                            //
+                                                                                                           //
+/*------------------------------                                                                           //
+|           GLITCHES           |                                                                           //
+------------------------------*/                                                                           //
+const std::vector<string_view> GlitchDifficulties{"Novice", "Intermediate", "Advanced", "Expert", "Hero"};
+
+string_view GlitchISGDescDisabled                     = "Shortened to ISG, allows Link's melee weapon to\n"//
+                                                        "be in a constant swinging state. Simply touching\n"
+                                                        "objects with this causes them to get hit.\n"      //
+                                                        "Putting away the weapon while ISG is on hits\n"   //
+                                                        "any object with a spherical hitbox,\n"            //
+                                                        "such as small skulltulas. It is initiated by\n"   //
+                                                        "interrupting a crouch stab.";                     //
+string_view GlitchISGDescNovice                       = "ISG may be required to kill certain enemies,\n"   //
+                                                        "or to Bomb Hover when enabled.";                  //
+string_view GlitchHoverDescDisabled                   = "Hovering allows Link to consecutively backflip\n" //
+                                                        "in the air without falling. By shielding\n"       //
+                                                        "damage with ISG on, Link will stay in midair.\n"  //
+                                                        "While bombs aren't always required, this option\n"//
+                                                        "will always expect them to be used.\n"            //
+                                                        "\n"                                               //
+                                                        "Requires ISG to be enabled.";                     //
+string_view GlitchHoverDescNovice                     = "Only bombchus are required for hovering.";        //
+string_view GlitchHoverDescIntermediate               = "Some hovers may require that you start from flat\n"
+                                                        "terrain, which requires somewhat precise timing.";//
+string_view GlitchHoverDescAdvanced                   = "Usage of regular bombs will now also be expected,\n"
+                                                        "which may require consecutive precise timings.";  //
+string_view GlitchMegaflipDescDisabled                = "A Megaflip is a backflip/sidehop with high speed.\n"
+                                                        "This can be done with several methods.";          //
+string_view GlitchMegaflipDescNovice                  = "Only Megaflipping with bombs is required.";       //
+string_view GlitchMegaflipDescIntermediate            = "Some Megaflips where you don't have a lot of room\n"
+                                                        "to work with and positioning is more important\n" //
+                                                        "may be required.";                                //
+string_view GlitchHookshotClipDescDisabled            = "Hookshot Clipping allows Link to hookshot through\n"
+                                                        "certain walls, which is useful if a valid\n"      //
+                                                        "target is on the other side.";                    //
+string_view GlitchHookshotClipDescNovice              = "Basic Hookshot Clipping may be required.";        //
+string_view GlitchHookshotJump_BonkDescDisabled       = "A Hookshot Jump is an umbrella term for techniques"
+                                                        "that launch Link into the sky using the Hookshot\n"
+                                                        "in various ways, sometimes together with\n"       //
+                                                        "other items. The bonk method only requires the\n" //
+                                                        "Hookshot itself.";                                //
+string_view GlitchHookshotJump_BonkDescIntermediate   = "Basic Hookshot Jumps with a bonk may be required.";
+string_view GlitchHookshotJump_BootsDescDisabled      = "This Hookshot Jump technique is one of the easier\n"
+                                                        "ones, and require any pair of boots.";            //
+string_view GlitchHookshotJump_BootsDescNovice        = "Only relatively short Hookshot Jumps with boots\n"//
+                                                        "may be required.";                                //
+string_view GlitchHookshotJump_BootsDescIntermediate  = "Higher Hookshot Jumps with boots, where you look\n"
+                                                        "further up or downwards may be required.";        //
+string_view GlitchLedgeClipDescDisabled               = "A Ledge Clip allows Link to fall through a floor\n"
+                                                        "or pass through an object by facing a wall\n"     //
+                                                        "and dropping down to the left in a various ways.\n"
+                                                        "These only work as an adult.";                    //
+string_view GlitchLedgeClipDescNovice                 = "Basic Ledge Clips may be required.\n"             //
+                                                        "Some require that you let go of the ledge with\n" //
+                                                        "a specific timing.";                              //
+string_view GlitchLedgeClipDescIntermediate           = "Certain harder clips may also be required.";      //
+string_view GlitchTripleSlashClipDescDisabled         = "When doing a three-slash-combo with either the\n" //
+                                                        "Kokiri Sword or the Master Sword and put it away,\n"
+                                                        "Link will be placed back a small distance.\n"     //
+                                                        "If, while slashing, you use the recoil of hitting\n"
+                                                        "a wall and then put away the sword, Link may clip\n"
+                                                        "into a wall behind him if angled correctly.";     //
+string_view GlitchTripleSlashClipDescNovice           = "Basic Triple Slash Clipping may be required.";    //

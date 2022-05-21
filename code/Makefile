@@ -54,7 +54,7 @@ endif
 
 VERFLAGS := -D OOT3D=$(OOT3D) -D OOT3DJ=$(OOT3DJ) -D Z3D=$(Z3D)
 
-ARCH	:=	-march=armv6k -mtune=mpcore -mfloat-abi=softfp -mtp=soft
+ARCH	:=	-march=armv6k -mtune=mpcore -mfloat-abi=softfp -mtp=soft -mfpu=vfpv2
 
 CFLAGS	:=	-g -Wall -mword-relocations -D DEBUG \
 			-fomit-frame-pointer -ffunction-sections \
@@ -65,9 +65,9 @@ CFLAGS	+=	$(INCLUDE) -DARM11 -D_3DS $(VERFLAGS)
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11
 
 ASFLAGS	+=	-g $(ARCH) $(VERFLAGS)
-LDFLAGS	=	-g $(ARCH) -Wl,-Map,$(notdir $*.map) -T $(TOPDIR)/$(LINK_SCRIPT) -nostdlib $(VERFLAGS) -lgcc
+LDFLAGS	=	-g $(ARCH) -Wl,-Map,$(notdir $*.map) -T $(TOPDIR)/$(LINK_SCRIPT) $(VERFLAGS) -lgcc
 
-LIBS	:=
+LIBS	:=	-lgcc
 
 # Debug-specific flags
 debug ?= 0
@@ -151,7 +151,12 @@ all: $(BUILD)
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
-	@python3 patch.py $(OUTPUT).elf
+	@if python3 patch.py $(OUTPUT).elf; then \
+		echo "created basecode.ips" ; \
+	else \
+		python patch.py $(OUTPUT).elf; \
+		echo "created basecode.ips" ; \
+	fi
 
 #---------------------------------------------------------------------------------
 clean:

@@ -2,6 +2,8 @@
 
 #include <3ds.h>
 
+#include "keys.hpp"
+
 namespace Logic {
 
   extern bool noVariable;
@@ -46,7 +48,6 @@ namespace Logic {
 
   //Trade Quest
   extern bool PocketEgg;
-  extern bool PocketCucco;
   extern bool Cojiro;
   extern bool OddMushroom;
   extern bool OddPoultice;
@@ -123,6 +124,9 @@ namespace Logic {
   extern u8 ProgressiveMagic;
   extern u8 ProgressiveOcarina;
 
+  //Keysanity
+  extern bool IsKeysanity;
+
   //Keys
   extern u8 ForestTempleKeys;
   extern u8 FireTempleKeys;
@@ -133,6 +137,7 @@ namespace Logic {
   extern u8 GerudoTrainingGroundsKeys;
   extern u8 GerudoFortressKeys;
   extern u8 GanonsCastleKeys;
+  extern u8 TreasureGameKeys;
 
   //Boss Keys
   extern bool BossKeyForestTemple;
@@ -173,12 +178,19 @@ namespace Logic {
   extern bool BuyBombchus5;
   extern bool BuyBombchus10;
   extern bool BuyBombchus20;
+  extern bool BuyArrow;
+  extern bool BuyBomb;
+  extern bool BuyGPotion;
+  extern bool BuyBPotion;
+  extern bool BuySeed;
+  extern bool MagicRefill;
 
   /* --- HELPERS --- */
   /* These are used to simplify reading the logic, but need to be updated
   /  every time a base value is updated.                       */
 
   extern bool Ocarina;
+  extern bool OcarinaOfTime;
   extern bool MagicMeter;
   extern bool Hookshot;
   extern bool Longshot;
@@ -187,6 +199,7 @@ namespace Logic {
   extern bool GoldenGauntlets;
   extern bool SilverScale;
   extern bool GoldScale;
+  extern bool AdultsWallet;
 
   extern bool ScarecrowSong;
   extern bool Scarecrow;
@@ -204,8 +217,9 @@ namespace Logic {
   extern bool BottleWithBigPoe;
 
   extern bool Bombs;
-  extern bool HasBombchus;
   extern bool FoundBombchus;
+  extern bool CanPlayBowling;
+  extern bool HasBombchus;
   extern bool HasExplosives;
   extern bool IsChild;
   extern bool IsAdult;
@@ -222,7 +236,7 @@ namespace Logic {
   extern bool CanSummonGossipFairy;
   extern bool CanSummonGossipFairyWithoutSuns;
   extern bool CanTakeDamage;
-  extern bool CanPlantBean;
+  //extern bool CanPlantBean;
   extern bool CanOpenBombGrotto;
   extern bool CanOpenStormGrotto;
   extern bool HookshotOrBoomerang;
@@ -259,6 +273,7 @@ namespace Logic {
   extern bool CarpenterRescue;
   extern bool DampesWindmillAccess;
   extern bool GF_GateOpen;
+  extern bool GtG_GateOpen;
   extern bool DrainWell;
   extern bool GoronCityChildFire;
   extern bool GCWoodsWarpOpen;
@@ -286,34 +301,6 @@ namespace Logic {
   extern u8 AddedProgressiveOcarinas;
   extern u8 TokensInPool;
 
-  //Enum values for CanUse() and related functions
-  enum class CanUseItem {
-    Dins_Fire,
-    Farores_Wind,
-    Nayrus_Love,
-    Lens_of_Truth,
-    Bow,
-    Hammer,
-    Iron_Boots,
-    Hover_Boots,
-    Hookshot,
-    Longshot,
-    Silver_Gauntlets,
-    Golden_Gauntlets,
-    Goron_Tunic,
-    Zora_Tunic,
-    Scarecrow,
-    Distant_Scarecrow,
-    Slingshot,
-    Boomerang,
-    Kokiri_Sword,
-    Sticks,
-    Deku_Shield,
-    Fire_Arrows,
-    Ice_Arrows,
-    Light_Arrows,
-  };
-
   enum class HasProjectileAge {
     Adult,
     Child,
@@ -321,11 +308,32 @@ namespace Logic {
     Either,
   };
 
+  enum class GlitchType {
+    ISG,
+    BombHover,
+    Megaflip,
+    HookshotClip,
+    HookshotJump_Bonk,
+    HookshotJump_Boots,
+    LedgeClip,
+    TripleSlashClip,
+  };
+
+  enum class GlitchDifficulty {
+    NOVICE = 1,
+    INTERMEDIATE,
+    ADVANCED,
+    EXPERT,
+    HERO,
+  };
+
   void UpdateHelpers();
   bool CanPlay(bool song);
-  bool CanUse(CanUseItem itemName);
+  bool CanUse(ItemKey itemName);
   bool HasProjectile(HasProjectileAge age);
   bool SmallKeys(u8 dungeonKeyCount, u8 requiredAmount);
+  bool SmallKeys_ShadowTemple(u8 dungeonKeyCount, u8 requiredAmountGlitchless, u8 requiredAmountGlitched);
+  bool CanDoGlitch(GlitchType glitch, GlitchDifficulty difficulty);
   bool EventsUpdated();
   void LogicReset();
 }

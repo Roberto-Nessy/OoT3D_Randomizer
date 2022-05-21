@@ -13,8 +13,12 @@
 #include "category.hpp"
 #include "settings.hpp"
 #include "tinyxml2.h"
+#include "utils.hpp"
 
 namespace fs = std::filesystem;
+
+static const std::string CACHED_SETTINGS_FILENAME = "CACHED_SETTINGS";
+static const std::string CACHED_COSMETICS_FILENAME = "CACHED_COSMETICS";
 
 static std::string_view GetBasePath(OptionCategory category) {
   static constexpr std::array<std::string_view, 2> paths{
@@ -62,7 +66,7 @@ bool CreatePresetDirectories() {
 std::vector<std::string> GetSettingsPresets() {
   std::vector<std::string> presetEntries = {};
   for (const auto& entry : fs::directory_iterator(GetBasePath(OptionCategory::Setting))) {
-    if(entry.path().stem().string() != "CACHED_SETTINGS") {
+    if(entry.path().stem().string() != CACHED_SETTINGS_FILENAME) {
       presetEntries.push_back(entry.path().stem().string());
     }
   }
@@ -78,7 +82,7 @@ static std::string PresetPath(std::string_view presetName, OptionCategory catego
 bool SavePreset(std::string_view presetName, OptionCategory category) {
   using namespace tinyxml2;
 
-  XMLDocument preset = XMLDocument();
+  XMLDocument preset = XMLDocument(false);
 
   // Create and insert the XML declaration
   preset.InsertEndChild(preset.NewDeclaration());
@@ -87,7 +91,7 @@ bool SavePreset(std::string_view presetName, OptionCategory category) {
   XMLElement* rootNode = preset.NewElement("settings");
   preset.InsertEndChild(rootNode);
 
-  for (MenuItem* menu : Settings::mainMenu) {
+  for (Menu* menu : Settings::GetAllOptionMenus()) {
     if (menu->mode != OPTION_SUB_MENU) {
       continue;
     }
@@ -96,22 +100,14 @@ bool SavePreset(std::string_view presetName, OptionCategory category) {
         continue;
       }
 
-      // Create the <setting> element
-      XMLElement* newSetting = preset.NewElement("setting");
-      newSetting->SetAttribute("name", setting->GetName().c_str());
+      XMLElement* newSetting = rootNode->InsertNewChildElement("setting");
+      newSetting->SetAttribute("name", RemoveLineBreaks(setting->GetName()).c_str());
       newSetting->SetText(setting->GetSelectedOptionText().c_str());
-
-      // Append it to the root node
-      rootNode->InsertEndChild(newSetting);
     }
   }
 
-  const std::string filepath = PresetPath(presetName, category);
-  XMLError e = preset.SaveFile(filepath.c_str());
-  if (e != XML_SUCCESS) {
-    return false;
-  }
-  return true;
+  XMLError e = preset.SaveFile(PresetPath(presetName, category).c_str());
+  return e == XML_SUCCESS;
 }
 
 //Read the preset XML file
@@ -132,7 +128,7 @@ bool LoadPreset(std::string_view presetName, OptionCategory category) {
 
   XMLElement* curNode = rootNode->FirstChildElement();
 
-  for (MenuItem* menu : Settings::mainMenu) {
+  for (Menu* menu : Settings::GetAllOptionMenus()) {
     if (menu->mode != OPTION_SUB_MENU) {
       continue;
     }
@@ -144,29 +140,28 @@ bool LoadPreset(std::string_view presetName, OptionCategory category) {
 
       // Since presets are saved linearly, we can simply loop through the nodes as
       // we loop through the settings to find most of the matching elements.
-      const std::string& settingToFind = setting->GetName();
-      if (settingToFind == curNode->Attribute("name")) {
+      const std::string& settingToFind = RemoveLineBreaks(setting->GetName());
+      if (settingToFind == RemoveLineBreaks(curNode->Attribute("name"))) {
         setting->SetSelectedIndexByString(curNode->GetText());
         curNode = curNode->NextSiblingElement();
       } else {
         // If the current setting and element don't match, then search
         // linearly from the beginning. This will get us back on track if the
-        // next setting and element line up with each other*/
+        // next setting and element line up with each other.
         curNode = rootNode->FirstChildElement();
-        bool settingFound = false;
         while (curNode != nullptr) {
-          if (settingToFind == curNode->Attribute("name")) {
+          if (settingToFind == RemoveLineBreaks(curNode->Attribute("name"))) {
             setting->SetSelectedIndexByString(curNode->GetText());
             curNode = curNode->NextSiblingElement();
-            settingFound = true;
             break;
           }
           curNode = curNode->NextSiblingElement();
         }
-        //reset to the beginning if the setting wasn't found
-        if (!settingFound) {
-          curNode = rootNode->FirstChildElement();
-        }
+      }
+
+      // Reset to the beginning if we reached the end.
+      if (curNode == nullptr) {
+        curNode = rootNode->FirstChildElement();
       }
     }
   }
@@ -200,23 +195,29 @@ bool SaveSpecifiedPreset(std::string_view presetName, OptionCategory category) {
 }
 
 void SaveCachedSettings() {
-  SavePreset("CACHED_SETTINGS", OptionCategory::Setting);
+  SavePreset(CACHED_SETTINGS_FILENAME, OptionCategory::Setting);
 }
 
 void LoadCachedSettings() {
   //If cache file exists, load it
   for (const auto& entry : fs::directory_iterator(GetBasePath(OptionCategory::Setting))) {
-    if(entry.path().stem().string() == "CACHED_SETTINGS") {
+    if(entry.path().stem().string() == CACHED_SETTINGS_FILENAME) {
       //File exists, open
-      LoadPreset("CACHED_SETTINGS", OptionCategory::Setting);
+      LoadPreset(CACHED_SETTINGS_FILENAME, OptionCategory::Setting);
     }
   }
 }
 
 bool SaveCachedCosmetics() {
-  return SavePreset("CACHED_COSMETICS", OptionCategory::Cosmetic);
+  return SavePreset(CACHED_COSMETICS_FILENAME, OptionCategory::Cosmetic);
 }
 
-bool LoadCachedCosmetics() {
-  return LoadPreset("CACHED_COSMETICS", OptionCategory::Cosmetic);
+void LoadCachedCosmetics() {
+  //If cache file exists, load it
+  for (const auto& entry : fs::directory_iterator(GetBasePath(OptionCategory::Cosmetic))) {
+    if(entry.path().stem().string() == CACHED_COSMETICS_FILENAME) {
+      //File exists, open
+      LoadPreset(CACHED_COSMETICS_FILENAME, OptionCategory::Cosmetic);
+    }
+  }
 }
