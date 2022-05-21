@@ -629,6 +629,7 @@ bool PlacementLog_Write() {
   WriteExcludedLocations(placementLog);
   WriteStartingInventory(placementLog);
   WriteEnabledTricks(placementLog);
+  WriteEnabledGlitches(placementLog);
   WriteMasterQuestDungeons(placementLog);
   WriteRequiredTrials(placementLog);
 
