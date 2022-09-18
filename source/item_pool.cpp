@@ -595,8 +595,8 @@ static void SetMinimalItemPool() {
   ReplaceMaxItem(PROGRESSIVE_SLINGSHOT, 1);
   ReplaceMaxItem(PROGRESSIVE_BOMB_BAG, 1);
   ReplaceMaxItem(PIECE_OF_HEART, 0);
-  // Need an extra heart container when starting with 1 heart to be able to reach 3 hearts
-  ReplaceMaxItem(HEART_CONTAINER, (StartingHealth.Value<u8>() == 18)? 1 : 0);
+  // Need extra heart containers when starting with 1 heart or less to be able to reach 3 hearts
+  ReplaceMaxItem(HEART_CONTAINER, 2 - StartingHearts.Value<u8>());
 }
 
 void GenerateItemPool() {
@@ -726,6 +726,16 @@ void GenerateItemPool() {
     PlaceItemInLocation(WASTELAND_BOMBCHU_SALESMAN, BOMBCHU_10, false, true);
   }
 
+  if (ShuffleFrogSongRupees) {
+    AddItemToMainPool(PURPLE_RUPEE, 5);
+  } else {
+    PlaceItemInLocation(ZR_FROGS_ZELDAS_LULLABY, PURPLE_RUPEE, false, true);
+    PlaceItemInLocation(ZR_FROGS_EPONAS_SONG, PURPLE_RUPEE, false, true);
+    PlaceItemInLocation(ZR_FROGS_SARIAS_SONG, PURPLE_RUPEE, false, true);
+    PlaceItemInLocation(ZR_FROGS_SUNS_SONG, PURPLE_RUPEE, false, true);
+    PlaceItemInLocation(ZR_FROGS_SONG_OF_TIME, PURPLE_RUPEE, false, true);
+  }
+
   if (ShuffleAdultTradeQuest) {
     AddItemToMainPool(POCKET_EGG);
     AddItemToMainPool(COJIRO);
@@ -815,10 +825,23 @@ void GenerateItemPool() {
       PlaceItemInLocation(GF_SOUTH_F1_CARPENTER, RECOVERY_HEART, false, true);
       PlaceItemInLocation(GF_SOUTH_F2_CARPENTER, RECOVERY_HEART, false, true);
     } else {
-      AddItemToMainPool(GERUDO_FORTRESS_SMALL_KEY, 4);
+      //Only add key ring if 4 Fortress keys necessary
+      if (RingFortress) {
+        AddItemToMainPool(GERUDO_FORTRESS_KEY_RING);
+        //Add junk to make up for missing keys
+        for (u8 i = 0; i < 3; i++) {
+          AddItemToMainPool(GetJunkItem());
+        }
+      } else {
+        AddItemToMainPool(GERUDO_FORTRESS_SMALL_KEY, 4);
+      }
     }
     if (ItemPoolValue.Is(ITEMPOOL_PLENTIFUL)) {
-      AddItemToPool(PendingJunkPool, GERUDO_FORTRESS_SMALL_KEY);
+      if (RingFortress && GerudoFortress.Is(GERUDOFORTRESS_NORMAL)) {
+        AddItemToPool(PendingJunkPool, GERUDO_FORTRESS_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, GERUDO_FORTRESS_SMALL_KEY);
+      }
     }
   } else {
     if (GerudoFortress.Is(GERUDOFORTRESS_FAST)) {
@@ -845,24 +868,71 @@ void GenerateItemPool() {
     PlaceItemInLocation(GF_GERUDO_TOKEN, GERUDO_TOKEN, false, true);
   }
 
+  //Keys
+
+  //For key rings, need to add as many junk items as "missing" keys
+  if (KeyRings) {
+    u8 ringJunkAmt = 0;
+    for (auto dungeon : dungeonList) {
+      if (dungeon->HasKeyRing()) {
+        ringJunkAmt += dungeon->GetSmallKeyCount() - 1;
+      }
+    }
+    for (u8 i = 0; i < ringJunkAmt; i++) {
+        AddItemToMainPool(GetJunkItem());
+    }
+  }
+
   if (ItemPoolValue.Is(ITEMPOOL_PLENTIFUL)) {
     if (ShuffleGerudoToken) {
       AddItemToPool(PendingJunkPool, GERUDO_TOKEN);
     }
 
     //Plentiful small keys
-    if (Keysanity.Is(KEYSANITY_ANYWHERE)) {
-      AddItemToPool(PendingJunkPool, BOTTOM_OF_THE_WELL_SMALL_KEY);
-      AddItemToPool(PendingJunkPool, FOREST_TEMPLE_SMALL_KEY);
-      AddItemToPool(PendingJunkPool, FIRE_TEMPLE_SMALL_KEY);
-      AddItemToPool(PendingJunkPool, WATER_TEMPLE_SMALL_KEY);
-      AddItemToPool(PendingJunkPool, SPIRIT_TEMPLE_SMALL_KEY);
-      AddItemToPool(PendingJunkPool, SHADOW_TEMPLE_SMALL_KEY);
-      AddItemToPool(PendingJunkPool, GERUDO_TRAINING_GROUNDS_SMALL_KEY);
-      AddItemToPool(PendingJunkPool, GANONS_CASTLE_SMALL_KEY);
+    if (Keysanity.Is(KEYSANITY_ANYWHERE) || Keysanity.Is(KEYSANITY_ANY_DUNGEON) || Keysanity.Is(KEYSANITY_OVERWORLD)) {
+      if (BottomOfTheWell.HasKeyRing()) {
+        AddItemToPool(PendingJunkPool, BOTTOM_OF_THE_WELL_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, BOTTOM_OF_THE_WELL_SMALL_KEY);
+      }
+      if (ForestTemple.HasKeyRing()) {
+        AddItemToPool(PendingJunkPool, FOREST_TEMPLE_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, FOREST_TEMPLE_SMALL_KEY);
+      }
+      if (FireTemple.HasKeyRing()) {
+        AddItemToPool(PendingJunkPool, FIRE_TEMPLE_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, FIRE_TEMPLE_SMALL_KEY);
+      }
+      if (WaterTemple.HasKeyRing()) {
+        AddItemToPool(PendingJunkPool, WATER_TEMPLE_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, WATER_TEMPLE_SMALL_KEY);
+      }
+      if (SpiritTemple.HasKeyRing()) {
+        AddItemToPool(PendingJunkPool, SPIRIT_TEMPLE_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, SPIRIT_TEMPLE_SMALL_KEY);
+      }
+      if (ShadowTemple.HasKeyRing()) {
+        AddItemToPool(PendingJunkPool, SHADOW_TEMPLE_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, SHADOW_TEMPLE_SMALL_KEY);
+      }
+      if (GerudoTrainingGrounds.HasKeyRing()) {
+        AddItemToPool(PendingJunkPool, GERUDO_TRAINING_GROUNDS_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, GERUDO_TRAINING_GROUNDS_SMALL_KEY);
+      }
+      if (GanonsCastle.HasKeyRing()) {
+        AddItemToPool(PendingJunkPool, GANONS_CASTLE_KEY_RING);
+      } else {
+        AddItemToPool(PendingJunkPool, GANONS_CASTLE_SMALL_KEY);
+      }
     }
 
-    if (BossKeysanity.Is(BOSSKEYSANITY_ANYWHERE)) {
+    if (BossKeysanity.Is(BOSSKEYSANITY_ANYWHERE) || BossKeysanity.Is(BOSSKEYSANITY_ANY_DUNGEON) || BossKeysanity.Is(BOSSKEYSANITY_OVERWORLD)) {
       AddItemToPool(PendingJunkPool, FOREST_TEMPLE_BOSS_KEY);
       AddItemToPool(PendingJunkPool, FIRE_TEMPLE_BOSS_KEY);
       AddItemToPool(PendingJunkPool, WATER_TEMPLE_BOSS_KEY);
@@ -870,7 +940,7 @@ void GenerateItemPool() {
       AddItemToPool(PendingJunkPool, SHADOW_TEMPLE_BOSS_KEY);
     }
 
-    if (GanonsBossKey.Is(GANONSBOSSKEY_ANYWHERE)) {
+    if (GanonsBossKey.Is(GANONSBOSSKEY_ANYWHERE) || GanonsBossKey.Is(GANONSBOSSKEY_ANY_DUNGEON) || GanonsBossKey.Is(GANONSBOSSKEY_OVERWORLD)) {
       AddItemToPool(PendingJunkPool, GANONS_CASTLE_BOSS_KEY);
     }
   }
@@ -1026,8 +1096,12 @@ void GenerateItemPool() {
     PlaceVanillaSmallKeys();
   } else {
     for (auto dungeon : dungeonList) {
-      if (dungeon->GetSmallKeyCount() > 0) {
-        AddItemToMainPool(dungeon->GetSmallKey(), dungeon->GetSmallKeyCount());
+      if (dungeon->HasKeyRing() && Keysanity.IsNot(KEYSANITY_START_WITH)) {
+        AddItemToMainPool(dungeon->GetKeyRing());
+      } else {
+        if (dungeon->GetSmallKeyCount() > 0) {
+          AddItemToMainPool(dungeon->GetSmallKey(), dungeon->GetSmallKeyCount());
+        }
       }
     }
   }

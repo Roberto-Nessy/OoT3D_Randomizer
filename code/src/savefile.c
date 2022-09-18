@@ -6,6 +6,7 @@
 #include "3ds/extdata.h"
 #include <string.h>
 #include "entrance.h"
+#include "multiplayer.h"
 
 #define DECLARE_EXTSAVEDATA
 #include "savefile.h"
@@ -59,7 +60,7 @@ void SaveFile_Init(u32 fileBaseIndex) {
 
     gSaveContext.sceneFlags[5].swch |= 0x00010000; //remove Ruto cutscene in Water Temple
 
-    gSaveContext.unk_13D0[4] |= 0x01; //Club Moblin cutscene
+    gSaveContext.otherNewEventFlags |= 0x01; //Club Moblin cutscene
 
     //open lowest Vanilla Fire Temple locked door (to prevent key logic lockouts)
     //Not done on keysanity since this lockout is a non issue when FiT keys can be found outside the temple
@@ -105,12 +106,12 @@ void SaveFile_Init(u32 fileBaseIndex) {
 
     if (gSettingsContext.gerudoFortress == GERUDOFORTRESS_FAST) {
         gSaveContext.eventChkInf[0x9] |= 0x000E; //Free 3 carpenters
-        gSaveContext.sceneFlags[DUNGEON_GERUDO_FORTRESS].swch    |= 0x000D01DC; //heard yells/unlocked doors
-        gSaveContext.sceneFlags[DUNGEON_GERUDO_FORTRESS].collect |= 0x0000C400; //picked up keys
+        gSaveContext.sceneFlags[DUNGEON_THIEVES_HIDEOUT].swch    |= 0x000D01DC; //heard yells/unlocked doors
+        gSaveContext.sceneFlags[DUNGEON_THIEVES_HIDEOUT].collect |= 0x0000C400; //picked up keys
     } else if (gSettingsContext.gerudoFortress == GERUDOFORTRESS_OPEN) {
         gSaveContext.eventChkInf[0x9] |= 0x000F; //Free all carpenters
-        gSaveContext.sceneFlags[DUNGEON_GERUDO_FORTRESS].swch    |= 0x000F01FE; //heard yells/unlocked doors
-        gSaveContext.sceneFlags[DUNGEON_GERUDO_FORTRESS].collect |= 0x0000D400; //picked up keys
+        gSaveContext.sceneFlags[DUNGEON_THIEVES_HIDEOUT].swch    |= 0x000F01FE; //heard yells/unlocked doors
+        gSaveContext.sceneFlags[DUNGEON_THIEVES_HIDEOUT].collect |= 0x0000D400; //picked up keys
     }
 
     if (gSettingsContext.zorasFountain == ZORASFOUNTAIN_OPEN) {
@@ -243,11 +244,21 @@ u8 SaveFile_GetIsSceneDiscovered(u8 sceneNum) {
 }
 
 void SaveFile_SetSceneDiscovered(u8 sceneNum) {
+    // This is used to reveal Kak Shop items when entered the scene as adult only
+    if (sceneNum == 0x30 && gSaveContext.linkAge == AGE_ADULT) {
+        EventSet(0x8B);
+    }
+
+    if (SaveFile_GetIsSceneDiscovered(sceneNum)) {
+        return;
+    }
+
     u16 numBits = sizeof(u32) * 8;
     u32 idx = sceneNum / numBits;
     if (idx < SAVEFILE_SCENES_DISCOVERED_IDX_COUNT) {
         u32 sceneBit = 1 << (sceneNum - (idx * numBits));
         gExtSaveData.scenesDiscovered[idx] |= sceneBit;
+        Multiplayer_Send_DiscoveredScene(idx, sceneBit);
     }
 }
 
@@ -265,7 +276,7 @@ void SaveFile_SetEntranceDiscovered(u16 entranceIndex) {
 
     // Skip if already set to save time from setting the connected or
     // if this is a dynamic entrance
-    if (entranceIndex > 0x2020 || SaveFile_GetIsEntranceDiscovered(entranceIndex)) {
+    if (entranceIndex > 0x0820 || SaveFile_GetIsEntranceDiscovered(entranceIndex)) {
         return;
     }
 
@@ -274,6 +285,7 @@ void SaveFile_SetEntranceDiscovered(u16 entranceIndex) {
     if (idx < SAVEFILE_ENTRANCES_DISCOVERED_IDX_COUNT) {
         u32 entranceBit = 1 << (entranceIndex - (idx * numBits));
         gExtSaveData.entrancesDiscovered[idx] |= entranceBit;
+        Multiplayer_Send_DiscoveredEntrance(idx, entranceBit);
         // Set connected
         for (size_t i = 0; i < ENTRANCE_OVERRIDES_MAX_COUNT; i++) {
             if (entranceIndex == rEntranceOverrides[i].index) {
@@ -315,7 +327,7 @@ void SaveFile_SetStartingInventory(void) {
         gSaveContext.dungeonKeys[DUNGEON_SHADOW_TEMPLE]            = gSettingsContext.shadowTempleDungeonMode          ? 6 : 5;
         gSaveContext.dungeonKeys[DUNGEON_BOTTOM_OF_THE_WELL]       = gSettingsContext.bottomOfTheWellDungeonMode       ? 2 : 3;
         gSaveContext.dungeonKeys[DUNGEON_GERUDO_TRAINING_GROUNDS]  = gSettingsContext.gerudoTrainingGroundsDungeonMode ? 3 : 9;
-        gSaveContext.dungeonKeys[DUNGEON_GANONS_CASTLE_FIRST_PART] = gSettingsContext.ganonsCastleDungeonMode          ? 3 : 2;
+        gSaveContext.dungeonKeys[DUNGEON_INSIDE_GANONS_CASTLE] = gSettingsContext.ganonsCastleDungeonMode          ? 3 : 2;
         //give starting spirit keys for vanilla key locations
     } else if (gSettingsContext.keysanity == KEYSANITY_VANILLA) {
         if (gSettingsContext.spiritTempleDungeonMode == DUNGEONMODE_MQ) {
@@ -332,15 +344,13 @@ void SaveFile_SetStartingInventory(void) {
 
     //give Ganon's Castle Boss Key
     if (gSettingsContext.ganonsBossKey == GANONSBOSSKEY_START_WITH) {
-        gSaveContext.dungeonItems[DUNGEON_GANONS_CASTLE_SECOND_PART] |= 0x1;
+        gSaveContext.dungeonItems[DUNGEON_GANONS_TOWER] |= 0x1;
     }
 
     //starting Nuts and Sticks
     if (gSettingsContext.startingConsumables) {
         gSaveContext.items[SLOT_NUT] = ITEM_NUT;
         gSaveContext.items[SLOT_STICK] = ITEM_STICK;
-        gSaveContext.upgrades |= 1 << 17;
-        gSaveContext.upgrades |= 1 << 20;
         gSaveContext.ammo[SLOT_NUT] = 20;
         gSaveContext.ammo[SLOT_STICK] = 10;
     }
@@ -352,12 +362,16 @@ void SaveFile_SetStartingInventory(void) {
         gSaveContext.upgrades |= ((gSettingsContext.startingStickCapacity + 1) << 17);
         gSaveContext.items[SLOT_STICK] = ITEM_STICK;
         gSaveContext.ammo[SLOT_STICK] = (gSettingsContext.startingStickCapacity + 1) * 10;
+    } else if (gSettingsContext.startingConsumables) {
+        gSaveContext.upgrades |= 1 << 17;
     }
 
     if (gSettingsContext.startingNutCapacity > 0) {
         gSaveContext.upgrades |= ((gSettingsContext.startingNutCapacity + 1) << 20);
         gSaveContext.items[SLOT_NUT] = ITEM_NUT;
         gSaveContext.ammo[SLOT_NUT] = (gSettingsContext.startingNutCapacity + 2) * 10;
+    } else if (gSettingsContext.startingConsumables) {
+        gSaveContext.upgrades |= 1 << 20;
     }
 
     if (gSettingsContext.startingBombBag > 0) {
@@ -368,7 +382,7 @@ void SaveFile_SetStartingInventory(void) {
 
     if (gSettingsContext.startingBombchus > 0) {
         gSaveContext.items[SLOT_BOMBCHU] = ITEM_BOMBCHU;
-        gSaveContext.ammo[SLOT_BOMBCHU] = 20;
+        gSaveContext.ammo[SLOT_BOMBCHU] = 30 * gSettingsContext.startingBombchus - 10;
     }
 
     if (gSettingsContext.startingBow > 0) {
@@ -476,8 +490,8 @@ void SaveFile_SetStartingInventory(void) {
         ItemEffect_GiveDefense(&gSaveContext, 0, 0);
     }
 
-    gSaveContext.healthCapacity = gSettingsContext.startingHealth << 4;
-    gSaveContext.health         = gSettingsContext.startingHealth << 4;
+    gSaveContext.healthCapacity = gSettingsContext.startingHearts << 4;
+    gSaveContext.health         = gSettingsContext.startingHearts << 4;
 
     gSaveContext.questItems |= gSettingsContext.startingQuestItems;
     gSaveContext.questItems |= gSettingsContext.startingDungeonReward;
@@ -558,6 +572,16 @@ void SaveFile_ResetItemSlotsIfMatchesID(u8 itemSlot) {
     }
 }
 
+u8 SaveFile_InventoryMenuHasSlot(u8 adult, u8 itemSlot) {
+    u8* itemMenu = adult ? gSaveContext.itemMenuAdult : gSaveContext.itemMenuChild;
+    for (size_t i = 0; i < 0x18; i++) {
+        if (itemMenu[i] == itemSlot) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 void SaveFile_SetOwnedTradeItemEquipped(void) {
     if (gSaveContext.sceneFlags[0x60].unk == 0) {
         gSaveContext.items[SLOT_TRADE_ADULT] = 0xFF;
@@ -572,6 +596,14 @@ void SaveFile_SetOwnedTradeItemEquipped(void) {
     }
 }
 
+s8 SaveFile_GetIgnoreMaskReactionOption(u32 reactionSet) {
+    // This option somehow breaks talking to the Kakariko Mountain Gate guard, so use a workaround
+    if (reactionSet == 0x3C && PLAYER->currentMask == 1 && (gSaveContext.infTable[7] & 0x80) == 0) {
+        return 0;
+    }
+    return gExtSaveData.option_IgnoreMaskReaction;
+}
+
 void SaveFile_InitExtSaveData(u32 saveNumber) {
     gExtSaveData.version = EXTSAVEDATA_VERSION; // Do not change this line
     gExtSaveData.biggoronTrades = 0;
@@ -584,6 +616,8 @@ void SaveFile_InitExtSaveData(u32 saveNumber) {
     gExtSaveData.option_EnableBGM = gSettingsContext.playMusic;
     gExtSaveData.option_EnableSFX = gSettingsContext.playSFX;
     gExtSaveData.option_SilenceNavi = gSettingsContext.silenceNavi;
+    gExtSaveData.option_IgnoreMaskReaction = gSettingsContext.ignoreMaskReaction;
+    gExtSaveData.option_SkipSongReplays = gSettingsContext.skipSongReplays;
 }
 
 void SaveFile_LoadExtSaveData(u32 saveNumber) {
@@ -641,4 +675,13 @@ void SaveFile_SaveExtSaveData(u32 saveNumber) {
     extDataWriteFileDirectly(fsa, path, &gExtSaveData, 0, sizeof(gExtSaveData));
 
     extDataUnmount(fsa);
+}
+
+void SaveFile_EnforceHealthLimit(void) {
+    u16 healthLimit = (gSaveContext.healthCapacity == 0) ? 2 : gSaveContext.healthCapacity;
+    if (gSaveContext.health > healthLimit) {
+        gSaveContext.health = healthLimit;
+    } else if (gSaveContext.health < 0) {
+        gSaveContext.health = 0;
+    }
 }

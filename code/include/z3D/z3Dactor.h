@@ -209,7 +209,12 @@ typedef struct {
 
 typedef struct {
     /* 0x0000 */ Actor  actor;
-    /* 0x01A4 */ char   unk_1A4[0x13];
+    /* 0x01A4 */ char   unk_148[0x0005];
+    /* 0x01A9 */ s8     heldItemActionParam;
+    /* 0x01AA */ u8     heldItemId;
+    /* 0x01AB */ char   unk_1AB[0x1];
+    /* 0x01AC */ s8     itemActionParam;
+    /* 0x01AD */ char   unk_1AD[0x000A];
     /* 0x01B7 */ u8     currentMask;
     /* 0x01B8 */ char   unk_1B8[0x94];
     /* 0x024C */ void*  giDrawSpace;
@@ -225,12 +230,17 @@ typedef struct {
     /* 0x170C */ char   unk_170C[0x0004];
     /* 0x1710 */ u32    stateFlags1;
     /* 0x1714 */ u32    stateFlags2;
-    /* 0x1718 */ char   unk_1718[0x0013];
+    /* 0x1718 */ Actor* unk_1718;
+    /* 0x171C */ Actor* boomerangActor;
+    /* 0x1720 */ Actor* unk_1720;
+    /* 0x1724 */ Actor* naviActor;
+    /* 0x1728 */ s16    naviTextId;
+    /* 0x172A */ u8     stateFlags3;
     /* 0x172B */ s8     exchangeItemId;
     /* 0x172C */ char   unk_172C[0x0AF0];
     /* 0x221C */ float  xzSpeed; //probably
     /* 0x2220 */ char   unk_2220[0x0007];
-    /* 0x2227 */ u8     isg;
+    /* 0x2227 */ s8     meleeWeaponState;
     /* 0x2228 */ char   unk_2228[0x260];
     /* 0x2488 */ s8     invincibilityTimer; // prevents damage when nonzero (positive = visible, counts towards zero each frame)
     /* 0x2489 */ char   unk_2489[0x27B];

@@ -4,6 +4,9 @@
 
 using string_view = std::string_view;
 
+extern string_view personalizationDesc;
+extern string_view ingameDefaultsDesc;
+
 extern string_view openRandomize;
 extern string_view worldRandomize;
 extern string_view shuffleRandomize;
@@ -126,6 +129,8 @@ extern string_view magicBeansDesc;
 extern string_view merchantsDesc;
 extern string_view merchantsHintsDesc;
 
+extern string_view frogSongRupeesDesc;
+
 extern string_view adultTradeDesc;
 
 extern string_view chestMinigameDesc;
@@ -148,6 +153,8 @@ extern string_view gerudoKeysVanilla;
 extern string_view gerudoKeysAnyDungeon;
 extern string_view gerudoKeysOverworld;
 extern string_view gerudoKeysAnywhere;
+
+extern string_view keyRingDesc;
 
 extern string_view bossKeyStartWith;
 extern string_view bossKeyVanilla;
@@ -204,6 +211,8 @@ extern string_view keepFWWarpPointDesc;
 
 extern string_view fastBunnyHoodDesc;
 
+extern string_view racingDesc;
+
 extern string_view gossipStonesHintsDesc;
 
 extern string_view obscureHintsDesc;
@@ -239,6 +248,8 @@ extern string_view startWithConsumablesDesc;
 
 extern string_view startWithMaxRupeesDesc;
 
+extern string_view startingHealthDesc;
+
 extern string_view itemPoolPlentiful;
 extern string_view itemPoolBalanced;
 extern string_view itemPoolScarce;
@@ -256,20 +267,41 @@ extern string_view progGoronSword;
 
 extern string_view faroresWindAnywhereDesc;
 
+extern string_view ageRestrictionsDesc;
 extern string_view adultStickDesc;
 extern string_view adultBoomerangDesc;
 extern string_view childHammerDesc;
+extern string_view adultSlingshotDesc;
+extern string_view childBowDesc;
+extern string_view childHookshotDesc;
+extern string_view childIronBootsDesc;
+extern string_view childHoverBootsDesc;
+extern string_view adultMasksDesc;
+extern string_view adultKokiriSwordDesc;
+extern string_view childMasterSwordDesc;
+extern string_view childBiggoronSwordDesc;
+extern string_view adultDekuShieldDesc;
+extern string_view childMirrorShieldDesc;
+extern string_view childGoronTunicDesc;
+extern string_view childZoraTunicDesc;
 
 extern string_view gkDurabilityVanilla;
 extern string_view gkDurabilityRandomRisk;
 extern string_view gkDurabilityRandomSafe;
 
-extern string_view zTargetingDesc;
-extern string_view cameraControlDesc;
-extern string_view motionControlDesc;
-extern string_view togglePlayMusicDesc;
-extern string_view togglePlaySFXDesc;
+extern string_view mp_EnabledDesc;
+extern string_view mp_SharedProgressDesc;
+extern string_view mp_SyncIdDesc;
+extern string_view mp_SharedHealthDesc;
+extern string_view mp_SharedRupeesDesc;
+extern string_view mp_SharedAmmoDesc;
+
 extern string_view silenceNaviDesc;
+extern string_view ignoreMaskReactionDesc;
+
+extern string_view naviColorsDesc;
+extern string_view necessarySimpleModeDesc;
+extern string_view alwaysSimpleModeDesc;
 
 extern string_view coloredKeysDesc;
 extern string_view coloredBossKeysDesc;
@@ -292,6 +324,9 @@ extern string_view shuffleSFXCategorically;
 extern string_view randomTrapDmgDesc;
 extern string_view basicTrapDmgDesc;
 extern string_view advancedTrapDmgDesc;
+extern string_view fireTrapDesc;
+extern string_view antiFairyTrapDesc;
+extern string_view curseTrapsDesc;
 
 extern string_view ToggleAllTricksDesc;
 
@@ -307,14 +342,18 @@ extern string_view LogicLabDivingDesc;
 extern string_view LogicLabWallGSDesc;
 extern string_view LogicGraveyardPoHDesc;
 extern string_view LogicChildDampeRacePoHDesc;
+extern string_view LogicGVHammerChestDesc;
 extern string_view LogicGerudoKitchenDesc;
+extern string_view LogicGerudoChildClimbDesc;
 extern string_view LogicLensWastelandDesc;
 extern string_view LogicReverseWastelandDesc;
 extern string_view LogicColossusGSDesc;
 extern string_view LogicOutsideGanonsGSDesc;
 extern string_view LogicManOnRoofDesc;
+extern string_view LogicWindmillPoHHookshotDesc;
 extern string_view LogicDMTBombableDesc;
 extern string_view LogicDMTSoilGSDesc;
+extern string_view LogicDMTSummitHoverDesc;
 extern string_view LogicLinkGoronDinsDesc;
 extern string_view LogicGoronCityLeftMostDesc;
 extern string_view LogicGoronCityPotDesc;
@@ -325,6 +364,7 @@ extern string_view LogicCraterBeanPoHWithHoversDesc;
 extern string_view LogicBiggoronBoleroDesc;
 extern string_view LogicZoraRiverLowerDesc;
 extern string_view LogicZoraRiverUpperDesc;
+extern string_view LogicZFGreatFairyDesc;
 extern string_view LogicDekuB1WebsWithBowDesc;
 extern string_view LogicDekuB1SkipDesc;
 extern string_view LogicDekuBasementGSDesc;
@@ -385,24 +425,125 @@ extern string_view LogicSpiritTrialHookshotDesc;
 extern string_view LogicFlamingChestsDesc;
 
 extern const std::vector<string_view> GlitchDifficulties;
+
+extern string_view GlitchRestrictedItemsDescDisabled;
+extern string_view GlitchRestrictedItemsDescNovice;
+
+extern string_view GlitchSuperStabDescDisabled;
+extern string_view GlitchSuperStabDescNovice;
+
 extern string_view GlitchISGDescDisabled;
 extern string_view GlitchISGDescNovice;
+extern string_view GlitchISGDescIntermediate;
+extern string_view GlitchISGDescAdvanced;
+
 extern string_view GlitchHoverDescDisabled;
 extern string_view GlitchHoverDescNovice;
 extern string_view GlitchHoverDescIntermediate;
 extern string_view GlitchHoverDescAdvanced;
+
+extern string_view GlitchBombOIDescDisabled;
+extern string_view GlitchBombOIDescNovice;
+extern string_view GlitchBombOIDescIntermediate;
+extern string_view GlitchBombOIDescAdvanced;
+extern string_view GlitchBombOIDescExpert;
+
+extern string_view GlitchHoverBoostDescDisabled;
+extern string_view GlitchHoverBoostDescNovice;
+extern string_view GlitchHoverBoostDescIntermediate;
+extern string_view GlitchHoverBoostDescAdvanced;
+
+extern string_view GlitchSuperSlideDescDisabled;
+extern string_view GlitchSuperSlideDescNovice;
+extern string_view GlitchSuperSlideDescIntermediate;
+extern string_view GlitchSuperSlideDescAdvanced;
+extern string_view GlitchSuperSlideDescExpert;
+
 extern string_view GlitchMegaflipDescDisabled;
 extern string_view GlitchMegaflipDescNovice;
 extern string_view GlitchMegaflipDescIntermediate;
+extern string_view GlitchMegaflipDescAdvanced;
+extern string_view GlitchMegaflipDescExpert;
+extern string_view GlitchMegaflipDescHero;
+
+extern string_view GlitchASlideDescDisabled;
+extern string_view GlitchASlideDescNovice;
+extern string_view GlitchASlideDescIntermediate;
+extern string_view GlitchASlideDescAdvanced;
+extern string_view GlitchASlideDescExpert;
+
+extern string_view GlitchHammerSlideDescDisabled;
+extern string_view GlitchHammerSlideDescNovice;
+extern string_view GlitchHammerSlideDescIntermediate;
+
+extern string_view GlitchLedgeCancelDescDisabled;
+extern string_view GlitchLedgeCancelDescNovice;
+extern string_view GlitchLedgeCancelDescIntermediate;
+extern string_view GlitchLedgeCancelDescAdvanced;
+
+extern string_view GlitchActionSwapDescDisabled;
+extern string_view GlitchActionSwapDescNovice;
+extern string_view GlitchActionSwapDescAdvanced;
+
+extern string_view GlitchQPADescDisabled;
+extern string_view GlitchQPADescNovice;
+extern string_view GlitchQPADescIntermediate;
+extern string_view GlitchQPADescAdvanced;
+extern string_view GlitchQPADescExpert;
+
 extern string_view GlitchHookshotClipDescDisabled;
 extern string_view GlitchHookshotClipDescNovice;
+extern string_view GlitchHookshotClipDescIntermediate;
+
 extern string_view GlitchHookshotJump_BonkDescDisabled;
+extern string_view GlitchHookshotJump_BonkDescNovice;
 extern string_view GlitchHookshotJump_BonkDescIntermediate;
+extern string_view GlitchHookshotJump_BonkDescAdvanced;
+
 extern string_view GlitchHookshotJump_BootsDescDisabled;
 extern string_view GlitchHookshotJump_BootsDescNovice;
 extern string_view GlitchHookshotJump_BootsDescIntermediate;
+extern string_view GlitchHookshotJump_BootsDescAdvanced;
+
+extern string_view GlitchCutsceneDiveDescDisabled;
+extern string_view GlitchCutsceneDiveDescNovice;
+extern string_view GlitchCutsceneDiveDescIntermediate;
+extern string_view GlitchCutsceneDiveDescAdvanced;
+
+extern string_view GlitchNaviDive_StickDescDisabled;
+extern string_view GlitchNaviDive_StickDescNovice;
+extern string_view GlitchNaviDive_StickDescIntermediate;
+extern string_view GlitchNaviDive_StickDescAdvanced;
+
+extern string_view GlitchTripleSlashClipDescDisabled;
+extern string_view GlitchTripleSlashClipDescNovice;
+extern string_view GlitchTripleSlashClipDescIntermediate;
+extern string_view GlitchTripleSlashClipDescAdvanced;
+extern string_view GlitchTripleSlashClipDescExpert;
+
 extern string_view GlitchLedgeClipDescDisabled;
 extern string_view GlitchLedgeClipDescNovice;
 extern string_view GlitchLedgeClipDescIntermediate;
-extern string_view GlitchTripleSlashClipDescDisabled;
-extern string_view GlitchTripleSlashClipDescNovice;
+extern string_view GlitchLedgeClipDescAdvanced;
+
+extern string_view GlitchSeamWalkDescDisabled;
+extern string_view GlitchSeamWalkDescNovice;
+extern string_view GlitchSeamWalkDescIntermediate;
+extern string_view GlitchSeamWalkDescAdvanced;
+extern string_view GlitchSeamWalkDescExpert;
+extern string_view GlitchSeamWalkDescHero;
+
+extern string_view GlitchWWTEscapeDesc;
+extern string_view GlitchGVTentAsChildDesc;
+extern string_view GlitchGFGuardSneakDesc;
+extern string_view GlitchItemlessWastelandDesc;
+extern string_view GlitchOccamsStatueDesc;
+extern string_view GlitchZDOoBJumpSlashDesc;
+extern string_view GlitchJabuStickRecoilDesc;
+extern string_view GlitchJabuAdultDesc;
+extern string_view GlitchBlueFireWallDesc;
+extern string_view GlitchClassicHalfieDesc;
+extern string_view GlitchModernHalfieDesc;
+extern string_view GlitchJabuSwitchDesc;
+extern string_view GlitchForestBKSkipDesc;
+extern string_view GlitchFireGrunzClipDesc;

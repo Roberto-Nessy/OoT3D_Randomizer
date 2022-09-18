@@ -9,6 +9,7 @@
 #include "trial.hpp"
 #include "tinyxml2.h"
 #include "utils.hpp"
+#include "shops.hpp"
 
 #include <3ds.h>
 #include <cstdio>
@@ -129,40 +130,34 @@ void WriteIngameSpoilerLog() {
   for (const LocationKey key : allLocations) {
     auto loc = Location(key);
 
-    // Exclude uncheckable/repeatable locations from ingame tracker
-    if (!Settings::IngameSpoilers) {
-        // General
-        if (loc->IsExcluded() || loc->GetHintKey() == NONE) {
-            continue;
-        }
-        // Shops
-        else if (loc->IsShop() && (
-            loc->GetPlacedItem().GetItemType() == ITEMTYPE_REFILL ||
-            loc->GetPlacedItem().GetItemType() == ITEMTYPE_SHOP ||
-            loc->GetPlacedItem().GetHintKey() == PROGRESSIVE_BOMBCHUS)) {
-            continue;
-        }
-        // Deku Scrubs
-        else if (Settings::Scrubsanity.Is(SCRUBSANITY_OFF) && loc->IsCategory(Category::cDekuScrub) && !loc->IsCategory(Category::cDekuScrubUpgrades)) {
-            continue;
-        }
-        // Cows
-        else if (!Settings::ShuffleCows && loc->IsCategory(Category::cCow)) {
-            continue;
-        }
-        // Merchants
-        else if (Settings::ShuffleMerchants.Is(SHUFFLEMERCHANTS_OFF) && loc->IsCategory(Category::cMerchant)) {
-            continue;
-        }
-        // Adult Trade
-        else if (!Settings::ShuffleAdultTradeQuest && loc->IsCategory(Category::cAdultTrade)) {
-          continue;
-        }
-        // Gerudo Fortress
-        else if ((Settings::GerudoFortress.Is(GERUDOFORTRESS_OPEN) && (loc->IsCategory(Category::cVanillaGFSmallKey) || loc->GetHintKey() == GF_GERUDO_TOKEN)) ||
-            (Settings::GerudoFortress.Is(GERUDOFORTRESS_FAST) && loc->IsCategory(Category::cVanillaGFSmallKey) && loc->GetHintKey() != GF_NORTH_F1_CARPENTER)) {
-            continue;
-        }
+    // Hide excluded locations from ingame tracker
+    if (loc->IsExcluded()) {
+        continue;
+    }
+    // Cows
+    else if (!Settings::ShuffleCows && loc->IsCategory(Category::cCow)) {
+        continue;
+    }
+    // Merchants
+    else if (Settings::ShuffleMerchants.Is(SHUFFLEMERCHANTS_OFF) && loc->IsCategory(Category::cMerchant)) {
+        continue;
+    }
+    // Adult Trade
+    else if (!Settings::ShuffleAdultTradeQuest && loc->IsCategory(Category::cAdultTrade)) {
+        continue;
+    }
+    // Chest Minigame
+    else if (Settings::ShuffleChestMinigame.Is(SHUFFLECHESTMINIGAME_OFF) && loc->IsCategory(Category::cChestMinigame)) {
+        continue;
+    }
+    // Frog Song Rupees
+    else if (!Settings::ShuffleFrogSongRupees && loc->IsCategory(Category::cFrogRupees)) {
+        continue;
+    }
+    // Gerudo Fortress
+    else if ((Settings::GerudoFortress.Is(GERUDOFORTRESS_OPEN) && (loc->IsCategory(Category::cVanillaGFSmallKey) || loc->GetHintKey() == GF_GERUDO_TOKEN)) ||
+        (Settings::GerudoFortress.Is(GERUDOFORTRESS_FAST) && loc->IsCategory(Category::cVanillaGFSmallKey) && loc->GetHintKey() != GF_NORTH_F1_CARPENTER)) {
+        continue;
     }
 
     // Copy at most 51 chars from the name and location name to avoid issues with names that don't fit on screen
@@ -180,6 +175,9 @@ void WriteIngameSpoilerLog() {
     }
 
     auto locItem = loc->GetPlacedItemName().GetEnglish();
+    if (loc->GetPlacedItemKey() == ICE_TRAP && loc->IsCategory(Category::cShop)) {
+        locItem = NonShopItems[TransformShopIndex(GetShopIndex(key))].Name.GetEnglish();
+    }
     if (stringOffsetMap.find(locItem) == stringOffsetMap.end()) {
       if (spoilerStringOffset + locItem.size() + 1 >= SPOILER_STRING_DATA_SIZE) {
         spoilerOutOfSpace = true;
@@ -195,6 +193,42 @@ void WriteIngameSpoilerLog() {
     spoilerData.ItemLocations[spoilerItemIndex].CollectionCheckType = loc->GetCollectionCheck().type;
     spoilerData.ItemLocations[spoilerItemIndex].LocationScene = loc->GetCollectionCheck().scene;
     spoilerData.ItemLocations[spoilerItemIndex].LocationFlag = loc->GetCollectionCheck().flag;
+
+    // Collect Type and Reveal Type
+    if (key == GANON) {
+        spoilerData.ItemLocations[spoilerItemIndex].CollectType = COLLECTTYPE_NEVER;
+        spoilerData.ItemLocations[spoilerItemIndex].RevealType = REVEALTYPE_ALWAYS;
+    } else if (key == MARKET_BOMBCHU_BOWLING_BOMBCHUS) {
+        spoilerData.ItemLocations[spoilerItemIndex].CollectType = COLLECTTYPE_REPEATABLE;
+        spoilerData.ItemLocations[spoilerItemIndex].RevealType = REVEALTYPE_ALWAYS;
+    } else if (key == ZR_MAGIC_BEAN_SALESMAN && !Settings::ShuffleMagicBeans) {
+        spoilerData.ItemLocations[spoilerItemIndex].RevealType = REVEALTYPE_ALWAYS;
+    }
+    // Shops
+    else if (loc->IsShop()) {
+        if (Settings::Shopsanity.Is(SHOPSANITY_OFF)) {
+            spoilerData.ItemLocations[spoilerItemIndex].RevealType = REVEALTYPE_ALWAYS;
+        } else {
+            spoilerData.ItemLocations[spoilerItemIndex].RevealType = REVEALTYPE_SCENE;
+        }
+        if (loc->GetPlacedItem().GetItemType() == ITEMTYPE_REFILL ||
+            loc->GetPlacedItem().GetItemType() == ITEMTYPE_SHOP ||
+            loc->GetPlacedItem().GetHintKey() == PROGRESSIVE_BOMBCHUS) {
+            spoilerData.ItemLocations[spoilerItemIndex].CollectType = COLLECTTYPE_REPEATABLE;
+        }
+    }
+    // Gold Skulltulas
+    else if (loc->IsCategory(Category::cSkulltula) && (
+        (Settings::Tokensanity.Is(TOKENSANITY_OFF)) ||
+        (Settings::Tokensanity.Is(TOKENSANITY_DUNGEONS) && !loc->IsDungeon()) ||
+        (Settings::Tokensanity.Is(TOKENSANITY_OVERWORLD) && loc->IsDungeon()))) {
+        spoilerData.ItemLocations[spoilerItemIndex].RevealType = REVEALTYPE_ALWAYS;
+    }
+    // Deku Scrubs
+    else if (loc->IsCategory(Category::cDekuScrub) && !loc->IsCategory(Category::cDekuScrubUpgrades) && Settings::Scrubsanity.Is(SCRUBSANITY_OFF)) {
+        spoilerData.ItemLocations[spoilerItemIndex].CollectType = COLLECTTYPE_REPEATABLE;
+        spoilerData.ItemLocations[spoilerItemIndex].RevealType = REVEALTYPE_ALWAYS;
+    }
 
     auto checkGroup = loc->GetCollectionCheckGroup();
     spoilerData.ItemLocations[spoilerItemIndex].Group = checkGroup;
@@ -276,7 +310,7 @@ static void WriteLocation(
     node->SetAttribute("price", price);
   }
   if (!location->IsAddedToPool()) {
-    #ifdef ENABLE_DEBUG  
+    #ifdef ENABLE_DEBUG
       node->SetAttribute("not-added", true);
     #endif
   }
@@ -362,7 +396,7 @@ static void WriteStartingInventory(tinyxml2::XMLDocument& spoilerLog) {
     for (size_t i = 0; i < menu->size(); ++i) {
       const auto setting = menu->at(i);
       //Ignore no starting bottles and the Choose/All On toggles
-      if (setting->GetSelectedOptionIndex() == 0) {
+      if (setting->IsDefaultSelected()) {
         continue;
       }
 
@@ -387,6 +421,34 @@ static void WriteEnabledTricks(tinyxml2::XMLDocument& spoilerLog) {
     }
 
     auto node = parentNode->InsertNewChildElement("trick");
+    node->SetAttribute("name", RemoveLineBreaks(setting->GetName()).c_str());
+  }
+
+  if (!parentNode->NoChildren()) {
+    spoilerLog.RootElement()->InsertEndChild(parentNode);
+  }
+}
+
+// Writes the enabled glitches to the spoiler log, if there are any.
+static void WriteEnabledGlitches(tinyxml2::XMLDocument& spoilerLog) {
+  auto parentNode = spoilerLog.NewElement("enabled-glitches");
+
+  for (const auto& setting : Settings::glitchCategories) {
+    if (setting->Value<u8>() == 0) {
+      continue;
+    }
+
+    auto node = parentNode->InsertNewChildElement("glitch-category");
+    node->SetAttribute("name", setting->GetName().c_str());
+    node->SetText(setting->GetSelectedOptionText().c_str());
+  }
+
+  for (const auto& setting : Settings::miscGlitches) {
+    if (!setting->Value<bool>()) {
+      continue;
+    }
+
+    auto node = parentNode->InsertNewChildElement("misc-glitch");
     node->SetAttribute("name", RemoveLineBreaks(setting->GetName()).c_str());
   }
 
@@ -532,6 +594,9 @@ bool SpoilerLog_Write() {
   WriteExcludedLocations(spoilerLog);
   WriteStartingInventory(spoilerLog);
   WriteEnabledTricks(spoilerLog);
+  if (Settings::Logic.Is(LOGIC_GLITCHED)) {
+    WriteEnabledGlitches(spoilerLog);
+  }
   WriteMasterQuestDungeons(spoilerLog);
   WriteRequiredTrials(spoilerLog);
   WritePlaythrough(spoilerLog);
@@ -572,6 +637,7 @@ bool PlacementLog_Write() {
   WriteExcludedLocations(placementLog);
   WriteStartingInventory(placementLog);
   WriteEnabledTricks(placementLog);
+  WriteEnabledGlitches(placementLog);
   WriteMasterQuestDungeons(placementLog);
   WriteRequiredTrials(placementLog);
 

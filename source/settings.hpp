@@ -229,23 +229,23 @@ enum class MenuType {
 class Menu {
   public:
 
-    static Menu SubMenu(std::string name_, std::vector<Option *>* settingsList_, bool printInSpoiler_ = true) {
-      return Menu{std::move(name_), MenuType::SubMenu, std::move(settingsList_), OPTION_SUB_MENU, printInSpoiler_};
+    static Menu SubMenu(std::string name_, std::vector<Option *>* settingsList_, std::string_view description_ = "", bool printInSpoiler_ = true) {
+      return Menu{std::move(name_), MenuType::SubMenu, std::move(settingsList_), OPTION_SUB_MENU, std::move(description_), printInSpoiler_};
     }
 
-    static Menu SubMenu(std::string name_, std::vector<Menu *>* itemsList_, bool printInSpoiler_ = true) {
-      return Menu{std::move(name_), MenuType::SubMenu, std::move(itemsList_), SUB_MENU, printInSpoiler_};
+    static Menu SubMenu(std::string name_, std::vector<Menu *>* itemsList_, std::string_view description_ = "", bool printInSpoiler_ = true) {
+      return Menu{std::move(name_), MenuType::SubMenu, std::move(itemsList_), SUB_MENU, std::move(description_), printInSpoiler_};
     }
 
     static Menu Action(std::string name_, u8 mode_) {
       return Menu{std::move(name_), MenuType::Action, std::move(mode_)};
     }
 
-    Menu(std::string name_, MenuType type_, std::vector<Option *>* settingsList_, u8 mode_, bool printInSpoiler_ = true)
-        : name(std::move(name_)), type(type_), settingsList(std::move(settingsList_)), mode(mode_), printInSpoiler(printInSpoiler_) {}
+    Menu(std::string name_, MenuType type_, std::vector<Option *>* settingsList_, u8 mode_, std::string_view description_ = "", bool printInSpoiler_ = true)
+        : name(std::move(name_)), type(type_), settingsList(std::move(settingsList_)), mode(mode_), description(std::move(description_)), printInSpoiler(printInSpoiler_) {}
 
-    Menu(std::string name_, MenuType type_, std::vector<Menu *>* itemsList_, u8 mode_, bool printInSpoiler_ = true)
-        : name(std::move(name_)), type(type_), itemsList(std::move(itemsList_)), mode(mode_), printInSpoiler(printInSpoiler_) {}
+    Menu(std::string name_, MenuType type_, std::vector<Menu *>* itemsList_, u8 mode_, std::string_view description_ = "", bool printInSpoiler_ = true)
+        : name(std::move(name_)), type(type_), itemsList(std::move(itemsList_)), mode(mode_), description(std::move(description_)), printInSpoiler(printInSpoiler_) {}
 
     Menu(std::string name_, MenuType type_, u8 mode_)
         : name(std::move(name_)), type(type_), mode(mode_) {}
@@ -272,6 +272,7 @@ class Menu {
     u16 menuIdx = 0;
     u16 settingBound = 0;
     int selectedSetting = 0;
+    std::string_view description = "";
     bool printInSpoiler = true;
 };
 
@@ -330,6 +331,7 @@ namespace Settings {
   extern Option ShuffleGerudoToken;
   extern Option ShuffleMagicBeans;
   extern Option ShuffleMerchants;
+  extern Option ShuffleFrogSongRupees;
   extern Option ShuffleAdultTradeQuest;
   extern Option ShuffleChestMinigame;
 
@@ -344,6 +346,16 @@ namespace Settings {
   extern Option LACSRewardCount;
   extern Option LACSDungeonCount;
   extern Option LACSTokenCount;
+  extern Option KeyRings;
+  extern Option RingFortress;
+  extern Option RingForest;
+  extern Option RingFire;
+  extern Option RingWater;
+  extern Option RingSpirit;
+  extern Option RingShadow;
+  extern Option RingWell;
+  extern Option RingGtg;
+  extern Option RingCastle;
 
   extern Option SkipChildStealth;
   extern Option SkipTowerEscape;
@@ -361,6 +373,7 @@ namespace Settings {
   extern Option KeepFWWarpPoint;
   extern Option FastBunnyHood;
 
+  extern Option Racing;
   extern Option GossipStoneHints;
   extern Option ClearerHints;
   extern Option HintDistribution;
@@ -372,12 +385,28 @@ namespace Settings {
   extern Option IngameSpoilers;
   extern Option MenuOpeningButton;
   extern Option RandomTrapDmg;
+  extern Option FireTrap;
+  extern Option AntiFairyTrap;
+  extern Option CurseTraps;
   extern bool HasNightStart;
 
   extern Option FaroresWindAnywhere;
   extern Option StickAsAdult;
   extern Option BoomerangAsAdult;
   extern Option HammerAsChild;
+  extern Option SlingshotAsAdult;
+  extern Option BowAsChild;
+  extern Option HookshotAsChild;
+  extern Option IronBootsAsChild;
+  extern Option HoverBootsAsChild;
+  extern Option MasksAsAdult;
+  extern Option KokiriSwordAsAdult;
+  extern Option MasterSwordAsChild;
+  extern Option BiggoronSwordAsChild;
+  extern Option DekuShieldAsAdult;
+  extern Option MirrorShieldAsChild;
+  extern Option GoronTunicAsChild;
+  extern Option ZoraTunicAsChild;
   extern Option GkDurability;
 
   extern Option ItemPoolValue;
@@ -438,7 +467,7 @@ namespace Settings {
   extern Option StartingWallet;
   extern Option StartingShardOfAgony;
   extern Option StartingDoubleDefense;
-  extern Option StartingHealth;
+  extern Option StartingHearts;
   extern Option StartingKokiriEmerald;
   extern Option StartingGoronRuby;
   extern Option StartingZoraSapphire;
@@ -465,14 +494,18 @@ namespace Settings {
   extern Option LogicLabWallGS;
   extern Option LogicGraveyardPoH;
   extern Option LogicChildDampeRacePoH;
+  extern Option LogicGVHammerChest;
   extern Option LogicGerudoKitchen;
+  extern Option LogicGerudoChildClimb;
   extern Option LogicLensWasteland;
   extern Option LogicReverseWasteland;
   extern Option LogicColossusGS;
   extern Option LogicOutsideGanonsGS;
   extern Option LogicManOnRoof;
+  extern Option LogicWindmillPoHHookshot;
   extern Option LogicDMTBombable;
   extern Option LogicDMTSoilGS;
+  extern Option LogicDMTSummitHover;
   extern Option LogicLinkGoronDins;
   extern Option LogicGoronCityLeftMost;
   extern Option LogicGoronCityPot;
@@ -483,6 +516,7 @@ namespace Settings {
   extern Option LogicBiggoronBolero;
   extern Option LogicZoraRiverLower;
   extern Option LogicZoraRiverUpper;
+  extern Option LogicZFGreatFairy;
   extern Option LogicDekuB1WebsWithBow;
   extern Option LogicDekuB1Skip;
   extern Option LogicDekuBasementGS;
@@ -543,14 +577,50 @@ namespace Settings {
   extern Option LogicFlamingChests;
 
   //Glitch Settings
+  extern Option GlitchRestrictedItems;
+  extern Option GlitchSuperStab;
   extern Option GlitchISG;
   extern Option GlitchHover;
+  extern Option GlitchBombOI;
+  extern Option GlitchHoverBoost;
+  extern Option GlitchSuperSlide;
   extern Option GlitchMegaflip;
+  extern Option GlitchASlide;
+  extern Option GlitchHammerSlide;
+  extern Option GlitchLedgeCancel;
+  extern Option GlitchActionSwap;
+  extern Option GlitchQPA;
   extern Option GlitchHookshotClip;
   extern Option GlitchHookshotJump_Bonk;
   extern Option GlitchHookshotJump_Boots;
-  extern Option GlitchLedgeClip;
+  extern Option GlitchCutsceneDive;
+  extern Option GlitchNaviDive_Stick;
   extern Option GlitchTripleSlashClip;
+  extern Option GlitchLedgeClip;
+  extern Option GlitchSeamWalk;
+  //Misc Glitch Settings
+  extern Option GlitchWWTEscape;
+  extern Option GlitchGVTentAsChild;
+  extern Option GlitchGFGuardSneak;
+  extern Option GlitchItemlessWasteland;
+  extern Option GlitchOccamsStatue;
+  extern Option GlitchZDOoBJumpSlash;
+  extern Option GlitchJabuStickRecoil;
+  extern Option GlitchJabuAdult;
+  extern Option GlitchBlueFireWall;
+  extern Option GlitchClassicHalfie;
+  extern Option GlitchModernHalfie;
+  extern Option GlitchJabuSwitch;
+  extern Option GlitchForestBKSkip;
+  extern Option GlitchFireGrunzClip;
+
+  //Multiplayer Settings
+  extern Option MP_Enabled;
+  extern Option MP_SharedProgress;
+  extern Option MP_SyncId;
+  extern Option MP_SharedHealth;
+  extern Option MP_SharedRupees;
+  extern Option MP_SharedAmmo;
 
   //Ingame Default Settings
   extern Option ZTargeting;
@@ -559,6 +629,7 @@ namespace Settings {
   extern Option TogglePlayMusic;
   extern Option TogglePlaySFX;
   extern Option SilenceNavi;
+  extern Option IgnoreMaskReaction;
 
   //Cosmetic Settings
   extern Option CustomTunicColors;
@@ -568,12 +639,45 @@ namespace Settings {
   extern Option ZoraTunicColor;
   extern Option SilverGauntletsColor;
   extern Option GoldGauntletsColor;
+  extern Option CustomNaviColors;
+  extern Option IdleNaviInnerColor;
+  extern Option NPCNaviInnerColor;
+  extern Option EnemyNaviInnerColor;
+  extern Option PropNaviInnerColor;
+  extern Option IdleNaviOuterColor;
+  extern Option NPCNaviOuterColor;
+  extern Option EnemyNaviOuterColor;
+  extern Option PropNaviOuterColor;
+  extern Option CustomTrailEffects;
+  extern Option SwordTrailInnerColor;
+  extern Option SwordTrailOuterColor;
+  extern Option SwordTrailDuration;
+  extern Option BoomerangTrailColor;
+  extern Option BoomerangTrailDuration;
+  extern Option ChosenSimpleMode;
+  extern Option BombchuTrailInnerColor;
+  extern Option BombchuTrailOuterColor;
+  extern Option BombchuTrailDuration;
   extern std::string finalChildTunicColor;
   extern std::string finalKokiriTunicColor;
   extern std::string finalGoronTunicColor;
   extern std::string finalZoraTunicColor;
   extern std::string finalSilverGauntletsColor;
   extern std::string finalGoldGauntletsColor;
+  extern std::string finalIdleNaviInnerColor;
+  extern std::string finalNPCNaviInnerColor;
+  extern std::string finalEnemyNaviInnerColor;
+  extern std::string finalPropNaviInnerColor;
+  extern std::string finalIdleNaviOuterColor;
+  extern std::string finalNPCNaviOuterColor;
+  extern std::string finalEnemyNaviOuterColor;
+  extern std::string finalPropNaviOuterColor;
+  extern std::string finalSwordTrailInnerColor;
+  extern std::string finalSwordTrailOuterColor;
+  extern Cosmetics::Color_RGBA8 finalBoomerangColor;
+  extern u8 boomerangTrailColorMode;
+  extern std::string finalChuTrailInnerColor;
+  extern std::string finalChuTrailOuterColor;
 
   extern Option ColoredKeys;
   extern Option ColoredBossKeys;
@@ -591,6 +695,9 @@ namespace Settings {
 
   extern u8 PlayOption;
 
+  extern Menu loadSettingsPreset;
+  extern Menu deleteSettingsPreset;
+
   extern std::vector<std::vector<Option *>> excludeLocationsOptionsVector;
   extern std::vector<Menu *> excludeLocationsMenus;
   extern std::vector<Option *> startingItemsOptions;
@@ -599,11 +706,14 @@ namespace Settings {
   extern std::vector<Option *> startingStonesMedallionsOptions;
   extern std::vector<Option *> startingOtherOptions;
   extern std::vector<Option *> trickOptions;
+  extern std::vector<Option *> glitchCategories;
+  extern std::vector<Option *> miscGlitches;
 
   extern std::vector<Menu *> startingInventoryOptions;
   extern std::vector<Menu *> detailedLogicOptions;
 
   extern std::vector<Menu *> mainMenu;
 
-  extern std::vector<Option *> vanillaLogicDefaults;
+  extern std::vector<std::pair<Option*, u8>> racingOverrides;
+  extern std::vector<std::pair<Option*, u8>> vanillaLogicOverrides;
 }

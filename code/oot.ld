@@ -180,6 +180,10 @@ SECTIONS
 		*(.patch_SkipTwinrovaQuarrelCutsceneTwo)
 	}
 
+	.patch_LostWoodsTargetCutscene 0x178058 : {
+		*(.patch_LostWoodsTargetCutscene)
+	}
+
 	.patch_CarpenterBossDontNullExchangeItem 0x178BE4 : {
 		*(.patch_CarpenterBossDontNullExchangeItem)
 	}
@@ -312,20 +316,16 @@ SECTIONS
 		*(.patch_DampeChest)
 	}
 
-	.patch_JabuJabuItemGive 0x1A1918 : {
-		*(.patch_JabuJabuItemGive)
+	.patch_PierreSoftlockFixOne 0x19C734 : {
+		*(.patch_PierreSoftlockFixOne)
 	}
 
-	.patch_JabuJabuCutsceneOverride 0x1A192C : {
-		*(.patch_JabuJabuCutsceneOverride)
+	.patch_RutoBlueWarpOverride 0x1A1900 : {
+		*(.patch_RutoBlueWarpOverride)
 	}
 
 	.patch_KotakeDontPlayBattleMusic 0x1A8218 : {
 		*(.patch_KotakeDontPlayBattleMusic)
-	}
-
-	.patch_GossipStoneAddSariaHint 0x1B398C : {
-		*(.patch_GossipStoneAddSariaHint)
 	}
 
 	.patch_ReadGossipStoneHints 0x1B3A44 : {
@@ -368,6 +368,10 @@ SECTIONS
 		*(.patch_KingZoraSetTradedPrescriptionFlag)
 	}
 
+	.patch_TruthSpinnerSpeed 0x1CD814 : {
+		*(.patch_TruthSpinnerSpeed)
+	}
+
 	.patch_DemoEffectStoneDraw 0x1D209C : {
 		*(.patch_DemoEffectStoneDraw)
 	}
@@ -388,52 +392,8 @@ SECTIONS
 		*(.patch_BombchuShopAlwaysOpen)
 	}
 
-	.patch_ForestTempleItemGive 0x1E3F84 : {
-		*(.patch_ForestTempleItemGive)
-	}
-
-	.patch_ForestTempleCutsceneOverride 0x1E3F98 : {
-		*(.patch_ForestTempleCutsceneOverride)
-	}
-
-	.patch_FireTempleItemGive 0x1E4010 : {
-		*(.patch_FireTempleItemGive)
-	}
-
-	.patch_FireTempleCutsceneOverride 0x1E4024 : {
-		*(.patch_FireTempleCutsceneOverride)
-	}
-
-	.patch_WaterTempleItemGive 0x1E40D8 : {
-		*(.patch_WaterTempleItemGive)
-	}
-
-	.patch_WaterTempleCutsceneOverride 0x1E40EC : {
-		*(.patch_WaterTempleCutsceneOverride)
-	}
-
-	.patch_SpiritTempleCompleteCheck 0x1E415C : {
-		*(.patch_SpiritTempleCompleteCheck)
-	}
-
-	.patch_SpiritTempleItemGive 0x1E4168 : {
-		*(.patch_SpiritTempleItemGive)
-	}
-
-	.patch_SpiritTempleCutsceneOverride 0x1E417C : {
-		*(.patch_SpiritTempleCutsceneOverride)
-	}
-
-	.patch_ShadowTempleCompleteCheck 0x1E41E4 : {
-		*(.patch_ShadowTempleCompleteCheck)
-	}
-
-	.patch_ShadowTempleItemGive 0x1E41F0 : {
-		*(.patch_ShadowTempleItemGive)
-	}
-
-	.patch_ShadowTempleCutsceneOverride 0x1E4204 : {
-		*(.patch_ShadowTempleCutsceneOverride)
+	.patch_AdultBlueWarpOverride 0x1E3F50 : {
+		*(.patch_AdultBlueWarpOverride)
 	}
 
 	.patch_DaruniaCheckStrength 0x1E489C : {
@@ -443,6 +403,10 @@ SECTIONS
 	.patch_CanPlayBombchuBowlingTwo 0x1EA1D4 : {
 		*(.patch_CanPlayBombchuBowlingTwo)
 	}
+
+	.patch_BoomerangTrailEffect 0x1F4220 : {
+		*(.patch_BoomerangTrailEffect)
+	} /*EnBoom_Draw*/
 
 	.patch_ItemGiveBombchuDropOne 0x1F6F70 : {
 		*(.patch_ItemGiveBombchuDropOne)
@@ -492,6 +456,10 @@ SECTIONS
 		*(.patch_BugsRecatchable)
 	}
 
+	.patch_WaterSpoutMasterQuestCheck 0x212BDC : {
+		*(.patch_WaterSpoutMasterQuestCheck)
+	}
+
 	.patch_DekuSproutCheckForest 0x2153A4 : {
 		*(.patch_DekuSproutCheckForest)
 	}
@@ -516,6 +484,10 @@ SECTIONS
 		*(.patch_NoHealFromBombchuBowlingPrize)
 	}
 
+	.patch_HookshotDrawChain 0x2202A0 : {
+		*(.patch_HookshotDrawChain)
+	}
+
 	.patch_patch_ItemGiveBombchuDropTwo 0x22BAE4 : {
 		*(.patch_ItemGiveBombchuDropTwo)
 	}
@@ -524,17 +496,21 @@ SECTIONS
 		*(.patch_BusinessScrubCheckFlags)
 	}
 
-	.patch_SyatekiManReminder 0x2391D8 : {
-		*(.patch_SyatekiManReminder)
-	}
+	.patch_RainbowChuTrailOne 0x247FC0 : {
+		*(.patch_RainbowChuTrailOne)
+	} /*Bombchus use 2 EffectBlure instances*/
+
+	.patch_RainbowChuTrailTwo 0x2480A4 : {
+		*(.patch_RainbowChuTrailTwo)
+	} /*Bombchus use 2 EffectBlure instances*/
 
 	.patch_EnExItemModelDraw 0x249C94 : {
 		*(.patch_EnExItemModelDraw)
 	}
 
-	.patch_SpiritTempleItemGiveTwo 0x24CF4C : {
-		*(.patch_SpiritTempleItemGiveTwo)
-	}
+	.patch_SwordTrailDurationGrezzoFix 0x2507D0 : {
+		*(.patch_SwordTrailDurationGrezzoFix)
+	} /*duration is set to 6 due to framerate increase. NOP to allow custom duration*/
 
 	.patch_MultiplyPlayerSpeed 0x251D34 : {
 		*(.patch_MultiplyPlayerSpeed)
@@ -542,6 +518,10 @@ SECTIONS
 
 	.patch_SkipDaruniaDanceThree 0x257F00 : {
 		*(.patch_SkipDaruniaDanceThree)
+	}
+
+	.patch_LostWoodsTargetTimer 0x2592B8 : {
+		*(.patch_LostWoodsTargetTimer)
 	}
 
 	.patch_LostWoodsShootingGame 0x259E4C : {
@@ -560,10 +540,6 @@ SECTIONS
 		*(.patch_CheckGerudoToken_269884)
 	}
 
-	.patch_SpiritTempleItemGiveThree 0x26B33C : {
-		*(.patch_SpiritTempleItemGiveThree)
-	}
-
 	.patch_MinuetLocation 0x26C388 : {
 		*(.patch_MinuetLocation)
 	}
@@ -572,8 +548,12 @@ SECTIONS
 		*(.patch_BoleroLocation)
 	}
 
-	.patch_WaterTempleItemGiveTwo 0x26DCD4 : {
-		*(.patch_WaterTempleItemGiveTwo)
+	.patch_BrownBoulderExplode 0x26F9F8 : {
+		*(.patch_BrownBoulderExplode)
+	}
+
+	.patch_RedBoulderExplode 0x26FE7C : {
+		*(.patch_RedBoulderExplode)
 	}
 
 	.patch_SongOfTimeJingle 0x274B1C : {
@@ -584,24 +564,8 @@ SECTIONS
 		*(.patch_DoorOfTimeCheck)
 	}
 
-	.patch_FireTempleItemGiveThree 0x27D060 : {
-		*(.patch_FireTempleItemGiveThree)
-	}
-
-	.patch_ShadowTempleItemGiveTwo 0x27DED0 : {
-		*(.patch_ShadowTempleItemGiveTwo)
-	}
-
 	.patch_ImpaInCourtyardCheckForVisitedZelda 0x27DEF8 : {
 		*(.patch_ImpaInCourtyardCheckForVisitedZelda)
-	}
-
-	.patch_ForestTempleItemGiveTwo 0x27E074 : {
-		*(.patch_ForestTempleItemGiveTwo)
-	}
-
-	.patch_WaterTempleItemGiveThree 0x283CA8 : {
-		*(.patch_WaterTempleItemGiveThree)
 	}
 
 	.patch_AnjuGiveCojiro 0x2884F4 : {
@@ -612,20 +576,16 @@ SECTIONS
 		*(.patch_SunsSongLocation)
 	}
 
+	.patch_PierreSoftlockFixTwo 0x288914 : {
+		*(.patch_PierreSoftlockFixTwo)
+	}
+
+	.patch_PierreSoftlockFixThree 0x2889D4 : {
+		*(.patch_PierreSoftlockFixThree)
+	}
+
 	.patch_KakarikoGateCheck 0x28A678 : {
 		*(.patch_KakarikoGateCheck)
-	}
-
-	.patch_FireTempleItemGiveFour 0x28E2AC : {
-		*(.patch_FireTempleItemGiveFour)
-	}
-
-	.patch_ShadowTempleItemGiveThree 0x28F258 : {
-		*(.patch_ShadowTempleItemGiveThree)
-	}
-
-	.patch_ForestTempleItemGiveThree 0x28FF44 : {
-		*(.patch_ForestTempleItemGiveThree)
 	}
 
 	.patch_BombchuBowlingAlwaysFirstPrize 0x291924 : {
@@ -644,6 +604,10 @@ SECTIONS
 		*(.patch_SerenadeLocation)
 	}
 
+	.patch_RainbowSwordTrail 0x2B9AD0 : {
+		*(.patch_RainbowSwordTrail)
+	}
+
 	.patch_OverrideTextID 0x2BC1C4 : {
 		*(.patch_OverrideTextID)
 	}
@@ -654,6 +618,10 @@ SECTIONS
 
 	.patch_NoSilverGauntletsCutsceneWarp 0x2BC2A0 : {
 		*(.patch_NoSilverGauntletsCutsceneWarp)
+	}
+
+	.patch_RunAnimationSpeed 0x2BE70C : {
+		*(.patch_RunAnimationSpeed)
 	}
 
 	.patch_FishingIgnoreTempBOne 0x2C3A10 : {
@@ -676,6 +644,10 @@ SECTIONS
 		*(.patch_GetCustomMessageTextOne)
 	}
 
+	.patch_ChildHoverBoots 0x2D5DF8 : {
+		*(.patch_ChildHoverBoots)
+	}
+
 	.patch_InstantTextFirstLine 0x2E049C : {
 		*(.patch_InstantTextFirstLine)
 	}
@@ -694,6 +666,10 @@ SECTIONS
 
 	.patch_SceneInitAfterCopyScenes 0x2EAFDC : {
 		*(.patch_SceneInitAfterCopyScenes)
+	}
+
+	.patch_ChildCanOpenBowSubMenu 0x2EB2D8 : {
+		*(.patch_ChildCanOpenBowSubMenu)
 	}
 
 	.patch_CorrectCompassChests 0x2F161C : {
@@ -720,6 +696,14 @@ SECTIONS
 		*(.patch_SetBGMEntrance)
 	}
 
+	.patch_NockArrow 0x33615C : {
+		*(.patch_NockArrow)
+	}
+
+	.patch_DecreaseArrowCount 0x3362C4 : {
+		*(.patch_DecreaseArrowCount)
+	}
+
 	.patch_SceneExitOverride 0x3366EC : {
 		*(.patch_SceneExitOverride)
 	}
@@ -742,6 +726,14 @@ SECTIONS
 
 	.patch_BiggoronDayCheck 0x33DCC0 : {
 		*(.patch_BiggoronDayCheck)
+	}
+
+	.patch_WarpSongTimerDepletion 0x33DE84 : {
+		*(.patch_WarpSongTimerDepletion)
+	}
+
+	.patch_MasterQuestGoldSkulltulaCheck 0x3415C8 : {
+		*(.patch_MasterQuestGoldSkulltulaCheck)
 	}
 
 	.patch_TurboTextSignalNPC 0x3469F4 : {
@@ -784,6 +776,10 @@ SECTIONS
 		*(.patch_FastChests)
 	}
 
+	.patch_MasterSwordTimerCheck 0x354DFC : {
+		*(.patch_MasterSwordTimerCheck)
+	}
+
 	.patch_LikeLikeNeverEatTunic 0x355C2C : {
 		*(.patch_LikeLikeNeverEatTunic)
 	}
@@ -800,8 +796,16 @@ SECTIONS
 		*(.patch_ISGCrouchStab)
 	}
 
+	.patch_ForceTrailEffectUpdate 0x362108 : {
+		*(.patch_ForceTrailEffectUpdate)
+	} /*EffectBlure_AddVertex*/
+
 	.patch_ModelSpawnGetObjectStatus 0x36A96C : {
 		*(.patch_ModelSpawnGetObjectStatus)
+	}
+
+	.patch_IgnoreMaskReaction 0x36BBC4 : {
+		*(.patch_IgnoreMaskReaction)
 	}
 
 	.patch_SetBGMEvent 0x36EC40 : {
@@ -834,6 +838,10 @@ SECTIONS
 
 	.patch_NoLensOfTruthNaviText 0x37798C : {
 		*(.patch_NoLensOfTruthNaviText)
+	}
+
+	.patch_FrogRewardPurple 0x3898F0 : {
+		*(.patch_FrogRewardPurple)
 	}
 
 	.patch_FrogReward 0x38992C : {
@@ -1032,24 +1040,16 @@ SECTIONS
 		*(.patch_FireArrowCheckChestFlagTwo)
 	}
 
+	.patch_LinkReflection 0x3F2F0C : {
+		*(.patch_LinkReflection)
+	}
+
 	.patch_SlidingDoorDestroyCustomModels 0x3F4A70 : {
 		*(.patch_SlidingDoorDestroyCustomModels)
 	}
 
-	.patch_DodongosCavernItemGive 0x3F57B0 : {
-		*(.patch_DodongosCavernItemGive)
-	}
-
-	.patch_DodongosCavernCutsceneOverride 0x3F57C4 : {
-		*(.patch_DodongosCavernCutsceneOverride)
-	}
-
-	.patch_DekuTreeItemGive 0x3F582C : {
-		*(.patch_DekuTreeItemGive)
-	}
-
-	.patch_DekuTreeCutsceneOverride 0x3F5840 : {
-		*(.patch_DekuTreeCutsceneOverride)
+	.patch_ChildBlueWarpOverride 0x3F5774 : {
+		*(.patch_ChildBlueWarpOverride)
 	}
 
 	.patch_CarpetSalesmanSetFlag 0x3F9550 : {
@@ -1066,6 +1066,14 @@ SECTIONS
 
 	.patch_SleepQueryCallback 0x3FD6C4 : {
 		*(.patch_SleepQueryCallback)
+	}
+
+	.patch_CurseTrapDizzyStick 0x41AB24 : {
+		*(.patch_CurseTrapDizzyStick)
+	}
+
+	.patch_CurseTrapDizzyButtons 0x41ABDC : {
+		*(.patch_CurseTrapDizzyButtons)
 	}
 
 	.patch_SaveMenuIgnoreOpen 0x42EC00 : {
@@ -1100,6 +1108,10 @@ SECTIONS
 		*(.patch_SaveFile_Init)
 	}
 
+	.patch_Multiplayer_OnLoadFile 0x449EFC : {
+		*(.patch_Multiplayer_OnLoadFile)
+	}
+
 	.patch_GetCustomMessageEntryTwo 0x44D564 : {
 		*(.patch_GetCustomMessageEntryTwo)
 	}
@@ -1114,6 +1126,10 @@ SECTIONS
 
 	.patch_ExtendedObjectClear 0x44E754 : {
 		*(.patch_ExtendedObjectClear)
+	}
+
+	.patch_Multiplayer_UpdatePrevActorFlags 0x44E878 : {
+		*(.patch_Multiplayer_UpdatePrevActorFlags)
 	}
 
 	.patch_PlayEntranceCutscene 0x44F068 : {
@@ -1138,6 +1154,10 @@ SECTIONS
 
 	.patch_LACSConditionTwo 0x44F20C : {
 		*(.patch_LACSConditionTwo)
+	}
+
+	.patch_BossChallenge_Enter 0x44F634 : {
+		*(.patch_BossChallenge_Enter)
 	}
 
 	.patch_SetSavewarpEntrance 0x44FBE4 : {
@@ -1180,12 +1200,24 @@ SECTIONS
 		*(.patch_InterfaceDrawDontSpoilTradeItems)
 	}
 
+	.patch_TimerExpiration 0x45A948 : {
+		*(.patch_TimerExpiration)
+	}
+
+	.patch_Timer2TickSound 0x45A9B4 : {
+		*(.patch_Timer2TickSound)
+	}
+
 	.patch_SunsSongEndCloseTextbox 0x45B514 : {
 		*(.patch_SunsSongEndCloseTextbox)
 	}
 
 	.patch_SetSunsSongRespawnFlag 0x45B660 : {
 		*(.patch_SetSunsSongRespawnFlag)
+	}
+
+	.patch_BossChallenge_ExitMenu 0x45CCA4 : {
+		*(.patch_BossChallenge_ExitMenu)
 	}
 
 	.patch_StoreChildBButtonEquip 0x45F20C : {
@@ -1216,6 +1248,10 @@ SECTIONS
 		*(.patch_EnableFW)
 	}
 
+	.patch_StoreTargetActorType 0x479984 : {
+		*(.patch_StoreTargetActorType)
+	}
+
 	.patch_FWKeepWarpPoint 0x47C3C0 : {
 		*(.patch_FWKeepWarpPoint)
 	}
@@ -1244,12 +1280,12 @@ SECTIONS
 		*(.patch_SwapAgeIgnoreSceneSetup)
 	}
 
-	.patch_FireTempleItemGiveTwo 0x491B60 : {
-		*(.patch_FireTempleItemGiveTwo)
-	}
-
 	.patch_FairyUseHealAmount 0x4968B4 : {
 		*(.patch_FairyUseHealAmount)
+	}
+
+	.patch_SendDroppedBottleContents 0x496A1C : {
+		*(.patch_SendDroppedBottleContents)
 	}
 
 	.patch_ReturnFWSetupGrottoInfo 0x496B88 : {
@@ -1276,8 +1312,20 @@ SECTIONS
 		*(.patch_EditDrawGetItemBeforeModelSpawn)
 	}
 
+	.patch_HookshotRotation 0x4C2524 : {
+		*(.patch_HookshotRotation)
+	}
+
+	.patch_HookshotDrawRedLaser 0x4C2620 : {
+		*(.patch_HookshotDrawRedLaser)
+	}
+
 	.patch_EditDrawGetItemAfterModelSpawn 0x4C61A4 : {
 		*(.patch_EditDrawGetItemAfterModelSpawn)
+	}
+
+	.patch_CrouchStabHitbox 0x4C85D4 : {
+		*(.patch_CrouchStabHitbox)
 	}
 
 	. = 0x4C99A8;

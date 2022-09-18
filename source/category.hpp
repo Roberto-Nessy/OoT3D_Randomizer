@@ -6,6 +6,7 @@ enum class Category {
     cForest,
     cGrotto,
     cMinigame,
+    cChestMinigame,
     cLostWoods,
     cDekuScrub,
     cDekuScrubUpgrades,
@@ -61,6 +62,7 @@ enum class Category {
     cVanillaMap,
     cVanillaCompass,
     cAdultTrade,
+    cFrogRupees,
 };
 
 enum class OptionCategory {

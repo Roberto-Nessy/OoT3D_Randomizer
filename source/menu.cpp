@@ -73,9 +73,32 @@ void MenuInit() {
   PrintMainMenu();
 }
 
-void MoveCursor(u32 kDown) {
+void MoveCursor(u32 kDown, bool updatedByHeld) {
   //Option sub menus need special checking for locked options
   if (currentMenu->mode == OPTION_SUB_MENU) {
+    // Cancel if holding and reached first/last selectable option
+    if (updatedByHeld) {
+      bool noSelectableOption = true;
+      if (kDown & KEY_DUP) {
+        for (int i = currentMenu->menuIdx - 1; i >= 0; i--) {
+          if (!currentMenu->settingsList->at(i)->IsHidden() && !currentMenu->settingsList->at(i)->IsLocked()) {
+            noSelectableOption = false;
+            break;
+          }
+        }
+      }
+      if (kDown & KEY_DDOWN) {
+        for (size_t i = currentMenu->menuIdx + 1; i < currentMenu->settingsList->size(); i++) {
+          if (!currentMenu->settingsList->at(i)->IsHidden() && !currentMenu->settingsList->at(i)->IsLocked()) {
+            noSelectableOption = false;
+            break;
+          }
+        }
+      }
+      if (noSelectableOption) {
+        return;
+      }
+    }
     //Loop through settings until an unlocked one is reached
     do {
       if ((kDown & KEY_DUP) != 0) {
@@ -97,14 +120,6 @@ void MoveCursor(u32 kDown) {
   }
   //All other menus except reset-to-defaults confirmation
   else if (currentMenu->mode != RESET_TO_DEFAULTS) {
-    if (kDown & KEY_DUP) {
-      currentMenu->menuIdx--;
-    }
-    if (kDown & KEY_DDOWN) {
-      currentMenu->menuIdx++;
-    }
-
-    //Bounds checking
     u16 max = -1;
     if (currentMenu->mode == LOAD_PRESET || currentMenu->mode == DELETE_PRESET) { //Number of presets if applicable
       max = presetEntries.size();
@@ -113,6 +128,23 @@ void MoveCursor(u32 kDown) {
     } else if (currentMenu->itemsList != nullptr) {
       max = currentMenu->itemsList->size(); //Default max: Number of items in menu
     }
+
+    // Cancel if holding and reached first/last menu
+    if (updatedByHeld) {
+      if ((kDown & KEY_DUP && currentMenu->menuIdx == 0) ||
+        (kDown & KEY_DDOWN && currentMenu->menuIdx == max - 1)) {
+        return;
+      }
+    }
+
+    if (kDown & KEY_DUP) {
+      currentMenu->menuIdx--;
+    }
+    if (kDown & KEY_DDOWN) {
+      currentMenu->menuIdx++;
+    }
+
+    //Bounds checking
     if (currentMenu->menuIdx == max) {
       currentMenu->menuIdx = 0;
     } else if (currentMenu->menuIdx == 0xFFFF) {
@@ -120,15 +152,28 @@ void MoveCursor(u32 kDown) {
     }
 
     //Scroll Check
-    if (currentMenu->menuIdx > currentMenu->settingBound + (MAX_SUBMENUS_ON_SCREEN - 1)) {
-      currentMenu->settingBound = currentMenu->menuIdx - (MAX_SUBMENUS_ON_SCREEN - 1);
-    } else if (currentMenu->menuIdx < currentMenu->settingBound) {
-      currentMenu->settingBound = currentMenu->menuIdx;
+    u16 max_entries_on_screen = MAX_SUBMENUS_ON_SCREEN;
+    if (currentMenu->mode == LOAD_PRESET || currentMenu->mode == DELETE_PRESET) {
+        max_entries_on_screen = MAX_SUBMENU_SETTINGS_ON_SCREEN;
+    }
+    if (currentMenu->menuIdx > currentMenu->settingBound + (max_entries_on_screen - (currentMenu->menuIdx == max - 1 ? 1 : 2))) {
+      currentMenu->settingBound = currentMenu->menuIdx - (max_entries_on_screen - (currentMenu->menuIdx == max - 1 ? 1 : 2));
+    } else if (currentMenu->menuIdx < currentMenu->settingBound + 1) {
+      currentMenu->settingBound = std::max(currentMenu->menuIdx - 1, 0);
+    }
+
+    // Shared cursor for preset menus
+    if (currentMenu->mode == LOAD_PRESET) {
+      Settings::deleteSettingsPreset.settingBound = currentMenu->settingBound;
+      Settings::deleteSettingsPreset.menuIdx = currentMenu->menuIdx;
+    } else if (currentMenu->mode == DELETE_PRESET) {
+      Settings::loadSettingsPreset.settingBound = currentMenu->settingBound;
+      Settings::loadSettingsPreset.menuIdx = currentMenu->menuIdx;
     }
   }
 }
 
-void MenuUpdate(u32 kDown) {
+void MenuUpdate(u32 kDown, bool updatedByHeld) {
   consoleSelect(&bottomScreen);
   consoleClear();
 
@@ -186,10 +231,9 @@ void MenuUpdate(u32 kDown) {
 
   //Print current menu (if applicable)
   consoleSelect(&bottomScreen);
-  MoveCursor(kDown); //Move cursor, if applicable
+  MoveCursor(kDown, updatedByHeld); //Move cursor, if applicable
   if (currentMenu->mode == MAIN_MENU) {
     PrintMainMenu();
-    ClearDescription();
   } else if (currentMenu->mode == OPTION_SUB_MENU) {
     UpdateOptionSubMenu(kDown);
     PrintOptionSubMenu();
@@ -331,6 +375,8 @@ void PrintMainMenu() {
       printf("\x1b[%d;%dH%s",   row,  3, menu->name.c_str());
     }
   }
+
+  PrintMenuDescription();
 }
 
 void PrintOptionSubMenu() {
@@ -348,19 +394,26 @@ void PrintOptionSubMenu() {
       visibleSettings++;
     }
   }
-  if (currentMenu->menuIdx >= currentMenu->settingBound + MAX_SUBMENU_SETTINGS_ON_SCREEN + hiddenSettings) {
+  bool isLastVisibleSetting = true;
+  for (size_t i = currentMenu->menuIdx + 1; i < currentMenu->settingsList->size(); i++) {
+    if (!currentMenu->settingsList->at(i)->IsHidden()) {
+      isLastVisibleSetting = false;
+      break;
+    }
+  }
+  if (currentMenu->menuIdx >= currentMenu->settingBound - (isLastVisibleSetting ? 0 : 1) + MAX_SUBMENU_SETTINGS_ON_SCREEN + hiddenSettings) {
     currentMenu->settingBound = currentMenu->menuIdx;
     u8 offset = 0;
     //skip over hidden settings
-    while (offset < MAX_SUBMENU_SETTINGS_ON_SCREEN - 1) {
+    while (offset < MAX_SUBMENU_SETTINGS_ON_SCREEN - (isLastVisibleSetting ? 1 : 2)) {
       currentMenu->settingBound--;
       if (currentMenu->settingBound == 0) {
         break;
       }
       offset += currentMenu->settingsList->at(currentMenu->settingBound)->IsHidden() ? 0 : 1;
     }
-  } else if (currentMenu->menuIdx < currentMenu->settingBound)  {
-    currentMenu->settingBound = currentMenu->menuIdx;
+  } else if (currentMenu->menuIdx < currentMenu->settingBound + 1)  {
+    currentMenu->settingBound = std::max(currentMenu->menuIdx - 1, 0);
   }
 
   //print menu name
@@ -413,6 +466,8 @@ void PrintSubMenu() {
       printf("\x1b[%d;%dH%s",   row,  3, currentMenu->itemsList->at(currentMenu->settingBound + i)->name.c_str());
     }
   }
+
+  PrintMenuDescription();
 }
 
 void PrintPresetsMenu() {
@@ -430,13 +485,13 @@ void PrintPresetsMenu() {
   }
 
   for (u8 i = 0; i < MAX_SUBMENU_SETTINGS_ON_SCREEN; i++) {
-    if (i >= presetEntries.size()) break;
+    if (i + currentMenu->settingBound >= presetEntries.size()) break;
 
-    std::string preset = presetEntries[i];
+    std::string preset = presetEntries[currentMenu->settingBound + i];
 
     u8 row = 3 + (i * 2);
     //make the current preset green
-    if (currentMenu->menuIdx == i) {
+    if (currentMenu->menuIdx == currentMenu->settingBound + i) {
       printf("\x1b[%d;%dH%s>",  row, 14, GREEN);
       printf("\x1b[%d;%dH%s%s", row, 15, preset.c_str(), RESET);
     } else {
@@ -477,15 +532,39 @@ void ClearDescription() {
 
   //clear the previous description
   std::string spaces = "";
-  spaces.append(9 * TOP_WIDTH, ' ');
-  printf("\x1b[22;0H%s", spaces.c_str());
+  spaces.append(11 * TOP_WIDTH, ' ');
+  printf("\x1b[20;0H%s", spaces.c_str());
 }
 
 void PrintOptionDescription() {
   ClearDescription();
   std::string_view description = currentSetting->GetSelectedOptionDescription();
 
-  printf("\x1b[22;0H%s", description.data());
+  printf("\x1b[20;0H%s", description.data());
+}
+
+void PrintMenuDescription() {
+  ClearDescription();
+  std::string_view description = currentMenu->itemsList->at(currentMenu->menuIdx)->description;
+
+  printf("\x1b[20;0H%s", description.data());
+}
+
+static void RestoreOverrides() {
+  if (Settings::Racing) {
+    for (auto overridePair : Settings::racingOverrides) {
+      overridePair.first->RestoreDelayedOption();
+    }
+  }
+
+  if (Settings::Logic.Is(LOGIC_VANILLA)) {
+    for (auto overridePair : Settings::vanillaLogicOverrides) {
+      overridePair.first->RestoreDelayedOption();
+    }
+  }
+
+  //Reload Cosmetic settings because Random Choice options might have been changed during generation
+  LoadCachedCosmetics();
 }
 
 void GenerateRandomizer() {
@@ -514,10 +593,12 @@ void GenerateRandomizer() {
       printf("\n\nFailed to generate after 5 tries.\nPress B to go back to the menu.\nA different seed might be successful.");\
       PlacementLog_Msg("\nRANDOMIZATION FAILED COMPLETELY. PLZ FIX\n");
       PlacementLog_Write();
+      RestoreOverrides();
       return;
     }
     else {
       printf("\n\nError %d with fill.\nPress Select to exit or B to go back to the menu.\n", ret);
+      RestoreOverrides();
       return;
     }
   }
@@ -541,13 +622,7 @@ void GenerateRandomizer() {
     printf("Failed\nPress Select to exit.\n");
   }
 
-  //Restore settings that were set to a specific value for vanilla logic
-  if (Settings::Logic.Is(LOGIC_VANILLA)) {
-      for (Option* setting : Settings::vanillaLogicDefaults) {
-        setting->RestoreDelayedOption();
-      }
-      Settings::Keysanity.RestoreDelayedOption();
-  }
+  RestoreOverrides();
 }
 
 //opens up the 3ds software keyboard for getting user input

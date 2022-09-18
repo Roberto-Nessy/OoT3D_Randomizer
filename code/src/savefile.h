@@ -4,7 +4,7 @@
 #include "z3D/z3D.h"
 
 #define SAVEFILE_SCENES_DISCOVERED_IDX_COUNT 4
-#define SAVEFILE_ENTRANCES_DISCOVERED_IDX_COUNT 258
+#define SAVEFILE_ENTRANCES_DISCOVERED_IDX_COUNT 66
 
 u8 SaveFile_GetMedallionCount(void);
 u8 SaveFile_GetStoneCount(void);
@@ -19,12 +19,14 @@ void SaveFile_UnsetTradeItemAsOwned(u8 itemId);
 u32 SaveFile_TradeItemIsOwned(u8 itemId);
 void SaveFile_SetOwnedTradeItemEquipped(void);
 void SaveFile_ResetItemSlotsIfMatchesID(u8 itemSlot);
+u8 SaveFile_InventoryMenuHasSlot(u8 adult, u8 itemSlot);
 void SaveFile_InitExtSaveData(u32 fileBaseIndex);
 void SaveFile_LoadExtSaveData(u32 saveNumber);
 void SaveFile_SaveExtSaveData(u32 saveNumber);
+void SaveFile_EnforceHealthLimit(void);
 
 // Increment the version number whenever the ExtSaveData structure is changed
-#define EXTSAVEDATA_VERSION 8
+#define EXTSAVEDATA_VERSION 10
 
 typedef struct {
     u32 version;            // Needs to always be the first field of the structure
@@ -47,6 +49,8 @@ typedef struct {
     s8 option_EnableBGM;
     s8 option_EnableSFX;
     s8 option_SilenceNavi;
+    s8 option_IgnoreMaskReaction;
+    s8 option_SkipSongReplays;
 } ExtSaveData;
 
 #ifdef DECLARE_EXTSAVEDATA

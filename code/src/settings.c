@@ -1,6 +1,7 @@
 #include "settings.h"
 #include "hid.h"
 #include "input.h"
+#include "savefile.h"
 
 SettingsContext gSettingsContext = {0};
 u8 Damage32 = 0;
@@ -74,6 +75,8 @@ u32 Settings_SetFullHealthRestore(u8 setAmount) {
     }
 }
 u32 NoHealFromHealthUpgrades(void) {
+    if (gSaveContext.healthCapacity == 0) // avoid Game Over when picking up a PoH with 0 hearts
+        return 0;
     return Settings_SetFullHealthRestore(0);
 }
 u32 NoHealFromBombchuBowlingPrize(void) {
@@ -99,7 +102,7 @@ u32 Settings_GetQuickTextOption() {
 }
 
 u32 Settings_GetSongReplaysOption() {
-    return gSettingsContext.skipSongReplays;
+    return gExtSaveData.option_SkipSongReplays;
 }
 
 u32 Settings_IsTurboText() {
@@ -113,18 +116,18 @@ u32 Settings_GetChestMinigameOption() {
 void Settings_SkipSongReplays() {
     // msgModes 18 to 23 are used to manage the song replays. Skipping to mode 23 ends the replay.
     // msgMode 18 starts the playback music. It can't be skipped for scarecrow's song (song "12") because it spawns Pierre.
-    if ((gSettingsContext.skipSongReplays == SONGREPLAYS_SKIP_NO_SFX && gGlobalContext->msgMode == 18 && gGlobalContext->unk_2A91[0xEB] != 12) ||
-        (gSettingsContext.skipSongReplays != SONGREPLAYS_DONT_SKIP   && gGlobalContext->msgMode == 19)
+    if ((gExtSaveData.option_SkipSongReplays == SONGREPLAYS_SKIP_NO_SFX && gGlobalContext->msgMode == 18 && gGlobalContext->lastPlayedSong != 12) ||
+        (gExtSaveData.option_SkipSongReplays != SONGREPLAYS_DONT_SKIP   && gGlobalContext->msgMode == 19)
        ) {
         // In Water Temple, playing ZL cycles through the modes to avoid problems with the dimmed bottom screen at the ZL switches
-        if (gGlobalContext->sceneNum == 5 && gGlobalContext->unk_2A91[0xEB] == 8) {
+        if (gGlobalContext->sceneNum == 5 && gGlobalContext->lastPlayedSong == 8) {
             gGlobalContext->msgMode = 20;
         }
         else {
             gGlobalContext->msgMode = 23;
         }
     }
-    else if (gSettingsContext.skipSongReplays != SONGREPLAYS_DONT_SKIP && gGlobalContext->msgMode > 19 && gGlobalContext->msgMode < 23) {
+    else if (gExtSaveData.option_SkipSongReplays != SONGREPLAYS_DONT_SKIP && gGlobalContext->msgMode > 19 && gGlobalContext->msgMode < 23) {
         gGlobalContext->msgMode++;
     }
 }
@@ -134,7 +137,26 @@ void Settings_SunsSongEndCloseTextbox() {
     gGlobalContext->unk_2B7E = 4; // msgCtx.ocarinaMode, exits the ocarina playing
 }
 
-  const char hashIconNames[32][25] = {
+s32 Settings_BowAsChild() {
+    return (s32)gSettingsContext.bowAsChild;
+}
+
+s32 Settings_IsMasterQuestDungeon(void) {
+    // Certain actors check the MQ flag in the base game, but they have to check the individual dungeon mode for the randomizer:
+    // - Gold Skulltulas becoming intangible if they're inside blocks in MQ;
+    // - The water jet covering the Boomerang chest (it didn't cover it on GameCube);
+    s16 scene = gGlobalContext->sceneNum;
+    if (scene <= 9)
+        return gSettingsContext.dungeonModes[scene];
+    else if (scene == 11) // GtG
+        return gSettingsContext.dungeonModes[11];
+    else if (scene == 13) // Inside Ganon's Castle
+        return gSettingsContext.dungeonModes[10];
+
+    return 0;
+}
+
+const char hashIconNames[32][25] = {
     "Deku Stick",
     "Deku Nut",
     "Bow",
@@ -167,4 +189,4 @@ void Settings_SunsSongEndCloseTextbox() {
     "Compass",
     "Map",
     "Big Magic",
-  };
+};

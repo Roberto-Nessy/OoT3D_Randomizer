@@ -3,6 +3,7 @@
 #include "settings.h"
 #include "gorons.h"
 #include "savefile.h"
+#include "entrance.h"
 
 SpoilerData gSpoilerData = {0};
 
@@ -184,4 +185,32 @@ u8 SpoilerData_GetIsItemLocationCollected(u16 itemIndex)
         }
     }
     return 0;
+}
+
+u8 SpoilerData_GetIsItemLocationRevealed(u16 itemIndex) {
+    if (gSettingsContext.ingameSpoilers) {
+        return 1;
+    }
+
+    SpoilerItemLocation* itemLoc = &gSpoilerData.ItemLocations[itemIndex];
+
+    if (itemLoc->RevealType == REVEALTYPE_ALWAYS) {
+        return 1;
+    } else if (itemLoc->RevealType == REVEALTYPE_NORMAL) {
+        return 0;
+    }
+
+    // Check entrances instead for the Bazaars since they share the same scene
+    if (itemLoc->LocationScene == 0x2C) {
+        return SaveFile_GetIsEntranceDiscovered(Entrance_GetReplacementIndex(0x052C)); // MK -> Bazaar
+    }
+    if (itemLoc->LocationScene == 0x33) {
+        return SaveFile_GetIsEntranceDiscovered(Entrance_GetReplacementIndex(0x00B7)); // Kak -> Bazaar
+    }
+    // Only reveal Kak Potion Shop when entered as Adult
+    if (itemLoc->LocationScene == 0x30) {
+        return EventCheck(0x8B) != 0;
+    }
+
+    return SaveFile_GetIsSceneDiscovered(itemLoc->LocationScene);
 }
