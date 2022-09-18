@@ -1516,6 +1516,18 @@ hook_BossChallenge_ExitMenu:
     cmp r8,#0x0
     bx lr
 
+.global hook_CriticalHealthCheck
+hook_CriticalHealthCheck:
+    cmp r0,#0x10
+    movle r0,#0x00
+    bxle lr
+    cmp r0,#0x50
+    movle r0,#0x10
+    bxle lr
+    cmp r0,#0xA0
+    movle r0,#0x18
+    bx lr
+
 .section .loader
 .global hook_into_loader
 hook_into_loader:
