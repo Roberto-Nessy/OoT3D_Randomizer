@@ -1374,4 +1374,16 @@ SECTIONS
 		rCustomMessages = . ;
         __text_end  = . ;
     }
+
+    .patch_CriticalHealthCheckOne 0x4715B8 : {
+        *(.patch_CriticalHealthCheckOne)
+    }
+
+    .patch_CriticalHealthCheckTwo 0x4716D4 : {
+        *(.patch_CriticalHealthCheckTwo)
+    }
+
+    .patch_CriticalHealthCheckThree 0x49F294 : {
+        *(.patch_CriticalHealthCheckThree)
+    }
 }

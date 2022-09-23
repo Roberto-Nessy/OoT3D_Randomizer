@@ -1525,6 +1525,18 @@ hook_RestoreISG:
     pop {r0-r12}
     bleq 0x34BBFC @Function that cancels ISG
     pop {lr}
+	bx lr
+
+.global hook_CriticalHealthCheck
+hook_CriticalHealthCheck:
+    cmp r0,#0x10
+    movle r0,#0x00
+    bxle lr
+    cmp r0,#0x50
+    movle r0,#0x10
+    bxle lr
+    cmp r0,#0xA0
+    movle r0,#0x18
     bx lr
 
 .section .loader

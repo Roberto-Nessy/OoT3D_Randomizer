@@ -1819,3 +1819,30 @@ LostWoodsTargetTimer_patch:
 
 loader_patch:
     b hook_into_loader
+
+.section .patch_CriticalHealthCheckOne
+.global CriticalHealthCheckOne_Patch
+CriticalHealthCheckOne_patch:
+    bl hook_CriticalHealthCheck
+    nop
+    nop
+    nop
+    nop
+
+.section .patch_CriticalHealthCheckTwo
+.global CriticalHealthCheckTwo_patch
+CriticalHealthCheckTwo_patch:
+    bl hook_CriticalHealthCheck
+    nop
+    nop
+    nop
+    nop
+
+.section .patch_CriticalHealthCheckThree
+.global CriticalHealthCheckThree_patch
+CriticalHealthCheckThree_patch:
+    push {lr}
+    bl hook_CriticalHealthCheck
+    pop {lr}
+    nop
+    nop
