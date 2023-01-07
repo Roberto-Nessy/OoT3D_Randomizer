@@ -321,6 +321,7 @@ bool WaterTempleLow            = false;
 bool WaterTempleMiddle         = false;
 bool WaterTempleHigh           = false;
 bool KakarikoVillageGateOpen   = false;
+bool BotWLowerWater            = false;
 bool KingZoraThawed            = false;
 bool ForestTempleJoelle        = false;
 bool ForestTempleBeth          = false;
@@ -1249,6 +1250,7 @@ void LogicReset() {
     WaterTempleMiddle         = false;
     WaterTempleHigh           = false;
     KakarikoVillageGateOpen   = false;
+    BotWLowerWater            = false;
     KingZoraThawed            = false;
     ForestTempleJoelle        = false;
     ForestTempleBeth          = false;

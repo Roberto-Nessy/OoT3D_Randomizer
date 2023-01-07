@@ -314,6 +314,7 @@ extern bool KingZoraThawed;
 extern bool AtDampeTime;
 extern bool DeliverLetter;
 extern bool KakarikoVillageGateOpen;
+extern bool BotWLowerWater;
 extern bool ForestTempleJoelle;
 extern bool ForestTempleBeth;
 extern bool ForestTempleJoAndBeth;
