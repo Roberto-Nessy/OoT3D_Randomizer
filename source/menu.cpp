@@ -28,6 +28,33 @@ Option* currentSetting;
 Menu* currentMenu;
 } // namespace
 
+bool languageInit = false;
+u8 language;
+u8 GetLanguage() {
+    if (!languageInit) {
+        cfguInit();
+        CFGU_GetSystemLanguage(&language);
+        cfguExit();
+        languageInit = true;
+    }
+    // Use same ordering as the custom text
+    switch (language) {
+        case CFG_LANGUAGE_EN:
+            return 0;
+        case CFG_LANGUAGE_FR:
+            return 1;
+        case CFG_LANGUAGE_ES:
+            return 2;
+        case CFG_LANGUAGE_IT:
+            return 3;
+        case CFG_LANGUAGE_DE:
+            return 4;
+        default:
+            // Default to English
+            return 0;
+    }
+}
+
 void PrintTopScreen() {
     consoleSelect(&topScreen);
     consoleClear();

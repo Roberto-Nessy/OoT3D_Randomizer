@@ -32,6 +32,7 @@
 #define CYAN "\x1b[36m"
 #define WHITE "\x1b[37m"
 
+u8 GetLanguage();
 void ModeChangeInit();
 void UpdateOptionSubMenu(u32 kDown);
 void UpdatePremadePresetsMenu(u32 kDown);

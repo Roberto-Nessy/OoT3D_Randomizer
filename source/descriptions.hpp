@@ -2,595 +2,624 @@
 #include <string_view>
 #include <vector>
 
-using string_view = std::string_view;
+#include "menu.hpp"
+
+class Description {
+  public:
+    Description(std::vector<std::string_view> text_) : text(std::move(text_)) {
+        for (u8 i = 0; i < text.size(); i++) {
+            if (text[i] != "") {
+                hasLanguage |= 1 << i;
+            }
+        }
 
-extern string_view menuOpenSettingsDesc;
-extern string_view menuGlitchOptionsDesc;
-extern string_view menuPersonalizationDesc;
-extern string_view menuIngameDefaultsDesc;
-extern string_view menuResetToDefaultsDesc;
+        if (text.size() == 0) {
+            text = { "" };
+        }
+    }
 
-extern string_view presetNintendedDesc;
-extern string_view presetAllsanityDesc;
-extern string_view presetRacingDesc;
-extern string_view presetVanillaDesc;
-extern string_view presetFullChaosDesc;
+    operator std::string_view() const {
+        u8 language = GetLanguage();
+        if (hasLanguage & (1 << language)) {
+            return text[language];
+        }
+        return text[0];
+    }
 
-extern string_view openRandomize;
-extern string_view worldRandomize;
-extern string_view shuffleRandomize;
-extern string_view dungeonRandomize;
+  private:
+    std::vector<std::string_view> text = { "" };
+    u16 hasLanguage = 0;
+};
 
-extern string_view logicGlitchless;
-extern string_view logicGlitched;
-extern string_view logicNoLogic;
-extern string_view logicVanilla;
+extern Description menuOpenSettingsDesc;
+extern Description menuGlitchOptionsDesc;
+extern Description menuPersonalizationDesc;
+extern Description menuIngameDefaultsDesc;
+extern Description menuResetToDefaultsDesc;
 
-extern string_view forestOpen;
-extern string_view forestClosed;
-extern string_view forestClosedDeku;
+extern Description presetNintendedDesc;
+extern Description presetAllsanityDesc;
+extern Description presetRacingDesc;
+extern Description presetVanillaDesc;
+extern Description presetFullChaosDesc;
 
-extern string_view kakGateOpen;
-extern string_view kakGateClosed;
+extern Description openRandomize;
+extern Description worldRandomize;
+extern Description shuffleRandomize;
+extern Description dungeonRandomize;
 
-extern string_view doorOfTimeOpen;
-extern string_view doorOfTimeClosed;
-extern string_view doorOfTimeIntended;
+extern Description logicGlitchless;
+extern Description logicGlitched;
+extern Description logicNoLogic;
+extern Description logicVanilla;
 
-extern string_view fountainNormal;
-extern string_view fountainAdult;
-extern string_view fountainOpen;
+extern Description forestOpen;
+extern Description forestClosed;
+extern Description forestClosedDeku;
+
+extern Description kakGateOpen;
+extern Description kakGateClosed;
+
+extern Description doorOfTimeOpen;
+extern Description doorOfTimeClosed;
+extern Description doorOfTimeIntended;
+
+extern Description fountainNormal;
+extern Description fountainAdult;
+extern Description fountainOpen;
+
+extern Description jabuJabuCloseDesc;
+extern Description jabuJabuOpenDesc;
+
+extern Description gerudoNormal;
+extern Description gerudoFast;
+extern Description gerudoOpen;
 
-extern string_view jabuJabuCloseDesc;
-extern string_view jabuJabuOpenDesc;
+extern Description bridgeOpen;
+extern Description bridgeVanilla;
+extern Description bridgeStones;
+extern Description bridgeMedallions;
+extern Description bridgeRewards;
+extern Description bridgeDungeons;
+extern Description bridgeTokens;
 
-extern string_view gerudoNormal;
-extern string_view gerudoFast;
-extern string_view gerudoOpen;
+extern Description bridgeStoneCountDesc;
+extern Description bridgeMedallionCountDesc;
+extern Description bridgeRewardCountDesc;
+extern Description bridgeDungeonCountDesc;
+extern Description bridgeTokenCountDesc;
 
-extern string_view bridgeOpen;
-extern string_view bridgeVanilla;
-extern string_view bridgeStones;
-extern string_view bridgeMedallions;
-extern string_view bridgeRewards;
-extern string_view bridgeDungeons;
-extern string_view bridgeTokens;
+extern Description randomGanonsTrialsDesc;
 
-extern string_view bridgeStoneCountDesc;
-extern string_view bridgeMedallionCountDesc;
-extern string_view bridgeRewardCountDesc;
-extern string_view bridgeDungeonCountDesc;
-extern string_view bridgeTokenCountDesc;
+extern Description ganonsTrialCountDesc;
 
-extern string_view randomGanonsTrialsDesc;
+extern Description ageDesc;
 
-extern string_view ganonsTrialCountDesc;
+extern Description shuffleEntrancesDesc;
 
-extern string_view ageDesc;
+extern Description dungeonEntrancesDesc;
 
-extern string_view shuffleEntrancesDesc;
+extern Description bossEntrancesDesc;
 
-extern string_view dungeonEntrancesDesc;
+extern Description overworldEntrancesDesc;
 
-extern string_view bossEntrancesDesc;
+extern Description grottoEntrancesDesc;
 
-extern string_view overworldEntrancesDesc;
+extern Description owlDropsDesc;
 
-extern string_view grottoEntrancesDesc;
+extern Description warpSongsDesc;
 
-extern string_view owlDropsDesc;
+extern Description overworldSpawnsDesc;
 
-extern string_view warpSongsDesc;
+extern Description mixedPoolsDesc;
+extern Description mixDungeonsDesc;
+extern Description mixOverworldDesc;
+extern Description mixInteriorsDesc;
+extern Description mixGrottosDesc;
 
-extern string_view overworldSpawnsDesc;
+extern Description decoupledEntrancesDesc;
 
-extern string_view mixedPoolsDesc;
-extern string_view mixDungeonsDesc;
-extern string_view mixOverworldDesc;
-extern string_view mixInteriorsDesc;
-extern string_view mixGrottosDesc;
+extern Description interiorEntrancesOff;
+extern Description interiorEntrancesSimple;
+extern Description interiorEntrancesAll;
 
-extern string_view decoupledEntrancesDesc;
+extern Description bombchuLogicDesc;
 
-extern string_view interiorEntrancesOff;
-extern string_view interiorEntrancesSimple;
-extern string_view interiorEntrancesAll;
+extern Description defaultAmmoDropsDesc;
+extern Description bombchuDropsDesc;
+extern Description noAmmoDropsDesc;
 
-extern string_view bombchuLogicDesc;
+extern Description defaultHeartDropsDesc;
+extern Description noHeartDropsDesc;
+extern Description noHeartRefillDesc;
+extern Description scarceHeartsDesc;
 
-extern string_view defaultAmmoDropsDesc;
-extern string_view bombchuDropsDesc;
-extern string_view noAmmoDropsDesc;
+extern Description mqDungeonCountDesc;
+extern Description setDungeonTypesDesc;
 
-extern string_view defaultHeartDropsDesc;
-extern string_view noHeartDropsDesc;
-extern string_view noHeartRefillDesc;
-extern string_view scarceHeartsDesc;
-
-extern string_view mqDungeonCountDesc;
-extern string_view setDungeonTypesDesc;
-
-extern string_view shuffleRewardsEndOfDungeon;
-extern string_view shuffleRewardsAnyDungeon;
-extern string_view shuffleRewardsOverworld;
-extern string_view shuffleRewardsAnywhere;
+extern Description shuffleRewardsEndOfDungeon;
+extern Description shuffleRewardsAnyDungeon;
+extern Description shuffleRewardsOverworld;
+extern Description shuffleRewardsAnywhere;
 
-extern string_view linksPocketDungeonReward;
-extern string_view linksPocketAdvancement;
-extern string_view linksPocketAnything;
-extern string_view linksPocketNothing;
+extern Description linksPocketDungeonReward;
+extern Description linksPocketAdvancement;
+extern Description linksPocketAnything;
+extern Description linksPocketNothing;
 
-extern string_view songsSongLocations;
-extern string_view songsDungeonRewards;
-extern string_view songsAllLocations;
+extern Description songsSongLocations;
+extern Description songsDungeonRewards;
+extern Description songsAllLocations;
 
-extern string_view shopsOff;
-extern string_view shopsZero;
-extern string_view shopsOne;
-extern string_view shopsTwo;
-extern string_view shopsThree;
-extern string_view shopsFour;
-extern string_view shopsRandom;
+extern Description shopsOff;
+extern Description shopsZero;
+extern Description shopsOne;
+extern Description shopsTwo;
+extern Description shopsThree;
+extern Description shopsFour;
+extern Description shopsRandom;
 
-extern string_view tokensOff;
-extern string_view tokensDungeon;
-extern string_view tokensOverworld;
-extern string_view tokensAllTokens;
+extern Description tokensOff;
+extern Description tokensDungeon;
+extern Description tokensOverworld;
+extern Description tokensAllTokens;
 
-extern string_view scrubsOff;
-extern string_view scrubsAffordable;
-extern string_view scrubsExpensive;
-extern string_view scrubsRandomPrices;
+extern Description scrubsOff;
+extern Description scrubsAffordable;
+extern Description scrubsExpensive;
+extern Description scrubsRandomPrices;
 
-extern string_view shuffleCowsDesc;
+extern Description shuffleCowsDesc;
 
-extern string_view kokiriSwordDesc;
-extern string_view masterSwordDesc;
+extern Description kokiriSwordDesc;
+extern Description masterSwordDesc;
 
-extern string_view ocarinasDesc;
+extern Description ocarinasDesc;
 
-extern string_view weirdEggDesc;
+extern Description weirdEggDesc;
 
-extern string_view zeldasLetterDesc;
+extern Description zeldasLetterDesc;
 
-extern string_view gerudoTokenDesc;
+extern Description gerudoTokenDesc;
 
-extern string_view magicBeansDesc;
+extern Description magicBeansDesc;
 
-extern string_view merchantsDesc;
-extern string_view merchantsHintsDesc;
+extern Description merchantsDesc;
+extern Description merchantsHintsDesc;
 
-extern string_view frogSongRupeesDesc;
+extern Description frogSongRupeesDesc;
 
-extern string_view adultTradeDesc;
+extern Description adultTradeDesc;
 
-extern string_view chestMinigameDesc;
+extern Description chestMinigameDesc;
 
-extern string_view mapCompassStartWith;
-extern string_view mapCompassVanilla;
-extern string_view mapCompassOwnDungeon;
-extern string_view mapCompassAnyDungeon;
-extern string_view mapCompassOverworld;
-extern string_view mapCompassAnywhere;
+extern Description mapCompassStartWith;
+extern Description mapCompassVanilla;
+extern Description mapCompassOwnDungeon;
+extern Description mapCompassAnyDungeon;
+extern Description mapCompassOverworld;
+extern Description mapCompassAnywhere;
 
-extern string_view smallKeyStartWith;
-extern string_view smallKeyVanilla;
-extern string_view smallKeyOwnDungeon;
-extern string_view smallKeyAnyDungeon;
-extern string_view smallKeyOverworld;
-extern string_view smallKeyAnywhere;
+extern Description smallKeyStartWith;
+extern Description smallKeyVanilla;
+extern Description smallKeyOwnDungeon;
+extern Description smallKeyAnyDungeon;
+extern Description smallKeyOverworld;
+extern Description smallKeyAnywhere;
 
-extern string_view gerudoKeysVanilla;
-extern string_view gerudoKeysAnyDungeon;
-extern string_view gerudoKeysOverworld;
-extern string_view gerudoKeysAnywhere;
+extern Description gerudoKeysVanilla;
+extern Description gerudoKeysAnyDungeon;
+extern Description gerudoKeysOverworld;
+extern Description gerudoKeysAnywhere;
 
-extern string_view keyRingDesc;
+extern Description keyRingDesc;
 
-extern string_view bossKeyStartWith;
-extern string_view bossKeyVanilla;
-extern string_view bossKeyOwnDungeon;
-extern string_view bossKeyAnyDungeon;
-extern string_view bossKeyOverworld;
-extern string_view bossKeyAnywhere;
+extern Description bossKeyStartWith;
+extern Description bossKeyVanilla;
+extern Description bossKeyOwnDungeon;
+extern Description bossKeyAnyDungeon;
+extern Description bossKeyOverworld;
+extern Description bossKeyAnywhere;
 
-extern string_view ganonKeyStartWith;
-extern string_view ganonKeyVanilla;
-extern string_view ganonKeyOwnDungeon;
-extern string_view ganonKeyAnyDungeon;
-extern string_view ganonKeyOverworld;
-extern string_view ganonKeyAnywhere;
-extern string_view ganonKeyLACS;
+extern Description ganonKeyStartWith;
+extern Description ganonKeyVanilla;
+extern Description ganonKeyOwnDungeon;
+extern Description ganonKeyAnyDungeon;
+extern Description ganonKeyOverworld;
+extern Description ganonKeyAnywhere;
+extern Description ganonKeyLACS;
 
-extern string_view lacsMedallionCountDesc;
-extern string_view lacsStoneCountDesc;
-extern string_view lacsRewardCountDesc;
-extern string_view lacsDungeonCountDesc;
-extern string_view lacsTokenCountDesc;
+extern Description lacsMedallionCountDesc;
+extern Description lacsStoneCountDesc;
+extern Description lacsRewardCountDesc;
+extern Description lacsDungeonCountDesc;
+extern Description lacsTokenCountDesc;
 
-extern string_view childStealthDesc;
+extern Description childStealthDesc;
 
-extern string_view skipTowerEscapeDesc;
+extern Description skipTowerEscapeDesc;
 
-extern string_view skipEponaRaceDesc;
+extern Description skipEponaRaceDesc;
 
-extern string_view skipMinigamePhasesDesc;
+extern Description skipMinigamePhasesDesc;
 
-extern string_view freeScarecrowDesc;
+extern Description freeScarecrowDesc;
 
-extern string_view fourPoesDesc;
+extern Description fourPoesDesc;
 
-extern string_view lakeHyliaOwlDesc;
+extern Description lakeHyliaOwlDesc;
 
-extern string_view bigPoeTargetCountDesc;
+extern Description bigPoeTargetCountDesc;
 
-extern string_view numRequiredCuccosDesc;
+extern Description numRequiredCuccosDesc;
 
-extern string_view kingZoraSpeedFast;
-extern string_view kingZoraSpeedVanilla;
-extern string_view kingZoraSpeedRandom;
-extern string_view kingZoraSpeedCustom;
+extern Description kingZoraSpeedFast;
+extern Description kingZoraSpeedVanilla;
+extern Description kingZoraSpeedRandom;
+extern Description kingZoraSpeedCustom;
 
-extern string_view completeMaskDesc;
+extern Description completeMaskDesc;
 
-extern string_view quickTextDesc0;
-extern string_view quickTextDesc1;
-extern string_view quickTextDesc2;
-extern string_view quickTextDesc3;
-extern string_view skipSongReplaysDesc;
+extern Description quickTextDesc0;
+extern Description quickTextDesc1;
+extern Description quickTextDesc2;
+extern Description quickTextDesc3;
+extern Description skipSongReplaysDesc;
 
-extern string_view keepFWWarpPointDesc;
+extern Description keepFWWarpPointDesc;
 
-extern string_view fastBunnyHoodDesc;
+extern Description fastBunnyHoodDesc;
 
-extern string_view racingDesc;
+extern Description racingDesc;
 
-extern string_view gossipStonesHintsDesc;
+extern Description gossipStonesHintsDesc;
 
-extern string_view obscureHintsDesc;
-extern string_view ambiguousHintsDesc;
-extern string_view clearHintsDesc;
+extern Description obscureHintsDesc;
+extern Description ambiguousHintsDesc;
+extern Description clearHintsDesc;
 
-extern string_view uselessHintsDesc;
-extern string_view balancedHintsDesc;
-extern string_view strongHintsDesc;
-extern string_view veryStrongHintsDesc;
+extern Description uselessHintsDesc;
+extern Description balancedHintsDesc;
+extern Description strongHintsDesc;
+extern Description veryStrongHintsDesc;
 
-extern string_view compassesShowRewardsDesc;
-extern string_view compassesShowWotHDesc;
-extern string_view mapsShowDungeonModesDesc;
+extern Description compassesShowRewardsDesc;
+extern Description compassesShowWotHDesc;
+extern Description mapsShowDungeonModesDesc;
 
-extern string_view damageMultiDesc;
+extern Description damageMultiDesc;
 
-extern string_view startingTimeDesc;
+extern Description startingTimeDesc;
 
-extern string_view locationsReachableDesc;
-extern string_view nightGSDesc;
+extern Description locationsReachableDesc;
+extern Description nightGSDesc;
 
-extern string_view chestAnimDesc;
+extern Description chestAnimDesc;
 
-extern string_view chestSizeDesc;
+extern Description chestSizeDesc;
 
-extern string_view ingameSpoilersShowDesc;
-extern string_view ingameSpoilersHideDesc;
+extern Description ingameSpoilersShowDesc;
+extern Description ingameSpoilersHideDesc;
 
-extern string_view menuButtonDesc;
+extern Description menuButtonDesc;
 
-extern string_view arrowSwitchDesc;
+extern Description arrowSwitchDesc;
 
-extern string_view startWithConsumablesDesc;
+extern Description startWithConsumablesDesc;
 
-extern string_view startWithMaxRupeesDesc;
+extern Description startWithMaxRupeesDesc;
 
-extern string_view startingHealthDesc;
+extern Description startingHealthDesc;
 
-extern string_view startingBunnyHoodDesc;
+extern Description startingBunnyHoodDesc;
 
-extern string_view itemPoolPlentiful;
-extern string_view itemPoolBalanced;
-extern string_view itemPoolScarce;
-extern string_view itemPoolMinimal;
+extern Description itemPoolPlentiful;
+extern Description itemPoolBalanced;
+extern Description itemPoolScarce;
+extern Description itemPoolMinimal;
 
-extern string_view iceTrapsOff;
-extern string_view iceTrapsNormal;
-extern string_view iceTrapsExtra;
-extern string_view iceTrapsMayhem;
-extern string_view iceTrapsOnslaught;
+extern Description iceTrapsOff;
+extern Description iceTrapsNormal;
+extern Description iceTrapsExtra;
+extern Description iceTrapsMayhem;
+extern Description iceTrapsOnslaught;
 
-extern string_view removeDDDesc;
+extern Description removeDDDesc;
 
-extern string_view progGoronSword;
-
-extern string_view faroresWindAnywhereDesc;
-
-extern string_view ageRestrictionsDesc;
-extern string_view ageItemsInLogicDesc;
-extern string_view adultStickDesc;
-extern string_view adultBoomerangDesc;
-extern string_view childHammerDesc;
-extern string_view adultSlingshotDesc;
-extern string_view childBowDesc;
-extern string_view childHookshotDesc;
-extern string_view childIronBootsDesc;
-extern string_view childHoverBootsDesc;
-extern string_view adultMasksDesc;
-extern string_view adultKokiriSwordDesc;
-extern string_view childMasterSwordDesc;
-extern string_view childBiggoronSwordDesc;
-extern string_view adultDekuShieldDesc;
-extern string_view childMirrorShieldDesc;
-extern string_view childGoronTunicDesc;
-extern string_view childZoraTunicDesc;
-
-extern string_view restoreISGdesc;
-
-extern string_view gkDurabilityVanilla;
-extern string_view gkDurabilityRandomRisk;
-extern string_view gkDurabilityRandomSafe;
-extern string_view retroAmmoDesc;
-
-extern string_view mp_EnabledDesc;
-extern string_view mp_SharedProgressDesc;
-extern string_view mp_SyncIdDesc;
-extern string_view mp_SharedHealthDesc;
-extern string_view mp_SharedRupeesDesc;
-extern string_view mp_SharedAmmoDesc;
-
-extern string_view silenceNaviDesc;
-extern string_view ignoreMaskReactionDesc;
-
-extern string_view naviColorsDesc;
-extern string_view necessarySimpleModeDesc;
-extern string_view alwaysSimpleModeDesc;
-
-extern string_view coloredKeysDesc;
-extern string_view coloredBossKeysDesc;
-
-extern string_view mirrorWorldOffDesc;
-extern string_view mirrorWorldOnDesc;
-extern string_view mirrorWorldSceneDesc;
-extern string_view mirrorWorldEntranceDesc;
-extern string_view mirrorWorldRandomDesc;
-
-extern string_view musicRandoDesc;
-extern string_view shuffleBGMDesc;
-extern string_view fanfaresOffDesc;
-extern string_view onlyFanfaresDesc;
-extern string_view fanfaresOcarinaDesc;
-extern string_view shuffleOcaMusicDesc;
-
-extern string_view shuffleSFXOff;
-extern string_view shuffleSFXAll;
-extern string_view shuffleSFXSceneSpecific;
-extern string_view shuffleSFXChaos;
-extern string_view shuffleSFXCategorically;
-
-extern string_view randomTrapDmgDesc;
-extern string_view basicTrapDmgDesc;
-extern string_view advancedTrapDmgDesc;
-extern string_view fireTrapDesc;
-extern string_view antiFairyTrapDesc;
-extern string_view curseTrapsDesc;
-extern string_view extraArrowEffectsDesc;
-
-extern string_view ToggleAllTricksDesc;
-
-extern string_view ToggleLogicNoneDesc;
-extern string_view ToggleLogicNoviceDesc;
-extern string_view ToggleLogicIntermediateDesc;
-extern string_view ToggleLogicExpertDesc;
-extern string_view LogicGrottosWithoutAgonyDesc;
-extern string_view LogicVisibleCollisionDesc;
-extern string_view LogicFewerTunicRequirementsDesc;
-extern string_view LogicLostWoodsGSBeanDesc;
-extern string_view LogicLabDivingDesc;
-extern string_view LogicLabWallGSDesc;
-extern string_view LogicGraveyardPoHDesc;
-extern string_view LogicChildDampeRacePoHDesc;
-extern string_view LogicGVHammerChestDesc;
-extern string_view LogicGerudoKitchenDesc;
-extern string_view LogicGerudoChildClimbDesc;
-extern string_view LogicLensWastelandDesc;
-extern string_view LogicReverseWastelandDesc;
-extern string_view LogicColossusGSDesc;
-extern string_view LogicOutsideGanonsGSDesc;
-extern string_view LogicManOnRoofDesc;
-extern string_view LogicWindmillPoHHookshotDesc;
-extern string_view LogicDMTBombableDesc;
-extern string_view LogicDMTSoilGSDesc;
-extern string_view LogicDMTSummitHoverDesc;
-extern string_view LogicLinkGoronDinsDesc;
-extern string_view LogicGoronCityLeftMostDesc;
-extern string_view LogicGoronCityPotDesc;
-extern string_view LogicGoronCityPotWithStrengthDesc;
-extern string_view LogicChildRollingWithStrengthDesc;
-extern string_view LogicCraterUpperToLowerDesc;
-extern string_view LogicCraterBeanPoHWithHoversDesc;
-extern string_view LogicBiggoronBoleroDesc;
-extern string_view LogicZoraRiverLowerDesc;
-extern string_view LogicZoraRiverUpperDesc;
-extern string_view LogicZFGreatFairyDesc;
-extern string_view LogicDekuB1WebsWithBowDesc;
-extern string_view LogicDekuB1SkipDesc;
-extern string_view LogicDekuBasementGSDesc;
-extern string_view LogicDCStaircaseDesc;
-extern string_view LogicDCJumpDesc;
-extern string_view LogicDCSlingshotSkipDesc;
-extern string_view LogicDCScarecrowGSDesc;
-extern string_view LogicJabuBossGSAdultDesc;
-extern string_view LogicJabuScrubJumpDiveDesc;
-extern string_view LogicForestOutsideBackdoorDesc;
-extern string_view LogicForestDoorFrameDesc;
-extern string_view LogicForestOutdoorEastGSDesc;
-extern string_view LogicFireBossDoorJumpDesc;
-extern string_view LogicFireStrengthDesc;
-extern string_view LogicFireScarecrowDesc;
-extern string_view LogicFireFlameMazeDesc;
-extern string_view LogicFireSongOfTimeDesc;
-extern string_view LogicWaterTempleTorchLongshotDesc;
-extern string_view LogicWaterTempleUpperBoostDesc;
-extern string_view LogicWaterCentralBowDesc;
-extern string_view LogicWaterCentralGSFWDesc;
-extern string_view LogicWaterCrackedWallNothingDesc;
-extern string_view LogicWaterCrackedWallHoversDesc;
-extern string_view LogicWaterBossKeyRegionDesc;
-extern string_view LogicWaterBKJumpDiveDesc;
-extern string_view LogicWaterNorthBasementLedgeJumpDesc;
-extern string_view LogicWaterDragonAdultDesc;
-extern string_view LogicWaterDragonJumpDiveDesc;
-extern string_view LogicWaterRiverGSDesc;
-extern string_view LogicWaterFallingPlatformGSDesc;
-extern string_view LogicSpiritLowerAdultSwitchDesc;
-extern string_view LogicSpiritChildBombchuDesc;
-extern string_view LogicSpiritWallDesc;
-extern string_view LogicSpiritLobbyGSDesc;
-extern string_view LogicSpiritMapChestDesc;
-extern string_view LogicSpiritSunChestDesc;
-extern string_view LogicShadowFireArrowEntryDesc;
-extern string_view LogicShadowUmbrellaDesc;
-extern string_view LogicShadowFreestandingKeyDesc;
-extern string_view LogicShadowStatueDesc;
-extern string_view LogicChildDeadhandDesc;
-extern string_view LogicGtgWithoutHookshotDesc;
-extern string_view LogicGtgFakeWallDesc;
-extern string_view LogicLensSpiritDesc;
-extern string_view LogicLensShadowDesc;
-extern string_view LogicLensShadowBackDesc;
-extern string_view LogicLensBotwDesc;
-extern string_view LogicLensGtgDesc;
-extern string_view LogicLensCastleDesc;
-extern string_view LogicLensJabuMQDesc;
-extern string_view LogicLensSpiritMQDesc;
-extern string_view LogicLensShadowMQDesc;
-extern string_view LogicLensShadowMQBackDesc;
-extern string_view LogicLensBotwMQDesc;
-extern string_view LogicLensGtgMQDesc;
-extern string_view LogicLensCastleMQDesc;
-extern string_view LogicSpiritTrialHookshotDesc;
-extern string_view LogicFlamingChestsDesc;
-
-extern const std::vector<string_view> GlitchDifficulties;
-
-extern string_view ToggleAllGlitchesDesc;
-
-extern string_view GlitchRestrictedItemsDescDisabled;
-extern string_view GlitchRestrictedItemsDescNovice;
-
-extern string_view GlitchSuperStabDescDisabled;
-extern string_view GlitchSuperStabDescNovice;
-
-extern string_view GlitchISGDescDisabled;
-extern string_view GlitchISGDescNovice;
-extern string_view GlitchISGDescIntermediate;
-extern string_view GlitchISGDescAdvanced;
-
-extern string_view GlitchHoverDescDisabled;
-extern string_view GlitchHoverDescNovice;
-extern string_view GlitchHoverDescIntermediate;
-extern string_view GlitchHoverDescAdvanced;
-
-extern string_view GlitchBombOIDescDisabled;
-extern string_view GlitchBombOIDescNovice;
-extern string_view GlitchBombOIDescIntermediate;
-extern string_view GlitchBombOIDescAdvanced;
-extern string_view GlitchBombOIDescExpert;
-
-extern string_view GlitchHoverBoostDescDisabled;
-extern string_view GlitchHoverBoostDescNovice;
-extern string_view GlitchHoverBoostDescIntermediate;
-extern string_view GlitchHoverBoostDescAdvanced;
-
-extern string_view GlitchSuperSlideDescDisabled;
-extern string_view GlitchSuperSlideDescNovice;
-extern string_view GlitchSuperSlideDescIntermediate;
-extern string_view GlitchSuperSlideDescAdvanced;
-extern string_view GlitchSuperSlideDescExpert;
-
-extern string_view GlitchMegaflipDescDisabled;
-extern string_view GlitchMegaflipDescNovice;
-extern string_view GlitchMegaflipDescIntermediate;
-extern string_view GlitchMegaflipDescAdvanced;
-extern string_view GlitchMegaflipDescExpert;
-extern string_view GlitchMegaflipDescHero;
-
-extern string_view GlitchASlideDescDisabled;
-extern string_view GlitchASlideDescNovice;
-extern string_view GlitchASlideDescIntermediate;
-extern string_view GlitchASlideDescAdvanced;
-extern string_view GlitchASlideDescExpert;
-
-extern string_view GlitchHammerSlideDescDisabled;
-extern string_view GlitchHammerSlideDescNovice;
-extern string_view GlitchHammerSlideDescIntermediate;
-
-extern string_view GlitchLedgeCancelDescDisabled;
-extern string_view GlitchLedgeCancelDescNovice;
-extern string_view GlitchLedgeCancelDescIntermediate;
-extern string_view GlitchLedgeCancelDescAdvanced;
-
-extern string_view GlitchActionSwapDescDisabled;
-extern string_view GlitchActionSwapDescNovice;
-extern string_view GlitchActionSwapDescAdvanced;
-
-extern string_view GlitchQPADescDisabled;
-extern string_view GlitchQPADescNovice;
-extern string_view GlitchQPADescIntermediate;
-extern string_view GlitchQPADescAdvanced;
-extern string_view GlitchQPADescExpert;
-
-extern string_view GlitchHookshotClipDescDisabled;
-extern string_view GlitchHookshotClipDescNovice;
-extern string_view GlitchHookshotClipDescIntermediate;
-
-extern string_view GlitchHookshotJump_BonkDescDisabled;
-extern string_view GlitchHookshotJump_BonkDescNovice;
-extern string_view GlitchHookshotJump_BonkDescIntermediate;
-extern string_view GlitchHookshotJump_BonkDescAdvanced;
-
-extern string_view GlitchHookshotJump_BootsDescDisabled;
-extern string_view GlitchHookshotJump_BootsDescNovice;
-extern string_view GlitchHookshotJump_BootsDescIntermediate;
-extern string_view GlitchHookshotJump_BootsDescAdvanced;
-
-extern string_view GlitchCutsceneDiveDescDisabled;
-extern string_view GlitchCutsceneDiveDescNovice;
-extern string_view GlitchCutsceneDiveDescIntermediate;
-extern string_view GlitchCutsceneDiveDescAdvanced;
-
-extern string_view GlitchNaviDive_StickDescDisabled;
-extern string_view GlitchNaviDive_StickDescNovice;
-extern string_view GlitchNaviDive_StickDescIntermediate;
-extern string_view GlitchNaviDive_StickDescAdvanced;
-
-extern string_view GlitchTripleSlashClipDescDisabled;
-extern string_view GlitchTripleSlashClipDescNovice;
-extern string_view GlitchTripleSlashClipDescIntermediate;
-extern string_view GlitchTripleSlashClipDescAdvanced;
-extern string_view GlitchTripleSlashClipDescExpert;
-
-extern string_view GlitchLedgeClipDescDisabled;
-extern string_view GlitchLedgeClipDescNovice;
-extern string_view GlitchLedgeClipDescIntermediate;
-extern string_view GlitchLedgeClipDescAdvanced;
-
-extern string_view GlitchSeamWalkDescDisabled;
-extern string_view GlitchSeamWalkDescNovice;
-extern string_view GlitchSeamWalkDescIntermediate;
-extern string_view GlitchSeamWalkDescAdvanced;
-extern string_view GlitchSeamWalkDescExpert;
-extern string_view GlitchSeamWalkDescHero;
-
-extern string_view GlitchWWTEscapeDesc;
-extern string_view GlitchGVTentAsChildDesc;
-extern string_view GlitchGFGuardSneakDesc;
-extern string_view GlitchItemlessWastelandDesc;
-extern string_view GlitchOccamsStatueDesc;
-extern string_view GlitchZDOoBJumpSlashDesc;
-extern string_view GlitchJabuStickRecoilDesc;
-extern string_view GlitchJabuAdultDesc;
-extern string_view GlitchBlueFireWallDesc;
-extern string_view GlitchClassicHalfieDesc;
-extern string_view GlitchModernHalfieDesc;
-extern string_view GlitchJabuSwitchDesc;
-extern string_view GlitchForestBKSkipDesc;
-extern string_view GlitchFireGrunzClipDesc;
+extern Description progGoronSword;
+
+extern Description faroresWindAnywhereDesc;
+
+extern Description ageRestrictionsDesc;
+extern Description ageItemsInLogicDesc;
+extern Description adultStickDesc;
+extern Description adultBoomerangDesc;
+extern Description childHammerDesc;
+extern Description adultSlingshotDesc;
+extern Description childBowDesc;
+extern Description childHookshotDesc;
+extern Description childIronBootsDesc;
+extern Description childHoverBootsDesc;
+extern Description adultMasksDesc;
+extern Description adultKokiriSwordDesc;
+extern Description childMasterSwordDesc;
+extern Description childBiggoronSwordDesc;
+extern Description adultDekuShieldDesc;
+extern Description childMirrorShieldDesc;
+extern Description childGoronTunicDesc;
+extern Description childZoraTunicDesc;
+
+extern Description restoreISGdesc;
+
+extern Description gkDurabilityVanilla;
+extern Description gkDurabilityRandomRisk;
+extern Description gkDurabilityRandomSafe;
+extern Description retroAmmoDesc;
+
+extern Description mp_EnabledDesc;
+extern Description mp_SharedProgressDesc;
+extern Description mp_SyncIdDesc;
+extern Description mp_SharedHealthDesc;
+extern Description mp_SharedRupeesDesc;
+extern Description mp_SharedAmmoDesc;
+
+extern Description silenceNaviDesc;
+extern Description ignoreMaskReactionDesc;
+
+extern Description naviColorsDesc;
+extern Description necessarySimpleModeDesc;
+extern Description alwaysSimpleModeDesc;
+
+extern Description coloredKeysDesc;
+extern Description coloredBossKeysDesc;
+
+extern Description mirrorWorldOffDesc;
+extern Description mirrorWorldOnDesc;
+extern Description mirrorWorldSceneDesc;
+extern Description mirrorWorldEntranceDesc;
+extern Description mirrorWorldRandomDesc;
+
+extern Description musicRandoDesc;
+extern Description shuffleBGMDesc;
+extern Description fanfaresOffDesc;
+extern Description onlyFanfaresDesc;
+extern Description fanfaresOcarinaDesc;
+extern Description shuffleOcaMusicDesc;
+
+extern Description shuffleSFXOff;
+extern Description shuffleSFXAll;
+extern Description shuffleSFXSceneSpecific;
+extern Description shuffleSFXChaos;
+extern Description shuffleSFXCategorically;
+
+extern Description randomTrapDmgDesc;
+extern Description basicTrapDmgDesc;
+extern Description advancedTrapDmgDesc;
+extern Description fireTrapDesc;
+extern Description antiFairyTrapDesc;
+extern Description curseTrapsDesc;
+extern Description extraArrowEffectsDesc;
+
+extern Description excludeLocationDesc;
+
+extern Description ToggleAllTricksDesc;
+
+extern Description ToggleLogicNoneDesc;
+extern Description ToggleLogicNoviceDesc;
+extern Description ToggleLogicIntermediateDesc;
+extern Description ToggleLogicExpertDesc;
+extern Description LogicGrottosWithoutAgonyDesc;
+extern Description LogicVisibleCollisionDesc;
+extern Description LogicFewerTunicRequirementsDesc;
+extern Description LogicLostWoodsGSBeanDesc;
+extern Description LogicLabDivingDesc;
+extern Description LogicLabWallGSDesc;
+extern Description LogicGraveyardPoHDesc;
+extern Description LogicChildDampeRacePoHDesc;
+extern Description LogicGVHammerChestDesc;
+extern Description LogicGerudoKitchenDesc;
+extern Description LogicGerudoChildClimbDesc;
+extern Description LogicLensWastelandDesc;
+extern Description LogicReverseWastelandDesc;
+extern Description LogicColossusGSDesc;
+extern Description LogicOutsideGanonsGSDesc;
+extern Description LogicManOnRoofDesc;
+extern Description LogicWindmillPoHHookshotDesc;
+extern Description LogicDMTBombableDesc;
+extern Description LogicDMTSoilGSDesc;
+extern Description LogicDMTSummitHoverDesc;
+extern Description LogicLinkGoronDinsDesc;
+extern Description LogicGoronCityLeftMostDesc;
+extern Description LogicGoronCityPotDesc;
+extern Description LogicGoronCityPotWithStrengthDesc;
+extern Description LogicChildRollingWithStrengthDesc;
+extern Description LogicCraterUpperToLowerDesc;
+extern Description LogicCraterBeanPoHWithHoversDesc;
+extern Description LogicBiggoronBoleroDesc;
+extern Description LogicZoraRiverLowerDesc;
+extern Description LogicZoraRiverUpperDesc;
+extern Description LogicZFGreatFairyDesc;
+extern Description LogicDekuB1WebsWithBowDesc;
+extern Description LogicDekuB1SkipDesc;
+extern Description LogicDekuBasementGSDesc;
+extern Description LogicDCStaircaseDesc;
+extern Description LogicDCJumpDesc;
+extern Description LogicDCSlingshotSkipDesc;
+extern Description LogicDCScarecrowGSDesc;
+extern Description LogicJabuBossGSAdultDesc;
+extern Description LogicJabuScrubJumpDiveDesc;
+extern Description LogicForestOutsideBackdoorDesc;
+extern Description LogicForestDoorFrameDesc;
+extern Description LogicForestOutdoorEastGSDesc;
+extern Description LogicFireBossDoorJumpDesc;
+extern Description LogicFireStrengthDesc;
+extern Description LogicFireScarecrowDesc;
+extern Description LogicFireFlameMazeDesc;
+extern Description LogicFireSongOfTimeDesc;
+extern Description LogicWaterTempleTorchLongshotDesc;
+extern Description LogicWaterTempleUpperBoostDesc;
+extern Description LogicWaterCentralBowDesc;
+extern Description LogicWaterCentralGSFWDesc;
+extern Description LogicWaterCrackedWallNothingDesc;
+extern Description LogicWaterCrackedWallHoversDesc;
+extern Description LogicWaterBossKeyRegionDesc;
+extern Description LogicWaterBKJumpDiveDesc;
+extern Description LogicWaterNorthBasementLedgeJumpDesc;
+extern Description LogicWaterDragonAdultDesc;
+extern Description LogicWaterDragonJumpDiveDesc;
+extern Description LogicWaterRiverGSDesc;
+extern Description LogicWaterFallingPlatformGSDesc;
+extern Description LogicSpiritLowerAdultSwitchDesc;
+extern Description LogicSpiritChildBombchuDesc;
+extern Description LogicSpiritWallDesc;
+extern Description LogicSpiritLobbyGSDesc;
+extern Description LogicSpiritMapChestDesc;
+extern Description LogicSpiritSunChestDesc;
+extern Description LogicShadowFireArrowEntryDesc;
+extern Description LogicShadowUmbrellaDesc;
+extern Description LogicShadowFreestandingKeyDesc;
+extern Description LogicShadowStatueDesc;
+extern Description LogicChildDeadhandDesc;
+extern Description LogicGtgWithoutHookshotDesc;
+extern Description LogicGtgFakeWallDesc;
+extern Description LogicLensSpiritDesc;
+extern Description LogicLensShadowDesc;
+extern Description LogicLensShadowBackDesc;
+extern Description LogicLensBotwDesc;
+extern Description LogicLensGtgDesc;
+extern Description LogicLensCastleDesc;
+extern Description LogicLensJabuMQDesc;
+extern Description LogicLensSpiritMQDesc;
+extern Description LogicLensShadowMQDesc;
+extern Description LogicLensShadowMQBackDesc;
+extern Description LogicLensBotwMQDesc;
+extern Description LogicLensGtgMQDesc;
+extern Description LogicLensCastleMQDesc;
+extern Description LogicSpiritTrialHookshotDesc;
+extern Description LogicFlamingChestsDesc;
+
+extern const std::vector<std::string_view> GlitchDifficulties;
+
+extern Description ToggleAllGlitchesDesc;
+
+extern Description GlitchRestrictedItemsDescDisabled;
+extern Description GlitchRestrictedItemsDescNovice;
+
+extern Description GlitchSuperStabDescDisabled;
+extern Description GlitchSuperStabDescNovice;
+
+extern Description GlitchISGDescDisabled;
+extern Description GlitchISGDescNovice;
+extern Description GlitchISGDescIntermediate;
+extern Description GlitchISGDescAdvanced;
+
+extern Description GlitchHoverDescDisabled;
+extern Description GlitchHoverDescNovice;
+extern Description GlitchHoverDescIntermediate;
+extern Description GlitchHoverDescAdvanced;
+
+extern Description GlitchBombOIDescDisabled;
+extern Description GlitchBombOIDescNovice;
+extern Description GlitchBombOIDescIntermediate;
+extern Description GlitchBombOIDescAdvanced;
+extern Description GlitchBombOIDescExpert;
+
+extern Description GlitchHoverBoostDescDisabled;
+extern Description GlitchHoverBoostDescNovice;
+extern Description GlitchHoverBoostDescIntermediate;
+extern Description GlitchHoverBoostDescAdvanced;
+
+extern Description GlitchSuperSlideDescDisabled;
+extern Description GlitchSuperSlideDescNovice;
+extern Description GlitchSuperSlideDescIntermediate;
+extern Description GlitchSuperSlideDescAdvanced;
+extern Description GlitchSuperSlideDescExpert;
+
+extern Description GlitchMegaflipDescDisabled;
+extern Description GlitchMegaflipDescNovice;
+extern Description GlitchMegaflipDescIntermediate;
+extern Description GlitchMegaflipDescAdvanced;
+extern Description GlitchMegaflipDescExpert;
+extern Description GlitchMegaflipDescHero;
+
+extern Description GlitchASlideDescDisabled;
+extern Description GlitchASlideDescNovice;
+extern Description GlitchASlideDescIntermediate;
+extern Description GlitchASlideDescAdvanced;
+extern Description GlitchASlideDescExpert;
+
+extern Description GlitchHammerSlideDescDisabled;
+extern Description GlitchHammerSlideDescNovice;
+extern Description GlitchHammerSlideDescIntermediate;
+
+extern Description GlitchLedgeCancelDescDisabled;
+extern Description GlitchLedgeCancelDescNovice;
+extern Description GlitchLedgeCancelDescIntermediate;
+extern Description GlitchLedgeCancelDescAdvanced;
+
+extern Description GlitchActionSwapDescDisabled;
+extern Description GlitchActionSwapDescNovice;
+extern Description GlitchActionSwapDescAdvanced;
+
+extern Description GlitchQPADescDisabled;
+extern Description GlitchQPADescNovice;
+extern Description GlitchQPADescIntermediate;
+extern Description GlitchQPADescAdvanced;
+extern Description GlitchQPADescExpert;
+
+extern Description GlitchHookshotClipDescDisabled;
+extern Description GlitchHookshotClipDescNovice;
+extern Description GlitchHookshotClipDescIntermediate;
+
+extern Description GlitchHookshotJump_BonkDescDisabled;
+extern Description GlitchHookshotJump_BonkDescNovice;
+extern Description GlitchHookshotJump_BonkDescIntermediate;
+extern Description GlitchHookshotJump_BonkDescAdvanced;
+
+extern Description GlitchHookshotJump_BootsDescDisabled;
+extern Description GlitchHookshotJump_BootsDescNovice;
+extern Description GlitchHookshotJump_BootsDescIntermediate;
+extern Description GlitchHookshotJump_BootsDescAdvanced;
+
+extern Description GlitchCutsceneDiveDescDisabled;
+extern Description GlitchCutsceneDiveDescNovice;
+extern Description GlitchCutsceneDiveDescIntermediate;
+extern Description GlitchCutsceneDiveDescAdvanced;
+
+extern Description GlitchNaviDive_StickDescDisabled;
+extern Description GlitchNaviDive_StickDescNovice;
+extern Description GlitchNaviDive_StickDescIntermediate;
+extern Description GlitchNaviDive_StickDescAdvanced;
+
+extern Description GlitchTripleSlashClipDescDisabled;
+extern Description GlitchTripleSlashClipDescNovice;
+extern Description GlitchTripleSlashClipDescIntermediate;
+extern Description GlitchTripleSlashClipDescAdvanced;
+extern Description GlitchTripleSlashClipDescExpert;
+
+extern Description GlitchLedgeClipDescDisabled;
+extern Description GlitchLedgeClipDescNovice;
+extern Description GlitchLedgeClipDescIntermediate;
+extern Description GlitchLedgeClipDescAdvanced;
+
+extern Description GlitchSeamWalkDescDisabled;
+extern Description GlitchSeamWalkDescNovice;
+extern Description GlitchSeamWalkDescIntermediate;
+extern Description GlitchSeamWalkDescAdvanced;
+extern Description GlitchSeamWalkDescExpert;
+extern Description GlitchSeamWalkDescHero;
+
+extern Description GlitchWWTEscapeDesc;
+extern Description GlitchGVTentAsChildDesc;
+extern Description GlitchGFGuardSneakDesc;
+extern Description GlitchItemlessWastelandDesc;
+extern Description GlitchOccamsStatueDesc;
+extern Description GlitchZDOoBJumpSlashDesc;
+extern Description GlitchJabuStickRecoilDesc;
+extern Description GlitchJabuAdultDesc;
+extern Description GlitchBlueFireWallDesc;
+extern Description GlitchClassicHalfieDesc;
+extern Description GlitchModernHalfieDesc;
+extern Description GlitchJabuSwitchDesc;
+extern Description GlitchForestBKSkipDesc;
+extern Description GlitchFireGrunzClipDesc;
