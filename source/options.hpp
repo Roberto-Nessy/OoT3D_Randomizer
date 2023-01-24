@@ -34,10 +34,23 @@ class Translation {
 // Reused Settings
 extern Translation randSettingsText;
 
+extern Translation stoneCountText;
+extern Translation medallionCountText;
+extern Translation rewardCountText;
+extern Translation dungeonCountText;
+extern Translation tokenCountText;
+
 extern Translation noOpt;
 extern Translation yesOpt;
 extern Translation offOpt;
 extern Translation onOpt;
+extern Translation closedOpt;
+extern Translation openOpt;
+extern Translation normalOpt;
+extern Translation vanillaOpt;
+extern Translation randomOpt;
+extern Translation adultOpt;
+extern Translation fastOpt;
 
 // Open Settings
 extern Translation forestText;
@@ -49,3 +62,11 @@ extern Translation gerudoText;
 extern Translation bridgeText;
 extern Translation randTrialsText;
 extern Translation trialCountText;
+
+extern Translation closedDekuOpt;
+extern Translation intendedOpt;
+extern Translation stonesOpt;
+extern Translation medallionsOpt;
+extern Translation rewardsOpt;
+extern Translation dungeonsOpt;
+extern Translation tokensOpt;
