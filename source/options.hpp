@@ -40,6 +40,19 @@ extern Translation rewardCountText;
 extern Translation dungeonCountText;
 extern Translation tokenCountText;
 
+extern Translation dungeonDTText;
+extern Translation dungeonDCText;
+extern Translation dungeonJJBText;
+extern Translation dungeonFoTText;
+extern Translation dungeonFiTText;
+extern Translation dungeonWaTText;
+extern Translation dungeonSpTText;
+extern Translation dungeonShTText;
+extern Translation dungeonBotWText;
+extern Translation dungeonICText;
+extern Translation dungeonGTGText;
+extern Translation dungeonGaCText;
+
 extern Translation noOpt;
 extern Translation yesOpt;
 extern Translation offOpt;
@@ -51,6 +64,7 @@ extern Translation vanillaOpt;
 extern Translation randomOpt;
 extern Translation adultOpt;
 extern Translation fastOpt;
+extern Translation allOpt;
 
 // Open Settings
 extern Translation forestText;
@@ -70,3 +84,36 @@ extern Translation medallionsOpt;
 extern Translation rewardsOpt;
 extern Translation dungeonsOpt;
 extern Translation tokensOpt;
+
+// World Settings
+extern Translation startingAgeText;
+extern Translation shuffleEntrancesText;
+extern Translation dungeonEntrancesText;
+extern Translation bossEntrancesText;
+extern Translation overworldEntrancesText;
+extern Translation interiorEntrancesText;
+extern Translation grottoEntrancesText;
+extern Translation owlDropsText;
+extern Translation warpSongsText;
+extern Translation overworldSpawnsText;
+extern Translation mixedPoolsText;
+extern Translation mixDungeonsText;
+extern Translation mixOverworldText;
+extern Translation mixInteriorsText;
+extern Translation mixGrottosText;
+extern Translation decoupleEntrancesText;
+extern Translation bombchusInLogicText;
+extern Translation ammoDropsText;
+extern Translation healthDropsText;
+extern Translation mqDungeonCountText;
+extern Translation setDungeonTypesText;
+
+extern Translation childOpt;
+extern Translation onGanonOpt;
+extern Translation ageRestrictedOpt;
+extern Translation fullOpt;
+extern Translation simpleOpt;
+extern Translation onBombchuOpt;
+extern Translation noDropOpt;
+extern Translation noRefillOpt;
+extern Translation mqOpt;
