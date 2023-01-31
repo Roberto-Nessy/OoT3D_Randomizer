@@ -97,19 +97,37 @@ Description veryStrongHintsDesc       = Description({                           
 /*------------------------------                                                           //
 |     MISCELLANEOUS HINTS      |                                                           //
 ------------------------------*/                                                           //
-Description miscHintsDesc             = "Toggle some specific hints at locations other\n"  //
-                                        "than Gossip Stones.";                             //
-Description totAltarHintsDesc         = "The Temple of Time altar will reveal the locations"
+Description miscHintsDesc             = Description({                                      //
+                          /* English */ "Toggle some specific hints at locations other\n"  //
+                                        "than Gossip Stones.",                             //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+Description totAltarHintsDesc         = Description({                                      //
+                          /* English */ "The Temple of Time altar will reveal the locations"
                                         "of the Spiritual Stones as child and the\n"       //
                                         "Medallions as adult, but only if Compasses Show\n"//
                                         "Rewards is disabled.\n"                           //
                                         "\n"                                               //
                                         "It will also always reveal the requirements for\n"//
                                         "the Door of Time as child, and for Ganon Boss Key\n"
-                                        "and Rainbow Bridge as adult.";                    //
-Description ganonHintsDesc            = "Talking to Ganondorf in his boss room will tell\n"//
+                                        "and Rainbow Bridge as adult.",                    //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+Description ganonHintsDesc            = Description({                                      //
+                          /* English */ "Talking to Ganondorf in his boss room will tell\n"//
                                         "you the location of the Light Arrows and, if it\n"//
-                                        "was shuffled, the Master Sword.";                 //
+                                        "was shuffled, the Master Sword.",                 //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
 /*------------------------------                                                           //
 |  MAP AND COMPASS GIVES INFO  |                                                           //
 ------------------------------*/                                                           //

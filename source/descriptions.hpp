@@ -274,18 +274,18 @@ extern Description racingDesc;
 
 extern Description gossipStonesHintsDesc;
 
-extern Description miscHintsDesc;
-extern Description totAltarHintsDesc;
-extern Description ganonHintsDesc;
-
-extern Description compassesShowRewardsDesc;
-extern Description compassesShowWotHDesc;
-extern Description mapsShowDungeonModesDesc;
+extern Description obscureHintsDesc;
+extern Description ambiguousHintsDesc;
+extern Description clearHintsDesc;
 
 extern Description uselessHintsDesc;
 extern Description balancedHintsDesc;
 extern Description strongHintsDesc;
 extern Description veryStrongHintsDesc;
+
+extern Description miscHintsDesc;
+extern Description totAltarHintsDesc;
+extern Description ganonHintsDesc;
 
 extern Description compassesShowRewardsDesc;
 extern Description compassesShowWotHDesc;
