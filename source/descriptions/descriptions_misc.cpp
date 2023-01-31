@@ -95,13 +95,35 @@ Description veryStrongHintsDesc       = Description({                           
                           /* German  */ "",                                                //
                                         });                                                //
 /*------------------------------                                                           //
+|     MISCELLANEOUS HINTS      |                                                           //
+------------------------------*/                                                           //
+Description miscHintsDesc             = "Toggle some specific hints at locations other\n"  //
+                                        "than Gossip Stones.";                             //
+Description totAltarHintsDesc         = "The Temple of Time altar will reveal the locations"
+                                        "of the Spiritual Stones as child and the\n"       //
+                                        "Medallions as adult, but only if Compasses Show\n"//
+                                        "Rewards is disabled.\n"                           //
+                                        "\n"                                               //
+                                        "It will also always reveal the requirements for\n"//
+                                        "the Door of Time as child, and for Ganon Boss Key\n"
+                                        "and Rainbow Bridge as adult.";                    //
+Description ganonHintsDesc            = "Talking to Ganondorf in his boss room will tell\n"//
+                                        "you the location of the Light Arrows and, if it\n"//
+                                        "was shuffled, the Master Sword.";                 //
+/*------------------------------                                                           //
 |  MAP AND COMPASS GIVES INFO  |                                                           //
 ------------------------------*/                                                           //
 Description compassesShowRewardsDesc  = Description({                                      //
-                          /* English */ "If dungeon rewards are set to be shuffled at the\n"
-                                        "end of dungeons, the in-game menu will reveal\n"  //
-                                        "which reward is in each dungeon, if the compass\n"//
-                                        "for that dungeon has been collected.",            //
+                          /* English */ "Obtaining a dungeon compass will hint at the\n"   //
+                                        "location of a Spiritual Stone or Medallion.\n"    //
+                                        "\n"                                               //
+                                        "If rewards are at the end of dungeons, the compass"
+                                        "for dungeon X will show what reward is at X.\n"   //
+                                        "Otherwise, it will show the area for the reward\n"//
+                                        "that, in the vanilla game, is located at X.\n"    //
+                                        "\n"                                               //
+                                        "These hints will appear in the Gear menu on the\n"//
+                                        "empty reward slots.",                             //
                           /* French  */ "",                                                //
                           /* Spanish */ "",                                                //
                           /* Italian */ "",                                                //
