@@ -65,6 +65,7 @@ extern Translation randomOpt;
 extern Translation adultOpt;
 extern Translation fastOpt;
 extern Translation allOpt;
+extern Translation dungeonsOpt;
 
 // Open Settings
 extern Translation forestText;
@@ -82,7 +83,6 @@ extern Translation intendedOpt;
 extern Translation stonesOpt;
 extern Translation medallionsOpt;
 extern Translation rewardsOpt;
-extern Translation dungeonsOpt;
 extern Translation tokensOpt;
 
 // World Settings
@@ -117,3 +117,56 @@ extern Translation onBombchuOpt;
 extern Translation noDropOpt;
 extern Translation noRefillOpt;
 extern Translation mqOpt;
+
+// Shuffle Settings
+extern Translation shuffleRewardsText;
+extern Translation linksPocketText;
+extern Translation shuffleSongsText;
+extern Translation shopsanityText;
+extern Translation tokensanityText;
+extern Translation scrubsanityText;
+extern Translation shuffleCowsText;
+extern Translation shuffleKokiriSwordText;
+extern Translation shuffleMasterSwordText;
+extern Translation shuffleOcarinasText;
+extern Translation shuffleWeirdEggText;
+extern Translation shuffleZeldasLetterText;
+extern Translation shuffleGerudoTokenText;
+extern Translation shuffleBeansText;
+extern Translation shuffleMerchantsText;
+extern Translation shuffleAdultTradeText;
+extern Translation shuffleChestGameText;
+extern Translation shuffleFrogRupeesText;
+extern Translation mapsCompassesText;
+extern Translation keysanityText;
+extern Translation gerudoKeysText;
+extern Translation bossKeysanityText;
+extern Translation ganonsBossKeyText;
+extern Translation keyRingsText;
+extern Translation gerudoFortressText;
+
+extern Translation endOfDungeonsOpt;
+extern Translation anyDungeonOpt;
+extern Translation overworldOpt;
+extern Translation anywhereOpt;
+extern Translation dungeonRewardOpt;
+extern Translation advancementOpt;
+extern Translation anythingOpt;
+extern Translation nothingOpt;
+extern Translation songLocationsOpt;
+extern Translation allTokensOpt;
+extern Translation affordableOpt;
+extern Translation expensiveOpt;
+extern Translation randomPricesOpt;
+extern Translation onNoHintsOpt;
+extern Translation onWithHintsOpt;
+extern Translation onSeparateOpt;
+extern Translation onPackOpt;
+extern Translation startWithOpt;
+extern Translation ownDungeonOpt;
+extern Translation LACSVanillaOpt;
+extern Translation LACSMedallionsOpt;
+extern Translation LACSStonesOpt;
+extern Translation LACSRewardsOpt;
+extern Translation LACSDungeonsOpt;
+extern Translation LACSTokensOpt;
