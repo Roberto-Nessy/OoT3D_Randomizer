@@ -2,8 +2,12 @@
 
 // clang-format off
 /*------------------------------
-|            RACING            |                            *SCREEN WIDTH*
+|       Empty Description      |                            *SCREEN WIDTH*
 ------------------------------*/       /*--------------------------------------------------*/
+Description emptyDesc                 = Description({""});                                 //
+/*------------------------------                                                           //
+|            RACING            |                                                           //
+------------------------------*/                                                           //
 Description racingDesc                = Description({                                      //
                           /* English */ "Overrides personalization options that could\n"   //
                                         "affect how fast a seed is beaten.",               //

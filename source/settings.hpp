@@ -15,6 +15,7 @@
 #include "category.hpp"
 #include "cosmetics.hpp"
 #include "debug.hpp"
+#include "descriptions.hpp"
 #include "menu.hpp"
 #include "pool_functions.hpp"
 #include "utils.hpp"
@@ -22,34 +23,34 @@
 class Option {
   public:
     static Option Bool(std::string name_, std::vector<std::string> options_,
-                       std::vector<std::string_view> optionDescriptions_,
+                       std::vector<Description*> optionDescriptions_,
                        OptionCategory category_ = OptionCategory::Setting, u8 defaultOption_ = 0,
                        bool defaultHidden_ = false) {
-        return Option{ false,     u8{ 0 },        std::move(name_), std::move(options_), std::move(optionDescriptions_),
+        return Option{ false,     u8{ 0 },        std::move(name_), std::move(options_), optionDescriptions_,
                        category_, defaultOption_, defaultHidden_ };
     }
 
     static Option U8(std::string name_, std::vector<std::string> options_,
-                     std::vector<std::string_view> optionDescriptions_,
+                     std::vector<Description*> optionDescriptions_,
                      OptionCategory category_ = OptionCategory::Setting, u8 defaultOption_ = 0,
                      bool defaultHidden_ = false) {
-        return Option{ u8{ 0 },   u8{ 0 },        std::move(name_), std::move(options_), std::move(optionDescriptions_),
+        return Option{ u8{ 0 },   u8{ 0 },        std::move(name_), std::move(options_), optionDescriptions_,
                        category_, defaultOption_, defaultHidden_ };
     }
 
     static Option Bool(u8 indent_, std::string name_, std::vector<std::string> options_,
-                       std::vector<std::string_view> optionDescriptions_,
+                       std::vector<Description*> optionDescriptions_,
                        OptionCategory category_ = OptionCategory::Setting, u8 defaultOption_ = 0,
                        bool defaultHidden_ = false) {
-        return Option{ false,     indent_,        std::move(name_), std::move(options_), std::move(optionDescriptions_),
+        return Option{ false,     indent_,        std::move(name_), std::move(options_), optionDescriptions_,
                        category_, defaultOption_, defaultHidden_ };
     }
 
     static Option U8(u8 indent_, std::string name_, std::vector<std::string> options_,
-                     std::vector<std::string_view> optionDescriptions_,
+                     std::vector<Description*> optionDescriptions_,
                      OptionCategory category_ = OptionCategory::Setting, u8 defaultOption_ = 0,
                      bool defaultHidden_ = false) {
-        return Option{ u8{ 0 },   indent_,        std::move(name_), std::move(options_), std::move(optionDescriptions_),
+        return Option{ u8{ 0 },   indent_,        std::move(name_), std::move(options_), optionDescriptions_,
                        category_, defaultOption_, defaultHidden_ };
     }
 
@@ -120,9 +121,9 @@ class Option {
     std::string_view GetSelectedOptionDescription() const {
         // bounds checking
         if (selectedOption >= optionDescriptions.size()) {
-            return optionDescriptions[optionDescriptions.size() - 1];
+            return *optionDescriptions[optionDescriptions.size() - 1];
         }
-        return optionDescriptions[selectedOption];
+        return *optionDescriptions[selectedOption];
     }
 
     u8 GetSelectedOptionIndex() const {
@@ -224,10 +225,10 @@ class Option {
 
   private:
     Option(u8 var_, u8 indent_, std::string name_, std::vector<std::string> options_,
-           std::vector<std::string_view> optionDescriptions_, OptionCategory category_, u8 defaultOption_,
+           std::vector<Description*> optionDescriptions_, OptionCategory category_, u8 defaultOption_,
            bool defaultHidden_)
         : var(var_), indent(indent_), name(std::move(name_)), options(std::move(options_)),
-          optionDescriptions(std::move(optionDescriptions_)), category(category_), defaultOption(defaultOption_),
+          optionDescriptions(optionDescriptions_), category(category_), defaultOption(defaultOption_),
           defaultHidden(defaultHidden_) {
         selectedOption = defaultOption;
         hidden         = defaultHidden;
@@ -235,10 +236,10 @@ class Option {
     }
 
     Option(bool var_, u8 indent_, std::string name_, std::vector<std::string> options_,
-           std::vector<std::string_view> optionDescriptions_, OptionCategory category_, u8 defaultOption_,
+           std::vector<Description*> optionDescriptions_, OptionCategory category_, u8 defaultOption_,
            bool defaultHidden_)
         : var(var_), indent(indent_), name(std::move(name_)), options(std::move(options_)),
-          optionDescriptions(std::move(optionDescriptions_)), category(category_), defaultOption(defaultOption_),
+          optionDescriptions(optionDescriptions_), category(category_), defaultOption(defaultOption_),
           defaultHidden(defaultHidden_) {
         selectedOption = defaultOption;
         hidden         = defaultHidden;
@@ -249,7 +250,7 @@ class Option {
     u8 indent = 0;
     std::string name;
     std::vector<std::string> options;
-    std::vector<std::string_view> optionDescriptions;
+    std::vector<Description*> optionDescriptions;
     u8 selectedOption = 0;
     u8 delayedOption  = 0;
     bool locked       = false;
@@ -267,36 +268,36 @@ enum class MenuType {
 
 class Menu {
   public:
-    static Menu SubMenu(std::string name_, std::vector<Option*>* settingsList_, std::string_view description_ = "",
+    static Menu SubMenu(std::string name_, std::vector<Option*>* settingsList_, Description* description_ = &emptyDesc,
                         bool printInSpoiler_ = true) {
-        return Menu{ std::move(name_), MenuType::SubMenu,       std::move(settingsList_),
-                     OPTION_MENU,      std::move(description_), printInSpoiler_ };
+        return Menu{ std::move(name_), MenuType::SubMenu, std::move(settingsList_),
+                     OPTION_MENU,      description_,      printInSpoiler_ };
     }
 
-    static Menu SubMenu(std::string name_, std::vector<Menu*>* itemsList_, std::string_view description_ = "",
+    static Menu SubMenu(std::string name_, std::vector<Menu*>* itemsList_, Description* description_ = &emptyDesc,
                         bool printInSpoiler_ = true) {
-        return Menu{ std::move(name_), MenuType::SubMenu,       std::move(itemsList_),
-                     SUB_MENU,         std::move(description_), printInSpoiler_ };
+        return Menu{ std::move(name_), MenuType::SubMenu, std::move(itemsList_),
+                     SUB_MENU,         description_,      printInSpoiler_ };
     }
 
-    static Menu Action(std::string name_, u8 mode_, std::string_view description_ = "") {
-        return Menu{ std::move(name_), MenuType::Action, std::move(mode_), std::move(description_) };
+    static Menu Action(std::string name_, u8 mode_, Description* description_ = &emptyDesc) {
+        return Menu{ std::move(name_), MenuType::Action, std::move(mode_), description_ };
     }
 
     Menu(std::string name_, MenuType type_, std::vector<Option*>* settingsList_, u8 mode_,
-         std::string_view description_ = "", bool printInSpoiler_ = true)
+         Description* description_ = &emptyDesc, bool printInSpoiler_ = true)
         : name(std::move(name_)), type(type_), settingsList(std::move(settingsList_)), mode(mode_),
-          description(std::move(description_)), printInSpoiler(printInSpoiler_) {
+          description(description_), printInSpoiler(printInSpoiler_) {
     }
 
     Menu(std::string name_, MenuType type_, std::vector<Menu*>* itemsList_, u8 mode_,
-         std::string_view description_ = "", bool printInSpoiler_ = true)
+         Description* description_ = &emptyDesc, bool printInSpoiler_ = true)
         : name(std::move(name_)), type(type_), itemsList(std::move(itemsList_)), mode(mode_),
-          description(std::move(description_)), printInSpoiler(printInSpoiler_) {
+          description(description_), printInSpoiler(printInSpoiler_) {
     }
 
-    Menu(std::string name_, MenuType type_, u8 mode_, std::string_view description_ = "")
-        : name(std::move(name_)), type(type_), mode(mode_), description(std::move(description_)) {
+    Menu(std::string name_, MenuType type_, u8 mode_, Description* description_ = &emptyDesc)
+        : name(std::move(name_)), type(type_), mode(mode_), description(description_) {
     }
 
     void ResetMenuIndex() {
@@ -321,7 +322,7 @@ class Menu {
     u16 menuIdx                  = 0;
     u16 settingBound             = 0;
     int selectedSetting          = 0;
-    std::string_view description = "";
+    Description* description     = &emptyDesc;
     bool printInSpoiler          = true;
 };
 

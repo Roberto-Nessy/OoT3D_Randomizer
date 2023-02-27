@@ -452,7 +452,7 @@ void PrintMainMenu() {
         }
     }
 
-    PrintDescription(currentMenu->itemsList->at(currentMenu->menuIdx)->description);
+    PrintDescription(*(currentMenu->itemsList->at(currentMenu->menuIdx)->description));
 }
 
 void PrintOptionSubMenu() {
@@ -577,7 +577,7 @@ void PrintSubMenu() {
         }
     }
 
-    PrintDescription(currentMenu->itemsList->at(currentMenu->menuIdx)->description);
+    PrintDescription(*(currentMenu->itemsList->at(currentMenu->menuIdx)->description));
 }
 
 void PrintPremadePresetsMenu(u32 kDown) {
@@ -601,7 +601,7 @@ void PrintPremadePresetsMenu(u32 kDown) {
     }
 
     if (!(kDown & KEY_A)) {
-        PrintDescription(premadePresets[currentMenu->menuIdx]->description);
+        PrintDescription(*(premadePresets[currentMenu->menuIdx]->description));
     }
 }
 

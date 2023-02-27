@@ -31,6 +31,8 @@ class Description {
     u16 hasLanguage = 0;
 };
 
+extern Description emptyDesc;
+
 extern Description menuOpenSettingsDesc;
 extern Description menuGlitchOptionsDesc;
 extern Description menuPersonalizationDesc;
@@ -370,9 +372,22 @@ extern Description mp_SharedAmmoDesc;
 extern Description silenceNaviDesc;
 extern Description ignoreMaskReactionDesc;
 
+extern Description randomChoiceDesc;
+extern Description randomColorDesc;
+extern Description customColorDesc;
+extern Description colorListDesc;
+
 extern Description naviColorsDesc;
 extern Description necessarySimpleModeDesc;
 extern Description alwaysSimpleModeDesc;
+extern Description swordTrailInnerDesc;
+extern Description swordTrailOuterDesc;
+extern Description swordTrailDurationDesc;
+extern Description boomerangTrailDesc;
+extern Description boomerangDurationDesc;
+extern Description bombchuTrailInnerDesc;
+extern Description bombchuTrailOuterDesc;
+extern Description bombchuDurationDesc;
 
 extern Description coloredKeysDesc;
 extern Description coloredBossKeysDesc;

@@ -12,7 +12,6 @@
 
 #include "category.hpp"
 #include "settings.hpp"
-#include "descriptions.hpp"
 #include "tinyxml2.h"
 #include "utils.hpp"
 
@@ -225,7 +224,7 @@ void LoadCachedCosmetics() {
 }
 
 PremadePreset presetNintended = { "Nintended",
-                                  presetNintendedDesc,
+                                  &presetNintendedDesc,
                                   {
                                       // Open Settings
                                       { &Settings::OpenForest, OPENFOREST_CLOSED },
@@ -241,7 +240,7 @@ PremadePreset presetNintended = { "Nintended",
                                   } };
 
 PremadePreset presetAllsanity = { "Allsanity",
-                                  presetAllsanityDesc,
+                                  &presetAllsanityDesc,
                                   {
                                       // World Settings
                                       { &Settings::ShuffleEntrances, ON },
@@ -286,7 +285,7 @@ PremadePreset presetAllsanity = { "Allsanity",
                                   } };
 
 PremadePreset presetRacing = { "Racing",
-                               presetRacingDesc,
+                               &presetRacingDesc,
                                {
                                    // Open Settings
                                    { &Settings::OpenForest, OPENFOREST_OPEN },
@@ -377,7 +376,7 @@ PremadePreset presetRacing = { "Racing",
                                } };
 
 PremadePreset presetVanilla = { "Vanilla Plus",
-                                presetVanillaDesc,
+                                &presetVanillaDesc,
                                 {
                                     // Open Settings
                                     { &Settings::OpenForest, OPENFOREST_CLOSED },
@@ -411,7 +410,7 @@ PremadePreset presetVanilla = { "Vanilla Plus",
                                 } };
 
 PremadePreset presetFullChaos = { "Full Chaos",
-                                  presetFullChaosDesc,
+                                  &presetFullChaosDesc,
                                   {
                                       // Open Settings
                                       { &Settings::OpenForest, OPENFOREST_CLOSED },

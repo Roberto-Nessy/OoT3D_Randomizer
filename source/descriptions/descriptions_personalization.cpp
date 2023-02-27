@@ -92,6 +92,38 @@ Description ignoreMaskReactionDesc    = Description({                           
                           /* German  */ "",                                                //
                                         });                                                //
 /*------------------------------                                                           //
+|       COSMETIC OPTIONS       |                                                           //
+------------------------------*/                                                           //
+Description randomChoiceDesc          = Description({                                      //
+                          /* English */ "A random color from the list of colors will be\n" //
+                                        "chosen.",                                         //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+Description randomColorDesc           = Description({                                      //
+                          /* English */ "A completely random color will be chosen.",       //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+Description customColorDesc           = Description({                                      //
+                          /* English */ "Press A and type in a custom 6 digit hex color.", //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+Description colorListDesc             = Description({                                      //
+                          /* English */ "This will only affect the color on Link's model.",//
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+/*------------------------------                                                           //
 |      NAVI & TRAIL COLORS     |                                                           //
 ------------------------------*/                                                           //
 Description naviColorsDesc            = Description({                                      //
@@ -122,6 +154,68 @@ Description alwaysSimpleModeDesc      = Description({                           
                           /* English */ "All boomerang and sword trails will use the plain\n"
                                         "texture from OoT, regardless of what color is\n"  //
                                         "chosen.",                                         //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+Description swordTrailInnerDesc       = Description({                                      //
+                          /* English */ "Select the color that appears from the base\n"    //
+                                        "of the sword.",                                   //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+Description swordTrailOuterDesc       = Description({                                      //
+                          /* English */ "Select the color that appears from the tip\n"     //
+                                        "of the sword.",                                   //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+Description swordTrailDurationDesc    = Description({                                      //
+                          /* English */ "Select the duration for sword trails.\n\n"        //
+                                        "If too many trails are on screen, the duration\n" //
+                                        "may be capped at Long for some of them.",         //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+Description boomerangTrailDesc        = Description({                                      //
+                          /* English */ "Select the color for boomerang trails.",          //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+Description boomerangDurationDesc     = Description({                                      //
+                          /* English */ "Select the duration for boomerang trails.",       //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+Description bombchuTrailInnerDesc     = Description({                                      //
+                          /* English */ "Select the color for the center of the\n"         //
+                                        "bombchu trail.",                                  //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+Description bombchuTrailOuterDesc     = Description({                                      //
+                          /* English */ "Select the color for the sides of the\n"          //
+                                        "bombchu trail.",                                  //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+Description bombchuDurationDesc       = Description({                                      //
+                          /* English */ "Select the duration for bombchu trails.",         //
                           /* French  */ "",                                                //
                           /* Spanish */ "",                                                //
                           /* Italian */ "",                                                //

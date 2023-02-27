@@ -5,6 +5,7 @@
 
 #include <settings.hpp>
 #include <item_location.hpp>
+#include <descriptions.hpp>
 
 enum class OptionCategory;
 
@@ -21,7 +22,7 @@ void LoadCachedCosmetics();
 
 typedef struct {
     std::string_view name;
-    std::string_view description;
+    Description*     description;
     std::vector<std::pair<Option*, u8>> optionOverrides;
     std::vector<LocationKey> excludedLocations;
 } PremadePreset;

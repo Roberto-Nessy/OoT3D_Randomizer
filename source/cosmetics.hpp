@@ -10,10 +10,6 @@ constexpr std::string_view RANDOM_COLOR_STR    = "Random Color";
 constexpr std::string_view CUSTOM_COLOR_STR    = "Custom #FFFFFF";
 constexpr std::string_view CUSTOM_COLOR_PREFIX = "Custom #";
 
-constexpr std::string_view RANDOM_CHOICE_DESC = "A random color from the list of colors will be\nchosen.";
-constexpr std::string_view RANDOM_COLOR_DESC  = "A completely random color will be chosen.";
-constexpr std::string_view CUSTOM_COLOR_DESC  = "Press A and type in a custom 6 digit hex color.";
-
 enum CosmeticSettings {
     RANDOM_CHOICE,
     RANDOM_COLOR,

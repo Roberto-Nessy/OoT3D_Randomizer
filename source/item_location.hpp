@@ -295,14 +295,14 @@ class ItemLocation {
     void AddExcludeOption() {
         // add option to forbid any location from progress items
         if (name.length() < 23) {
-            excludedOption = Option::Bool(name, { "Include", "Exclude" }, { excludeLocationDesc });
+            excludedOption = Option::Bool(name, { "Include", "Exclude" }, { &excludeLocationDesc });
         } else {
             // insert a newline character if the text is too long for one row
             size_t lastSpace        = name.rfind(' ', 23);
             std::string settingText = name;
             settingText.replace(lastSpace, 1, "\n ");
 
-            excludedOption = Option::Bool(settingText, { "Include", "Exclude" }, { excludeLocationDesc });
+            excludedOption = Option::Bool(settingText, { "Include", "Exclude" }, { &excludeLocationDesc });
         }
 
         Settings::excludeLocationsOptionsVector[collectionCheckGroup].push_back(&excludedOption);
@@ -438,7 +438,7 @@ class ItemLocation {
     bool addedToPool      = false;
     ItemKey placedItem    = NONE;
     ItemKey delayedItem   = NONE;
-    Option excludedOption = Option::Bool(name, { "Include", "Exclude" }, { "", "" });
+    Option excludedOption = Option::Bool(name, { "Include", "Exclude" }, { &emptyDesc, &emptyDesc });
     u16 price             = 0;
     SpoilerCollectionCheck collectionCheck;
     SpoilerCollectionCheckGroup collectionCheckGroup;
