@@ -303,32 +303,30 @@ Description shuffleBGMDesc            = Description({                           
                           /* Italian */ "",                                                //
                           /* German  */ "",                                                //
                                         });                                                //
-Description fanfaresOffDesc           = Description({                                      //
-                          /* English */ "Fanfares are not shuffled.",                      //
+Description shuffleMelodiesDesc       = Description({                                      //
+                          /* English */ "Shuffle played-once music.\n"                     //
+                                        "Mixed allows any melody to appear anywhere.\n"    //
+                                        "The group categories are Fanfares,\n"             //
+                                        "and Ocarina Songs.\n"                             //
+                                        "\"Own\" is for Custom Music, limiting the original\n"
+                                        "music to only appear at it's original place.\n",  //
                           /* French  */ "",                                                //
                           /* Spanish */ "",                                                //
                           /* Italian */ "",                                                //
                           /* German  */ "",                                                //
                                         });                                                //
-Description onlyFanfaresDesc          = Description({                                      //
-                          /* English */ "Fanfares and ocarina songs are shuffled in\n"     //
-                                        "separate pools.",                                 //
+Description customMusicDesc           = Description({                                      //
+                          /* English */ "Add custom music to the pool. The sound archive\n"//
+                                        "has to be placed in the Custom Music folder.",    //
                           /* French  */ "",                                                //
                           /* Spanish */ "",                                                //
                           /* Italian */ "",                                                //
                           /* German  */ "",                                                //
                                         });                                                //
-Description fanfaresOcarinaDesc       = Description({                                      //
-                          /* English */ "Fanfares and ocarina songs are shuffled together\n"
-                                        "in the same pool.",                               //
-                          /* French  */ "",                                                //
-                          /* Spanish */ "",                                                //
-                          /* Italian */ "",                                                //
-                          /* German  */ "",                                                //
-                                        });                                                //
-Description shuffleOcaMusicDesc       = Description({                                      //
-                          /* English */ "The music that plays back after you play an\n"    //
-                                        "ocarina song is randomized.",                     //
+Description customMusicOnlyDesc       = Description({                                      //
+                          /* English */ "Excludes the game's original music from the pool.\n"
+                                        "If there's not enough custom music, the original\n"
+                                        "song with be used.",                              //
                           /* French  */ "",                                                //
                           /* Spanish */ "",                                                //
                           /* Italian */ "",                                                //

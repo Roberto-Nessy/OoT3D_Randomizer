@@ -224,12 +224,8 @@ SECTIONS
 		*(.patch_FastOwlCutscenes)
 	}
 
-	.patch_BombchuShopInfinitePurchases 0x188D4C : {
+	.patch_BombchuShopInfinitePurchases 0x188D3C : {
 		*(.patch_BombchuShopInfinitePurchases)
-	}
-
-	.patch_DecoratedChest 0x189E88 : {
-		*(.patch_DecoratedChest)
 	}
 
 	.patch_BusinessScrubTable 0x18A634 : {
@@ -546,6 +542,10 @@ SECTIONS
 
 	.patch_MultiplyPlayerSpeed 0x251D34 : {
 		*(.patch_MultiplyPlayerSpeed)
+	}
+
+	.patch_PermadeathDeleteSave 0x252424 : {
+		*(.patch_PermadeathDeleteSave)
 	}
 
 	.patch_SkipDaruniaDanceThree 0x257F00 : {
@@ -1124,6 +1124,10 @@ SECTIONS
 		*(.patch_LabScientistIgnoreEyedropsInInventory)
 	}
 
+	.patch_FastChestsTwo 0x3F1048 : {
+		*(.patch_FastChestsTwo)
+	}
+
 	.patch_HandleDoorDestroyCustomModels 0x3F1B88 : {
 		*(.patch_HandleDoorDestroyCustomModels)
 	}
@@ -1178,6 +1182,10 @@ SECTIONS
 
 	.patch_CurseTrapDizzyButtons 0x41AC00 : {
 		*(.patch_CurseTrapDizzyButtons)
+	}
+
+	.patch_PermadeathSkipMenu 0x41C9A4 : {
+		*(.patch_PermadeathSkipMenu)
 	}
 
 	.patch_SaveMenuIgnoreOpen 0x42EC24 : {
@@ -1318,6 +1326,10 @@ SECTIONS
 
 	.patch_DeathHandleBButton 0x458CC8 : {
 		*(.patch_DeathHandleBButton)
+	}
+
+	.patch_PermadeathForceQuit 0x458E40 : {
+		*(.patch_PermadeathForceQuit)
 	}
 
 	.patch_SetGameOverEntrance 0x458E5C : {

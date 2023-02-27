@@ -312,9 +312,11 @@ typedef enum {
 } ChestAnimationsSetting;
 
 typedef enum {
-    CHESTSIZE_VANILLA,
-    CHESTSIZE_MATCHCONTENT,
-} ChestSizeSetting;
+    CHESTAPPEARANCE_VANILLA,
+    CHESTAPPEARANCE_TEXTURE,
+    CHESTAPPEARANCE_SIZE_AND_TEXTURE,
+    CHESTAPPEARANCE_CLASSIC,
+} ChestAppearanceSetting;
 
 typedef enum {
     RANDOMTRAPS_OFF,
@@ -372,6 +374,13 @@ typedef enum {
     STARTINGBGS_GIANTS_KNIFE,
     STARTINGBGS_BIGGORON_SWORD,
 } StartingBiggoronSwordSetting;
+
+typedef enum {
+    SHUFFLEMUSIC_OFF,
+    SHUFFLEMUSIC_MIXED,
+    SHUFFLEMUSIC_GROUPED,
+    SHUFFLEMUSIC_OWN,
+} ShuffleMusicSetting;
 
 typedef enum {
     SHUFFLESFX_OFF,
@@ -522,6 +531,7 @@ typedef struct {
     u8 fastBunnyHood;
 
     u8 damageMultiplier;
+    u8 permadeath;
     u8 startingTime;
     u8 gossipStoneHints;
     u8 totAltarHints;
@@ -530,7 +540,7 @@ typedef struct {
     u8 compassesShowWotH;
     u8 mapsShowDungeonMode;
     u8 chestAnimations;
-    u8 chestSize;
+    u8 chestAppearance;
     u8 generateSpoilerLog;
     u8 ingameSpoilers;
     u8 menuOpeningButton;

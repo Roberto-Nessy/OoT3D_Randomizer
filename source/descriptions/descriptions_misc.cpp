@@ -186,6 +186,17 @@ Description damageMultiDesc           = Description({                           
                           /* German  */ "",                                                //
                                         });                                                //
 /*------------------------------                                                           //
+|          PERMADEATH          |                                                           //
+------------------------------*/                                                           //
+Description permadeathDesc            = Description({                                      //
+                          /* English */ "Dying deletes your save file and kicks you back\n"//
+                                        "out to the main menu.",                           //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+/*------------------------------                                                           //
 |        STARTING TIME         |                                                           //
 ------------------------------*/                                                           //
 Description startingTimeDesc          = Description({                                      //
@@ -209,9 +220,37 @@ Description chestAnimDesc             = Description({                           
 /*------------------------------                                                           //
 |     CHEST SIZE AND COLOR     |                                                           //
 ------------------------------*/                                                           //
-Description chestSizeDesc             = Description({                                      //
-                          /* English */ "This option will change the appearance of all\n"  //
-                                        "regular chests depending on their contents:\n"    //
+Description chestVanillaDesc          = Description({                                      //
+                          /* English */ "Chests will appear as they do in the base game.", //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+Description chestTextureDesc          = Description({                                      //
+                          /* English */ "Chest texture will reflect its contents\n"        //
+                                        "regardless of size.\n"                            //
+                                        "Major Items    =    Gilded Chests\n"              //
+                                        "Lesser Items   =    Normal Chests\n"              //
+                                        "Boss Keys      =    Fancy Chests\n"               //
+                                        "Small Keys     =    Silver Chests",               //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+Description chestSizeTextureDesc      = Description({                                      //
+                          /* English */ "In addition to the texture change, major items\n" //
+                                        "and boss keys will be in big chests, and\n"       //
+                                        "everything else will be in small chests.",        //
+                          /* French  */ "",                                                //
+                          /* Spanish */ "",                                                //
+                          /* Italian */ "",                                                //
+                          /* German  */ "",                                                //
+                                        });                                                //
+Description chestClassicDesc          = Description({                                      //
+                          /* English */ "This is the behavior of CSMC in previous\n"       //
+                                        "versions of the randomizer.\n"                    //
                                         "Major Items    =    Big Wooden Chests\n"          //
                                         "Lesser Items   =    Small Wooden Chests\n"        //
                                         "Boss Keys      =    Big Fancy Chests\n"           //

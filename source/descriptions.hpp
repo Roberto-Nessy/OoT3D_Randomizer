@@ -295,6 +295,8 @@ extern Description mapsShowDungeonModesDesc;
 
 extern Description damageMultiDesc;
 
+extern Description permadeathDesc;
+
 extern Description startingTimeDesc;
 
 extern Description locationsReachableDesc;
@@ -302,7 +304,10 @@ extern Description nightGSDesc;
 
 extern Description chestAnimDesc;
 
-extern Description chestSizeDesc;
+extern Description chestVanillaDesc;
+extern Description chestTextureDesc;
+extern Description chestSizeTextureDesc;
+extern Description chestClassicDesc;
 
 extern Description ingameSpoilersShowDesc;
 extern Description ingameSpoilersHideDesc;
@@ -400,10 +405,9 @@ extern Description mirrorWorldRandomDesc;
 
 extern Description musicRandoDesc;
 extern Description shuffleBGMDesc;
-extern Description fanfaresOffDesc;
-extern Description onlyFanfaresDesc;
-extern Description fanfaresOcarinaDesc;
-extern Description shuffleOcaMusicDesc;
+extern Description shuffleMelodiesDesc;
+extern Description customMusicDesc;
+extern Description customMusicOnlyDesc;
 
 extern Description shuffleSFXOff;
 extern Description shuffleSFXAll;

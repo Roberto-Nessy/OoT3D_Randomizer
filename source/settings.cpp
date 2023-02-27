@@ -325,9 +325,10 @@ Option CompassesShowReward = Option::U8  ("Compasses Show Rewards", {noOpt, yesO
 Option CompassesShowWotH   = Option::U8  ("Compasses Show WotH",    {noOpt, yesOpt},                                                          {&compassesShowWotHDesc},                                                                                          OptionCategory::Setting,    ON);
 Option MapsShowDungeonMode = Option::U8  ("Maps Show Dungeon Modes",{noOpt, yesOpt},                                                          {&mapsShowDungeonModesDesc},                                                                                       OptionCategory::Setting,    ON);
 Option DamageMultiplier    = Option::U8  ("Damage Multiplier",      {"x1/2", "x1", "x2", "x4", "x8", "x16", "OHKO"},                        {&damageMultiDesc},                                                                                                OptionCategory::Setting,    DAMAGEMULTIPLIER_DEFAULT);
+Option Permadeath          = Option::Bool("Permadeath",             {offOpt, onOpt},                                                          {&permadeathDesc});
 Option StartingTime        = Option::U8  ("Starting Time",          {"Day", "Night"},                                                       {&startingTimeDesc});
 Option ChestAnimations     = Option::Bool("Chest Animations",       {"Always Fast", "Match Contents"},                                      {&chestAnimDesc});
-Option ChestSize           = Option::Bool("Chest Size and Color",   {vanillaOpt, "Match Contents"},                                          {&chestSizeDesc});
+Option ChestAppearance     = Option::U8  ("Chest Appearance Mod",   {"Vanilla", "Texture", "Size & Texture", "Classic CSMC"},               {&chestVanillaDesc, &chestTextureDesc, &chestSizeTextureDesc, &chestClassicDesc});
 Option GenerateSpoilerLog  = Option::Bool("Generate Spoiler Log",   {noOpt, yesOpt},                                                          {&emptyDesc},                                                                                                             OptionCategory::Setting,    ON);
 Option IngameSpoilers      = Option::Bool("Ingame Spoilers",        {"Hide", "Show"},                                                       {&ingameSpoilersHideDesc, &ingameSpoilersShowDesc});
 Option RandomTrapDmg       = Option::U8  ("Random Trap Damage",     {offOpt, "Basic", "Advanced"},                                           {&randomTrapDmgDesc, &basicTrapDmgDesc, &advancedTrapDmgDesc},                                                       OptionCategory::Setting,    RANDOMTRAPS_BASIC);
@@ -348,9 +349,10 @@ std::vector<Option *> miscOptions = {
     &CompassesShowWotH,
     &MapsShowDungeonMode,
     &DamageMultiplier,
+    &Permadeath,
     &StartingTime,
     &ChestAnimations,
-    &ChestSize,
+    &ChestAppearance,
     &GenerateSpoilerLog,
     &IngameSpoilers,
     &RandomTrapDmg,
@@ -1201,13 +1203,13 @@ std::vector<Option *> cosmeticOptions = {
     &MirrorWorld,
 };
 
-static std::vector<std::string> fanfareOptions = {offOpt, "Only Fanfares", "Fanfares + \nOcarina Music"};
-static std::vector<Description*> fanfareDescriptions = {&fanfaresOffDesc, &onlyFanfaresDesc, &fanfaresOcarinaDesc};
+static std::vector<std::string> musicOptions = {offOpt, "On (Mixed)", "On (Grouped)", "On (Own)"};
 
-Option ShuffleMusic =    Option::Bool("Shuffle Music",            {offOpt, onOpt},                         {&musicRandoDesc},                                                                                                                                     OptionCategory::Cosmetic);
-Option ShuffleBGM =      Option::U8  (2, "Shuffle BGM",           {offOpt, "On (Grouped)", "On (Mixed)"}, {&shuffleBGMDesc},                                                                                                                                     OptionCategory::Cosmetic,               2); // On (Mixed)
-Option ShuffleFanfares = Option::U8  (2, "Shuffle Fanfares",      {fanfareOptions},                      {fanfareDescriptions},                                                                                                                                OptionCategory::Cosmetic,               1); // Fanfares only
-Option ShuffleOcaMusic = Option::Bool(2, "Shuffle Ocarina Music", {offOpt, onOpt},                         {&shuffleOcaMusicDesc},                                                                                                                                OptionCategory::Cosmetic,               ON);
+Option ShuffleMusic    = Option::Bool("Shuffle Music",                   {offOpt, onOpt},                             {&musicRandoDesc},                                                                                                                          OptionCategory::Cosmetic);
+Option ShuffleBGM      = Option::U8  (2, "Shuffle BGM",                  {musicOptions},                            {&shuffleBGMDesc},                                                                                                                          OptionCategory::Cosmetic,               SHUFFLEMUSIC_MIXED);
+Option ShuffleMelodies = Option::U8  (2, "Shuffle Melodies",             {musicOptions},                            {&shuffleMelodiesDesc},                                                                                                                     OptionCategory::Cosmetic,               SHUFFLEMUSIC_GROUPED);
+Option CustomMusic     = Option::Bool(2, "Custom Music",                 {offOpt, onOpt},                             {&customMusicDesc},                                                                                                                         OptionCategory::Cosmetic);
+Option CustomMusicOnly = Option::Bool(4, "Custom Music Only",            {offOpt, onOpt},                             {&customMusicOnlyDesc},                                                                                                                     OptionCategory::Cosmetic);
 
 Option ShuffleSFX              = Option::U8  ("Shuffle SFX",             {offOpt, allOpt, "Scene Specific", "Chaos"}, {&shuffleSFXOff, &shuffleSFXAll, &shuffleSFXSceneSpecific, &shuffleSFXChaos},                                                                  OptionCategory::Cosmetic);
 Option ShuffleSFXFootsteps     = Option::Bool(2, "Include Footsteps",    {noOpt, yesOpt},                             {&emptyDesc},                                                                                                                                      OptionCategory::Cosmetic,               ON);
@@ -1217,8 +1219,9 @@ Option ShuffleSFXCategorically = Option::Bool(2, "Categorical Shuffle",  {offOpt
 std::vector<Option*> audioOptions = {
     &ShuffleMusic,
     &ShuffleBGM,
-    &ShuffleFanfares,
-    &ShuffleOcaMusic,
+    &ShuffleMelodies,
+    &CustomMusic,
+    &CustomMusicOnly,
     &ShuffleSFX,
     &ShuffleSFXFootsteps,
     &ShuffleSFXLinkVoice,
@@ -1418,9 +1421,10 @@ SettingsContext FillContext() {
     ctx.compassesShowWotH   = CompassesShowWotH.Value<u8>();
     ctx.mapsShowDungeonMode = MapsShowDungeonMode.Value<u8>();
     ctx.damageMultiplier    = DamageMultiplier.Value<u8>();
+    ctx.permadeath          = (Permadeath) ? 1 : 0;
     ctx.startingTime        = StartingTime.Value<u8>();
     ctx.chestAnimations     = (ChestAnimations) ? 1 : 0;
-    ctx.chestSize           = (ChestSize) ? 1 : 0;
+    ctx.chestAppearance     = ChestAppearance.Value<u8>();
     ctx.generateSpoilerLog  = (GenerateSpoilerLog) ? 1 : 0;
     ctx.ingameSpoilers      = (IngameSpoilers) ? 1 : 0;
     ctx.menuOpeningButton   = MenuOpeningButton.Value<u8>();
@@ -2433,15 +2437,20 @@ void ForceChange(u32 kDown, Option* currentSetting) {
     // Audio
     if (ShuffleMusic) {
         ShuffleBGM.Unhide();
-        ShuffleFanfares.Unhide();
-        if (ShuffleFanfares.Is(2)) // Fanfares + ocarina
-            ShuffleOcaMusic.Hide();
-        else
-            ShuffleOcaMusic.Unhide();
+        ShuffleMelodies.Unhide();
+        CustomMusic.Unhide();
+        if (CustomMusic) {
+            CustomMusicOnly.Unhide();
+        } else {
+            CustomMusicOnly.Hide();
+            CustomMusicOnly.SetSelectedIndex(OFF);
+        }
     } else {
         ShuffleBGM.Hide();
-        ShuffleFanfares.Hide();
-        ShuffleOcaMusic.Hide();
+        ShuffleMelodies.Hide();
+        CustomMusic.Hide();
+        CustomMusicOnly.Hide();
+        CustomMusicOnly.SetSelectedIndex(OFF);
     }
 
     if (ShuffleSFX) {
@@ -2876,26 +2885,21 @@ void UpdateSettings() {
 
     InitMusicRandomizer();
     if (ShuffleMusic) {
-        if (ShuffleBGM.Is(1)) {
-            Music::ShuffleSequences(Music::SeqType::SEQ_BGM_WORLD);
-            Music::ShuffleSequences(Music::SeqType::SEQ_BGM_EVENT);
-            Music::ShuffleSequences(Music::SeqType::SEQ_BGM_BATTLE);
-        } else if (ShuffleBGM.Is(2)) {
+        if (ShuffleBGM.Is(SHUFFLEMUSIC_MIXED)) {
             Music::ShuffleSequences(Music::SeqType::SEQ_BGM_WORLD | Music::SeqType::SEQ_BGM_EVENT |
                                     Music::SeqType::SEQ_BGM_BATTLE);
             Music::ShuffleSequences(Music::SeqType::SEQ_BGM_ERROR);
+        } else if (ShuffleBGM.Is(SHUFFLEMUSIC_GROUPED)) {
+            Music::ShuffleSequences(Music::SeqType::SEQ_BGM_WORLD);
+            Music::ShuffleSequences(Music::SeqType::SEQ_BGM_EVENT);
+            Music::ShuffleSequences(Music::SeqType::SEQ_BGM_BATTLE);
         }
 
-        if (ShuffleFanfares.Is(2)) {
+        if (ShuffleMelodies.Is(SHUFFLEMUSIC_MIXED)) {
             Music::ShuffleSequences(Music::SeqType::SEQ_FANFARE | Music::SeqType::SEQ_OCARINA);
-        } else {
-            if (ShuffleFanfares.Is(1)) {
-                Music::ShuffleSequences(Music::SeqType::SEQ_FANFARE);
-            }
-
-            if (ShuffleOcaMusic) {
-                Music::ShuffleSequences(Music::SeqType::SEQ_OCARINA);
-            }
+        } else if (ShuffleMelodies.Is(SHUFFLEMUSIC_GROUPED)) {
+            Music::ShuffleSequences(Music::SeqType::SEQ_FANFARE);
+            Music::ShuffleSequences(Music::SeqType::SEQ_OCARINA);
         }
     }
 

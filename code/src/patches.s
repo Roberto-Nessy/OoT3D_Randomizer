@@ -276,6 +276,18 @@ GetCustomMessageTextTwo_patch:
 FastChests_patch:
     bl hook_FastChests
 
+.section .patch_FastChestsTwo
+    bl hook_FastChests
+    bne 0x3F10B0
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+
 .section .patch_DampeChest
 .global DampeChest_patch
 DampeChest_patch:
@@ -939,7 +951,7 @@ BombPurchaseableCheck_patch:
 .section .patch_BombchuShopInfinitePurchases
 .global BombchuShopInfinitePurchases_patch
 BombchuShopInfinitePurchases_patch:
-    nop
+    b hook_BombchuShopInfinitePurchases
 
 .section .patch_GanonBattleDeathWarp
 .global GanonBattleDeathWarp_patch
@@ -1070,11 +1082,6 @@ ReadGossipStoneHints_patch:
 .global GossipStoneAddSariaHint_patch
 GossipStoneAddSariaHint_patch:
     bl hook_GossipStoneAddSariaHint
-
-.section .patch_DecoratedChest
-.global DecoratedChest_patch
-DecoratedChest_patch:
-    bl hook_DecoratedChest
 
 .section .patch_GoronShopPurchaseableCheck
 .global GoronShopPurchaseableCheck_patch
@@ -1579,6 +1586,21 @@ DontSetMotionSetting_patch:
 .global SaveMenuIgnoreOpen_patch
 SaveMenuIgnoreOpen_patch:
     bl hook_SaveMenuIgnoreOpen
+
+.section .patch_PermadeathDeleteSave
+.global PermadeathDeleteSave_patch
+PermadeathDeleteSave_patch:
+    bl hook_PermadeathDeleteSave
+
+.section .patch_PermadeathSkipMenu
+.global PermadeathSkipMenu_patch
+PermadeathSkipMenu_patch:
+    bl hook_PermadeathSkipMenu
+
+.section .patch_PermadeathForceQuit
+.global PermadeathForceQuit_patch
+PermadeathForceQuit_patch:
+    bl hook_PermadeathForceQuit
 
 .section .patch_OverrideFogDuringGameplayInit
 .global OverrideFogDuringGameplayInit_patch

@@ -1,5 +1,6 @@
 .arm
 .text
+.syntax unified
 
 .global hook_before_GlobalContext_Update
 hook_before_GlobalContext_Update:
@@ -596,14 +597,6 @@ hook_FastChests:
     pop {r0-r12, lr}
     bx lr
 
-.global hook_DecoratedChest
-hook_DecoratedChest:
-    push {r0-r12, lr}
-    bl Chest_OverrideDecoration
-    cmp r0,#0x1
-    pop {r0-r12, lr}
-    bx lr
-
 .global hook_FastOwlCutscenes
 hook_FastOwlCutscenes:
     push {r0-r12, lr}
@@ -1136,6 +1129,38 @@ hook_SaveMenuIgnoreOpen:
     beq 0x42F270
 .endif
     bx lr
+
+.global hook_PermadeathDeleteSave
+hook_PermadeathDeleteSave:
+    push {r0-r12, lr}
+    bl Permadeath_DeleteSave
+    pop {r0-r12, lr}
+    bx lr
+
+.global hook_PermadeathSkipMenu
+hook_PermadeathSkipMenu:
+    push {r0-r12, lr}
+    bl Permadeath_GetOption
+    cmp r0,#0x0
+    pop {r0-r12, lr}
+    movne r0,#0x10
+    moveq r0,#0x2
+    bx lr
+
+.global hook_PermadeathForceQuit
+hook_PermadeathForceQuit:
+    ldrbeq r8,[r11,#0x9]
+    bxne lr
+    push {r0-r12, lr}
+    bl Permadeath_GetOption
+    cmp r0,#0x0
+    pop {r0-r12, lr}
+.if _EUR_==1
+    bne 0x459014
+.else
+    bne 0x458FF4
+.endif
+    bxeq lr
 
 .global hook_OverrideFogDuringGameplayInit
 hook_OverrideFogDuringGameplayInit:
@@ -1825,6 +1850,16 @@ hook_OoBBombchuThree:
     bxeq lr
     ldrsh r0,[r5,#0xE]
     bx lr
+
+.global hook_BombchuShopInfinitePurchases
+hook_BombchuShopInfinitePurchases:
+    ldrsh r3,[r1,#0x1C]
+    push {r0-r12,lr}
+    bl Settings_IsLogicVanilla
+    cmp r0,#0x1
+    pop {r0-r12,lr}
+    movne r3,#0x0 @ Skip setting itemGetInf flag
+    b 0x188D40
 
 @ ----------------------------------
 @ ----------------------------------
