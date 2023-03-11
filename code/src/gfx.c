@@ -351,6 +351,7 @@ static void Gfx_UpdatePlayTime(void) {
     lastTick = currentTick;
 }
 
+s16 nextWarp = -1;
 static void Gfx_DrawSeedHash(void) {
     u8 offsetY = 0;
     Draw_DrawFormattedString(10, 16 + (SPACING_Y * offsetY++), COLOR_TITLE, "Seed Hash:");
@@ -386,6 +387,13 @@ static void Gfx_DrawSeedHash(void) {
         }
         offsetY++;
     }
+
+    if (nextWarp < 0) {
+        Draw_DrawFormattedString(10, 16 + (SPACING_Y * offsetY++), COLOR_WHITE, "Next warp: OFF");
+    } else {
+        Draw_DrawFormattedString(10, 16 + (SPACING_Y * offsetY++), COLOR_WHITE, "Next warp: 0x%hX", nextWarp);
+    }
+    offsetY++;
 }
 
 static void Gfx_DrawDungeonItems(void) {
@@ -961,11 +969,41 @@ static void Gfx_ShowMenu(void) {
             }
         } else if (curMenuIdx == PAGE_OPTIONS) {
             Gfx_OptionsUpdate();
+        } else if (curMenuIdx == PAGE_SEEDHASH) {
+            if (pressed & (BUTTON_UP | BUTTON_RIGHT | BUTTON_A) && nextWarp < 0) {
+                nextWarp = 0;
+            } else if (pressed & BUTTON_UP) {
+                nextWarp += 0x1;
+                handledInput = true;
+            } else if (pressed & BUTTON_DOWN) {
+                nextWarp -= 0x1;
+                handledInput = true;
+            } else if (pressed & BUTTON_RIGHT) {
+                nextWarp += 0x10;
+                handledInput = true;
+            } else if (pressed & BUTTON_LEFT) {
+                nextWarp -= 0x10;
+                handledInput = true;
+            } else if (pressed & BUTTON_A) {
+                nextWarp += 0x100;
+                handledInput = true;
+            } else if (pressed & BUTTON_Y) {
+                nextWarp -= 0x100;
+                handledInput = true;
+            }
+            if (handledInput && nextWarp < 0) {
+                nextWarp = -1;
+            }
         }
 
         if (!handledInput) {
             if (pressed & closingButton) {
                 showingLegend = false;
+                if (nextWarp >= 0) {
+                    gGlobalContext->nextEntranceIndex = nextWarp;
+                    gGlobalContext->sceneLoadFlag     = 0x14;
+                    nextWarp                          = -1;
+                }
                 Draw_ClearBackbuffer();
                 Draw_CopyBackBuffer();
                 if (gSettingsContext.playOption == PLAY_ON_CONSOLE) {

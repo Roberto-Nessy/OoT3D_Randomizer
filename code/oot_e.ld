@@ -748,10 +748,6 @@ SECTIONS
 		*(.patch_CollisionATvsAC)
 	}
 
-	.patch_CollisionDamageCalcFix 0x31B00C : {
-		*(.patch_CollisionDamageCalcFix)
-	}
-
 	.patch_ISGPutaway 0x32B4AC : {
 		*(.patch_ISGPutaway)
 	}
@@ -906,6 +902,18 @@ SECTIONS
 
 	.patch_SetSFX 0x37547C : {
 		*(.patch_SetSFX)
+	}
+
+	.patch_CollisionCheck_SetAC_Once 0x376174 : {
+		*(.patch_CollisionCheck_SetAC_Once)
+	}
+
+	.patch_CollisionCheck_SetAT_Once 0x3761FC : {
+		*(.patch_CollisionCheck_SetAT_Once)
+	}
+
+	.patch_CollisionCheck_SetOC_Once 0x3762B0 : {
+		*(.patch_CollisionCheck_SetOC_Once)
 	}
 
 	.patch_GKSetDurability 0x376BDC : {

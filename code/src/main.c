@@ -60,5 +60,23 @@ void after_GlobalContext_Update() {
         }
     }
 
+    if (drawActorInfo) {
+        for (size_t type = 0; type <= ACTORTYPE_CHEST; type++) {
+            for (Actor* actor = gGlobalContext->actorCtx.actorList[type].first; actor != NULL; actor = actor->next) {
+                s16 posX;
+                s16 posY;
+
+                Actor_GetScreenPos(gGlobalContext, actor, &posX, &posY);
+
+                if (posX < 0 || posX > SCREEN_TOP_WIDTH - (SPACING_X * 6) || //
+                    posY < 0 || posY > SCREEN_TOP_HEIGHT - (SPACING_Y * 2)) {
+                    continue;
+                }
+
+                Draw_DrawFormattedStringTop(posX, posY, COLOR_WHITE, "ID: 0x%X\n0x%X", actor->id, actor->params);
+            }
+        }
+    }
+
     Multiplayer_Sync_Update();
 }

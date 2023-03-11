@@ -1746,6 +1746,17 @@ hook_CollisionATvsAC:
     pop {r0-r12,lr}
     bx lr
 
+.global hook_CollisionCheck_All_Once
+hook_CollisionCheck_All_Once:
+    cpy r5,r2
+    push {r0-r12,lr}
+    bl HyperActors_GetExtraUpdate
+    cmp r0,#0x1
+    ldr r0,[r0]
+    pop {r0-r12,lr}
+    addeq lr,#0x4
+    bx lr
+
 .global hook_GanonDrawMasterSword
 hook_GanonDrawMasterSword:
     ldrh r0,[r4,#0x2E]

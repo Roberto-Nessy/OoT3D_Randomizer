@@ -9,7 +9,7 @@
 #define BORDER_WIDTH 2
 #define CHOICE_COLUMN 220
 #define DESCRIPTION_ROW 184
-#define OPTIONS_COUNT 5
+#define OPTIONS_COUNT 6
 
 typedef struct {
     char name[30];
@@ -66,6 +66,14 @@ void InitOptions(void) {
     strcpy(options[opNum].alternatives[altNum++], "Skip (Keep SFX)");
     strcpy(options[opNum].description, "Toggle skipping the automatic replay after\nyou play a song.");
     options[opNum++].optionPointer = &gExtSaveData.option_SkipSongReplays;
+
+    // Draw Actor Info
+    altNum = 0;
+    strcpy(options[opNum].name, "Draw Actor Info");
+    strcpy(options[opNum].alternatives[altNum++], "Off");
+    strcpy(options[opNum].alternatives[altNum++], "On");
+    strcpy(options[opNum].description, "Shows the actor's id and params.");
+    options[opNum++].optionPointer = &drawActorInfo;
 }
 
 void Gfx_DrawOptions(void) {

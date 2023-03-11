@@ -282,7 +282,13 @@ void TitleCard_rUpdate(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
     TitleCard_Update(globalCtx, titleCtx);
 }
 
-void HyperActor_UpdateAgain(Actor* thisx) {
+static u8 hyperActors_ExtraUpdate = 0;
+
+u8 HyperActors_GetExtraUpdate(void) {
+    return hyperActors_ExtraUpdate;
+}
+
+void HyperActors_UpdateAgain(Actor* thisx) {
     if (thisx->colorFilterTimer > 0) {
         thisx->colorFilterTimer--;
     }
@@ -295,6 +301,8 @@ void HyperActors_Main(Actor* thisx, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state != 0 || thisx->update == NULL) {
         return;
     }
+
+    hyperActors_ExtraUpdate = 1;
 
     if (gSettingsContext.hyperBosses == ON) {
         if ((thisx->id == 0x28) ||                                           // Gohma
@@ -315,10 +323,10 @@ void HyperActors_Main(Actor* thisx, GlobalContext* globalCtx) {
                     if (actor == thisx || actor->update == NULL) {
                         continue;
                     }
-                    HyperActor_UpdateAgain(actor);
+                    HyperActors_UpdateAgain(actor);
                 }
             }
-            HyperActor_UpdateAgain(thisx);
+            HyperActors_UpdateAgain(thisx);
         }
     }
 
@@ -326,9 +334,12 @@ void HyperActors_Main(Actor* thisx, GlobalContext* globalCtx) {
         if ((thisx->id == 0x2) ||   // Stalfos
             (thisx->id == 0xE) ||   // Octorok
             (thisx->id == 0x11) ||  // Wallmaster
+            (thisx->id == 0x12) ||  // Dodongo
             (thisx->id == 0x1B) ||  // Tektite
             (thisx->id == 0x1C1)) { // Door Mimic
-            HyperActor_UpdateAgain(thisx);
+            HyperActors_UpdateAgain(thisx);
         }
     }
+
+    hyperActors_ExtraUpdate = 0;
 }
