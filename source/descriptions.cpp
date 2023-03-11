@@ -1224,6 +1224,12 @@ string_view extraArrowEffectsDesc     = "Ice Arrows will act like blue fire, mel
 string_view hyperBossesDesc           = "Powers up all the bosses, including Ganon,\n"     //
                                         "allowing them to act twice as fast!";             //
                                                                                            //
+/*------------------------------                                                           //
+|         HYPER ENEMIES        |                                                           //
+------------------------------*/                                                           //
+string_view hyperEnemiesDesc          = "Powers up all enemies, allowing them to act twice\n"
+                                        "as fast!";                                        //
+                                                                                           //
                                                                                            //--------------//
 /*------------------------------                                                                           //
 |  DETAILED LOGIC EXPLANATIONS |                                                                           //

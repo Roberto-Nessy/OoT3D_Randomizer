@@ -748,6 +748,10 @@ SECTIONS
 		*(.patch_CollisionATvsAC)
 	}
 
+	.patch_CollisionDamageCalcFix 0x31B00C : {
+		*(.patch_CollisionDamageCalcFix)
+	}
+
 	.patch_ISGPutaway 0x32B4AC : {
 		*(.patch_ISGPutaway)
 	}
@@ -1534,8 +1538,24 @@ SECTIONS
 		*(.patch_DampeSetCollectibleFlag)
 	}
 
+	.patch_KingDodongoID 0x514594 : {
+		*(.patch_KingDodongoID)
+	}
+
+	.patch_KingDodongoFireBreathID 0x520D38 : {
+		*(.patch_KingDodongoFireBreathID)
+	}
+
 	.patch_PhantomGanonLightningID 0x523698 : {
 		*(.patch_PhantomGanonLightningID)
+	}
+
+	.patch_GohmaLarvaID 0x525F24 : {
+		*(.patch_GohmaLarvaID)
+	}
+
+	.patch_VolvagiaRockID 0x52FDB4 : {
+		*(.patch_VolvagiaRockID)
 	}
 
 	.patch_BombchuCheapestPriceOne 0x525348 : {

@@ -923,8 +923,26 @@ SwapFaroresWind_patch:
 BombchuShopAlwaysOpen_patch:
     nop
 
+.section .patch_CollisionDamageCalcFix
+    nop
+    nop
+    nop
+    nop
+
+.section .patch_KingDodongoID
+    .short 0x27
+
+.section .patch_KingDodongoFireBreathID
+    .short 0x30
+
 .section .patch_PhantomGanonLightningID
     .short 0x6D
+
+.section .patch_GohmaLarvaID
+    .short 0x2B
+
+.section .patch_VolvagiaRockID
+    .short 0xAD
 
 .section .patch_BombchuCheapestPriceOne
     .word 0x0063FFFF

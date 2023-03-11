@@ -282,7 +282,14 @@ void TitleCard_rUpdate(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
     TitleCard_Update(globalCtx, titleCtx);
 }
 
-void HyperActors(Actor* thisx, GlobalContext* globalCtx) {
+void HyperActor_UpdateAgain(Actor* thisx) {
+    if (thisx->colorFilterTimer > 0) {
+        thisx->colorFilterTimer--;
+    }
+    thisx->update(thisx, gGlobalContext);
+}
+
+void HyperActors_Main(Actor* thisx, GlobalContext* globalCtx) {
     thisx->update(thisx, globalCtx);
 
     if (globalCtx->csCtx.state != 0 || thisx->update == NULL) {
@@ -291,10 +298,10 @@ void HyperActors(Actor* thisx, GlobalContext* globalCtx) {
 
     if (gSettingsContext.hyperBosses == ON) {
         if ((thisx->id == 0x28) ||                                           // Gohma
-            (thisx->id == 0x12) ||                                           // King Dodongo
+            (thisx->id == 0x27 || thisx->id == 0x30) ||                      // King Dodongo + Fire Breath
             (thisx->id == 0xBA && thisx->params == -1) ||                    // Barinade
             (thisx->id == 0x52 || thisx->id == 0x67 || thisx->id == 0x6D) || // Phantom Ganon + Horse + Lightning
-            (thisx->id == 0x96 || thisx->id == 0xA2) ||                      // Volvagia (Flying + Grounded)
+            (thisx->id == 0x96 || thisx->id == 0xA2 || thisx->id == 0xAD) || // Volvagia + Rock Attack
             (thisx->id == 0xC4) ||                                           // Morpha
             (thisx->id == 0xE9 && thisx->params == -1) ||                    // Bongo Bongo
             (thisx->id == 0xDC) ||                                           // Twinrova
@@ -308,11 +315,20 @@ void HyperActors(Actor* thisx, GlobalContext* globalCtx) {
                     if (actor == thisx || actor->update == NULL) {
                         continue;
                     }
-                    actor->update(actor, globalCtx);
+                    HyperActor_UpdateAgain(actor);
                 }
             }
+            HyperActor_UpdateAgain(thisx);
+        }
+    }
 
-            thisx->update(thisx, globalCtx);
+    if (gSettingsContext.hyperEnemies == ON) {
+        if ((thisx->id == 0x2) ||   // Stalfos
+            (thisx->id == 0xE) ||   // Octorok
+            (thisx->id == 0x11) ||  // Wallmaster
+            (thisx->id == 0x1B) ||  // Tektite
+            (thisx->id == 0x1C1)) { // Door Mimic
+            HyperActor_UpdateAgain(thisx);
         }
     }
 }

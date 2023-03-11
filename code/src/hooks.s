@@ -336,7 +336,7 @@ hook_ApplyDamageMultiplier:
 .global hook_HyperActors
 hook_HyperActors:
     push {r0-r12, lr}
-    bl HyperActors
+    bl HyperActors_Main
     pop {r0-r12, lr}
     bx lr
 
