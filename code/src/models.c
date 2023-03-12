@@ -4,6 +4,8 @@
 #include "item_table.h"
 #include "objects.h"
 #include "custom_models.h"
+#include "settings.h"
+#include "common.h"
 #include <stddef.h>
 
 typedef void (*SkeletonAnimationModel_MatrixCopy_proc)(SkeletonAnimationModel* glModel, nn_math_MTX34* mtx);
@@ -79,24 +81,24 @@ void Model_Init(Model* model, GlobalContext* globalCtx) {
         CustomModel_SetOcarinaToRGBA565(cmb);
         Model_SetAnim(model->saModel, OBJECT_CUSTOM_GENERAL_ASSETS, TEXANIM_CHILD_SONG);
         model->saModel->unk_0C->animSpeed = 0.0f;
-        model->saModel->unk_0C->animMode = 0;
-        model->saModel->unk_0C->curFrame = model->itemRow->special;
+        model->saModel->unk_0C->animMode  = 0;
+        model->saModel->unk_0C->curFrame  = model->itemRow->special;
     } else if (model->itemRow->objectId == OBJECT_CUSTOM_ADULT_SONGS) {
         void* cmb = (void*)(((char*)ZARBuf) + 0xE8);
         CustomModel_SetOcarinaToRGBA565(cmb);
         Model_SetAnim(model->saModel, OBJECT_CUSTOM_GENERAL_ASSETS, TEXANIM_ADULT_SONG);
         model->saModel->unk_0C->animSpeed = 0.0f;
-        model->saModel->unk_0C->animMode = 0;
-        model->saModel->unk_0C->curFrame = model->itemRow->special;
+        model->saModel->unk_0C->animMode  = 0;
+        model->saModel->unk_0C->curFrame  = model->itemRow->special;
     } else if (model->itemRow->objectId == OBJECT_CUSTOM_BOSS_KEYS) {
         Model_SetAnim(model->saModel, OBJECT_CUSTOM_GENERAL_ASSETS, TEXANIM_BOSS_KEY);
         model->saModel->unk_0C->animSpeed = 0.0f;
-        model->saModel->unk_0C->animMode = 0;
-        model->saModel->unk_0C->curFrame = model->itemRow->special;
+        model->saModel->unk_0C->animMode  = 0;
+        model->saModel->unk_0C->curFrame  = model->itemRow->special;
     } else if (model->itemRow->cmabIndex >= 0) {
         Model_SetAnim(model->saModel, model->itemRow->objectId, model->itemRow->cmabIndex);
         model->saModel->unk_0C->animSpeed = 2.0f;
-        model->saModel->unk_0C->animMode = 1;
+        model->saModel->unk_0C->animMode  = 1;
     }
 
     if (model->itemRow->objectModelIdx2 >= 0) {
@@ -105,7 +107,7 @@ void Model_Init(Model* model, GlobalContext* globalCtx) {
         if (model->itemRow->cmabIndex2 >= 0) {
             Model_SetAnim(model->saModel2, model->itemRow->objectId, model->itemRow->cmabIndex2);
             model->saModel2->unk_0C->animSpeed = 2.0f;
-            model->saModel2->unk_0C->animMode = 1;
+            model->saModel2->unk_0C->animMode  = 1;
         }
     }
 
@@ -122,9 +124,9 @@ void Model_Destroy(Model* model) {
         model->saModel2 = NULL;
     }
 
-    model->actor = NULL;
+    model->actor   = NULL;
     model->itemRow = NULL;
-    model->loaded = 0;
+    model->loaded  = 0;
 }
 
 void Model_UpdateAll(GlobalContext* globalCtx) {
@@ -211,9 +213,9 @@ void Model_Draw(Model* model) {
 
 void Model_LookupByOverride(Model* model, ItemOverride override) {
     if (override.key.all != 0) {
-        u16 itemId = override.value.looksLikeItemId ? override.value.looksLikeItemId : override.value.itemId;
+        u16 itemId         = override.value.looksLikeItemId ? override.value.looksLikeItemId : override.value.itemId;
         u16 resolvedItemId = ItemTable_ResolveUpgrades(itemId);
-        model->itemRow = ItemTable_GetItemRow(resolvedItemId);
+        model->itemRow     = ItemTable_GetItemRow(resolvedItemId);
     }
 }
 
@@ -238,10 +240,10 @@ void Model_InfoLookup(Model* model, Actor* actor, GlobalContext* globalCtx, u16 
     // Special lookup for the Zora's Sapphire in the Big Octo room
     if ((actor->id == 0x8B) && (globalCtx->sceneNum == 0x02)) {
         ItemOverride_Key key = { .all = 0 };
-        key.scene = 0xFF;
-        key.type = OVR_TEMPLE;
-        key.flag = DUNGEON_JABUJABUS_BELLY;
-        override = ItemOverride_LookupByKey(key);
+        key.scene            = 0xFF;
+        key.type             = OVR_TEMPLE;
+        key.flag             = DUNGEON_JABUJABUS_BELLY;
+        override             = ItemOverride_LookupByKey(key);
         if (override.key.all != 0) {
             // Unrotate the Spiritual Stones
             actor->shape.rot.x = 0;
@@ -267,12 +269,12 @@ void Model_Create(Model* model, GlobalContext* globalCtx) {
     }
 
     if (newModel != NULL) {
-        newModel->actor = model->actor;
-        newModel->itemRow = model->itemRow;
+        newModel->actor         = model->actor;
+        newModel->itemRow       = model->itemRow;
         newModel->objectBankIdx = model->objectBankIdx;
-        newModel->loaded = 0;
-        newModel->saModel = NULL;
-        newModel->saModel2 = NULL;
+        newModel->loaded        = 0;
+        newModel->saModel       = NULL;
+        newModel->saModel2      = NULL;
         switch (newModel->itemRow->objectId) {
             case 0x0024: // Skulltula token
                 newModel->scale = 0.25f;
@@ -326,4 +328,17 @@ s32 Model_DrawByActor(Actor* actor) {
         }
     }
     return actorDrawn;
+}
+
+u32 Model_OverrideMesh(void* unk, u32 meshGroupIndex) {
+    // When adult Link holds a deku stick, draw unused deku stick instead of shield.
+    if (IsInGameOrBossChallenge() && gSaveContext.linkAge == AGE_ADULT && gSettingsContext.stickAsAdult &&
+        PLAYER->heldItemActionParam == 6 && // holding a deku stick
+        meshGroupIndex == 23 &&             // meshGroupIndex for deku stick in child object and shield in adult object
+        unk == PLAYER->skelAnime.unk_28->unk_draw_struct_14 // check that this is for the player model
+    ) {
+        return 44; // meshGroupIndex for unused deku stick in adult object
+    }
+
+    return meshGroupIndex;
 }

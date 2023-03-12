@@ -1,5 +1,6 @@
 .arm
 .text
+.syntax unified
 
 .global hook_before_GlobalContext_Update
 hook_before_GlobalContext_Update:
@@ -185,14 +186,6 @@ hook_DaruniaStrengthCheck:
     pop {r0-r12, lr}
     b 0x1E48A0
 
-.global hook_DampeCheckCollectibleFlag
-hook_DampeCheckCollectibleFlag:
-    push {r0-r12, lr}
-    bl EnTk_CheckCollectFlag
-    pop {r0-r12, lr}
-    cpy r4,r0
-    bx lr
-
 .global hook_GetToken
 hook_GetToken:
     push {r0-r12, lr}
@@ -340,6 +333,13 @@ hook_ApplyDamageMultiplier:
     pop {r0-r3, r5-r12, lr}
     bx lr
 
+.global hook_HyperActors
+hook_HyperActors:
+    push {r0-r12, lr}
+    bl HyperActors_Main
+    pop {r0-r12, lr}
+    bx lr
+
 .global hook_SceneInitAfterCopyScenes
 hook_SceneInitAfterCopyScenes:
     push {r0-r12, lr}
@@ -353,7 +353,11 @@ hook_StoreChildBButtonEquip:
     push {r0-r12, lr}
     bl SaveFile_SaveChildBButton
     pop {r0-r12, lr}
+.if _EUR_==1
+    b 0x45F230
+.else
     b 0x45F210
+.endif
 
 .global hook_LullabyCheckFlag
 hook_LullabyCheckFlag:
@@ -363,19 +367,27 @@ hook_LullabyCheckFlag:
     pop {r0-r12, lr}
     bx lr
 
-.global hook_FishingStoreTempB
-hook_FishingStoreTempB:
+.global hook_FishingIgnoreTempBOne
+hook_FishingIgnoreTempBOne:
+    bne 0x2C3A14
     push {r0-r12, lr}
-    bl Fishing_StoreTempB
+    bl isFishing
+    cmp r0,#0x1
     pop {r0-r12, lr}
-    bx lr
+    bne 0x2C3998
+    moveq r0,#89
+    b 0x2C3A14
 
-.global hook_FishingRestoreTempB
-hook_FishingRestoreTempB:
+.global hook_FishingIgnoreTempBTwo
+hook_FishingIgnoreTempBTwo:
+    blt 0x34CFD0
     push {r0-r12, lr}
-    bl Fishing_RestoreTempB
+    bl isFishing
+    cmp r0,#0x1
     pop {r0-r12, lr}
-    bx lr
+    bne 0x34CFF0
+    ldrb r1,[r4,#0x80]
+    b 0x34CFD0
 
 .global hook_ConvertBombDropOne
 hook_ConvertBombDropOne:
@@ -440,7 +452,8 @@ hook_AnjuCheckCuccoAmount:
     push {r1-r12, lr}
     bl EnNiwLady_CheckCuccoAmount
     pop {r1-r12, lr}
-    cmp r0,#0x0
+    cmp r0,#0x7
+    cpylt r8,r0
     b 0x179424
 
 .global hook_KingZoraCheckMovedFlag
@@ -553,20 +566,40 @@ hook_CanReadHints:
     bl Hints_CanReadHints
     cmp r0,#0x1
     pop {r0-r12, lr}
+    # Cannot read hints, show this text
+    # "What do you suppose this stone is?"
+    movne r0,#0x100
+    addne r0,r0,#0xB1
+    bxne lr
+    push {r0-r12, lr}
+    bl Hints_GetHintsSetting
+    cmp r0,#0x0
+    pop {r0-r12, lr}
+    # Vanilla hints, can read them (wearing mask)
+    # "Responding to your mask..."
+    moveq r0,#0x2000
+    addeq r0,r0,#0x54
+    bxeq lr
+    # Randomizer hints enabled, can read them
+    # Hint message, skipping other text
+    ldrh r0,[r4,#0x1C]
+    and r0,r0,#0xFF
+    add r0,r0,#0x400
+    bx lr
+
+.global hook_GossipStoneAddSariaHint
+hook_GossipStoneAddSariaHint:
+    ldrh r0,[r5,#0x16]
+    push {r0-r12, lr}
+    add r0,r0,#0x600
+    bl Hints_AddSariasSongHint
+    pop {r0-r12, lr}
     bx lr
 
 .global hook_FastChests
 hook_FastChests:
     push {r0-r12, lr}
     bl Chest_OverrideAnimation
-    cmp r0,#0x1
-    pop {r0-r12, lr}
-    bx lr
-
-.global hook_DecoratedChest
-hook_DecoratedChest:
-    push {r0-r12, lr}
-    bl Chest_OverrideDecoration
     cmp r0,#0x1
     pop {r0-r12, lr}
     bx lr
@@ -666,7 +699,11 @@ hook_SunsSongEndCloseTextbox:
     push {r0-r12, lr}
     bl Settings_SunsSongEndCloseTextbox
     pop {r0-r12, lr}
+.if _EUR_==1
+    b 0x45B538
+.else
     b 0x45B518
+.endif
 
 .global hook_SetSpecialVoidOutRespawnFlag
 hook_SetSpecialVoidOutRespawnFlag:
@@ -674,15 +711,6 @@ hook_SetSpecialVoidOutRespawnFlag:
     bl Grotto_ForceRegularVoidOut
     pop {r0-r12, lr}
     mov r1,#0x104
-    bx lr
-
-.global hook_GossipStoneAddSariaHint
-hook_GossipStoneAddSariaHint:
-    strh r1,[r5,#0x16]
-    push {r0-r12, lr}
-    add r0,r1,#0x600
-    bl Hints_AddSariasSongHint
-    pop {r0-r12, lr}
     bx lr
 
 .global hook_NoHealFromHealthUpgrades
@@ -914,6 +942,17 @@ hook_ItemsMenuDraw:
     pop {r0-r12, lr}
     b 0x2F8160
 
+.global hook_GearMenuEmptySlot
+hook_GearMenuEmptySlot:
+    push {r0,r2-r12, lr}
+    bl   GearMenu_GetRewardHint
+    cpy  r1,r0
+    pop  {r0,r2-r12, lr}
+    cmp  r1,#0x0
+    beq  0x2E9A1C @ clear tex box
+    mov  r2,#0x1
+    b    0x2E9A3C @ print reward hint
+
 .global hook_PlaySound
 hook_PlaySound:
     push {r1-r12, lr}
@@ -936,7 +975,11 @@ hook_SetBGMDayNight:
     bl SetBGM
     pop {r1-r12, lr}
     push {r4-r6, lr}
+.if _EUR_==1
+    b 0x483CAC
+.else
     b 0x483C8C
+.endif
 
 .global hook_SetBGMEvent
 hook_SetBGMEvent:
@@ -1015,18 +1058,6 @@ hook_KingZoraSetTradedPrescriptionFlag:
     mov r2,#0x24
     b 0x1C52A4
 
-.global hook_SyatekiManReminder
-hook_SyatekiManReminder:
-    push {r0-r12, lr}
-    bl EnSyatekiMan_UseRemindText
-    cmp r0,#1
-    pop {r0-r12, lr}
-    moveq r1,#0x9100
-    addeq r1,r1,#0x40
-    movne r1,#0x7100
-    addne r1,r1,#0xAF
-    b 0x23920C
-
 .global hook_SkipTimeTravelCutsceneOne
 hook_SkipTimeTravelCutsceneOne:
     push {r0-r12, lr}
@@ -1074,7 +1105,11 @@ hook_LoadGame:
     push {r0-r12, lr}
     bl SaveFile_LoadExtSaveData
     pop {r0-r12, lr}
+.if _EUR_==1
+    b 0x4473A4
+.else
     b 0x447384
+.endif
 
 .global hook_SaveGame
 hook_SaveGame:
@@ -1095,8 +1130,44 @@ hook_SaveMenuIgnoreOpen:
     bl SaveMenu_IgnoreOpen
     cmp r0,#0x1
     pop {r0-r12, lr}
+.if _EUR_==1
+    beq 0x42F294
+.else
     beq 0x42F270
+.endif
     bx lr
+
+.global hook_PermadeathDeleteSave
+hook_PermadeathDeleteSave:
+    push {r0-r12, lr}
+    bl Permadeath_DeleteSave
+    pop {r0-r12, lr}
+    bx lr
+
+.global hook_PermadeathSkipMenu
+hook_PermadeathSkipMenu:
+    push {r0-r12, lr}
+    bl Permadeath_GetOption
+    cmp r0,#0x0
+    pop {r0-r12, lr}
+    movne r0,#0x10
+    moveq r0,#0x2
+    bx lr
+
+.global hook_PermadeathForceQuit
+hook_PermadeathForceQuit:
+    ldrbeq r8,[r11,#0x9]
+    bxne lr
+    push {r0-r12, lr}
+    bl Permadeath_GetOption
+    cmp r0,#0x0
+    pop {r0-r12, lr}
+.if _EUR_==1
+    bne 0x459014
+.else
+    bne 0x458FF4
+.endif
+    bxeq lr
 
 .global hook_OverrideFogDuringGameplayInit
 hook_OverrideFogDuringGameplayInit:
@@ -1116,18 +1187,31 @@ hook_FixItemsMenuSlotDuplication:
     mov r4,#0xFF
     mov lr,#0xFF
     add r10,r10,#0x1
+.if _EUR_==1
+    b 0x456BB4
+.else
     b 0x456B94
+.endif
 
 .global hook_PlayEntranceCutscene
 hook_PlayEntranceCutscene:
+.if _EUR_==1
+    bgt 0x44F0C4
+.else
     bgt 0x44F0A4
+.endif
     push {r0-r12, lr}
     ldrb r0,[r5,#0x3]
     bl EntranceCutscene_ShouldPlay
     cmp r0,#0x0
     pop {r0-r12, lr}
+.if _EUR_==1
+    beq 0x44F0C4
+    b 0x44F08C
+.else
     beq 0x44F0A4
     b 0x44F06C
+.endif
 
 .global hook_SkipJabuOpeningCutscene
 hook_SkipJabuOpeningCutscene:
@@ -1135,6 +1219,26 @@ hook_SkipJabuOpeningCutscene:
     push {r0-r12, lr}
     bl Jabu_SkipOpeningCutscene
     pop {r0-r12, lr}
+    bx lr
+
+.global hook_MultiplyPlayerSpeed
+hook_MultiplyPlayerSpeed:
+    vldr.32 s0,[r6,#0x21C]
+    push {r0-r12, lr}
+    bl Player_GetSpeedMultiplier
+    vmov s1,r0
+    pop {r0-r12, lr}
+    vmul.f32 s0,s1
+    bx lr
+
+.global hook_RunAnimationSpeed
+hook_RunAnimationSpeed:
+    vldr.32 s17,[r5,#0x21C]
+    push {r0-r12, lr}
+    bl Player_GetSpeedMultiplier
+    vmov s1,r0
+    pop {r0-r12, lr}
+    vmul.f32 s17,s1
     bx lr
 
 .global hook_SilenceNavi
@@ -1145,6 +1249,27 @@ hook_SilenceNavi:
     pop {r0-r12, lr}
     beq 0x26808C
     cmp r0,r2
+    bx lr
+
+.global hook_ChestMinigame_KeyChestVisibility
+hook_ChestMinigame_KeyChestVisibility:
+    push {r0-r12, lr}
+    bl Settings_GetChestMinigameOption
+    cmp r0,#0x0
+    pop {r0-r12, lr}
+    orrne r10,r7,#0x0
+    orreq r10,r7,#0x4000
+    bx lr
+
+.global hook_ChestMinigame_DontOpenChestsOnInit
+hook_ChestMinigame_DontOpenChestsOnInit:
+    cmp r0,#0x0
+    bxeq lr
+    push {r0-r12, lr}
+    bl Settings_GetChestMinigameOption
+    cmp r0,#0x1
+    cmpgt r0,r0
+    pop {r0-r12, lr}
     bx lr
 
 .global hook_GameplayDestroy
@@ -1180,13 +1305,579 @@ hook_OverrideGrottoActorEntrance:
     pop {r0-r12, lr}
     b 0x3F22C4
 
-.global hook_ReturnFWSetupGrottoInfo
-hook_ReturnFWSetupGrottoInfo:
+.global hook_ReturnFW
+hook_ReturnFW:
     push {r0-r12, lr}
     bl Grotto_SetupReturnInfoOnFWReturn
     pop {r0-r12, lr}
     add sp,sp,#0x8
     bx lr
+
+.global hook_WarpSongEntranceOverride
+hook_WarpSongEntranceOverride:
+    push {r0-r1, r3-r12, lr}
+    cpy r0, r2
+    bl Entrance_OverrideNextIndex
+    cpy r2, r0
+    pop {r0-r1, r3-r12, lr}
+    strh r2,[r1,#0x1c]
+    bx lr
+
+.global hook_OwlEntranceOverride
+hook_OwlEntranceOverride:
+    push {r0, r2-r12, lr}
+    cpy r0, r1
+    bl Entrance_OverrideNextIndex
+    cpy r1, r0
+    pop {r0, r2-r12, lr}
+    b 0x3716F0
+
+.global hook_SavewarpSetRespawnFlag
+hook_SavewarpSetRespawnFlag:
+    push {r0-r12, lr}
+    bl Grotto_ForceGrottoReturnOnSpecialEntrance
+    pop {r0-r12, lr}
+    mov r0,#0xFF
+    bx lr
+
+.global hook_AdultItemsCMABsAsChild
+hook_AdultItemsCMABsAsChild:
+    push {r0-r12, lr}
+    bl Player_ShouldApplyAdultItemsCMABs
+    cmp r0,#0x1
+    pop {r0-r12, lr}
+    bx lr
+
+.global hook_Model_EnableMeshGroupByIndex
+hook_Model_EnableMeshGroupByIndex:
+    push {r0,r2-r12,lr}
+    bl Model_OverrideMesh
+    cpy r1,r0
+    pop {r0,r2-r12,lr}
+    b 0x4C8B8C
+
+.global hook_ArrowsOrSeeds
+hook_ArrowsOrSeeds:
+    push {r0-r12, lr}
+    bl Player_ShouldUseSlingshot
+    cmp r0,#0x0
+    pop {r0-r12, lr}
+    bx lr
+
+.global hook_HookshotDrawChain
+hook_HookshotDrawChain:
+    push {r0-r12, lr}
+    bl Player_IsAdult
+    cmp r0,#0x0
+    pop {r0-r12, lr}
+    beq 0x2202BC
+    ldr r0,[r4,#0x290]
+    b 0x2202A4
+
+.global hook_HookshotRotation
+hook_HookshotRotation:
+    push {r0-r12, lr}
+    bl Hookshot_GetZRotation
+    vmov.f32 s0,r0
+    pop {r0-r12, lr}
+    bx lr
+
+.global hook_LinkReflection
+hook_LinkReflection:
+    push {r0-r12, lr}
+    bl Player_IsAdult
+    cmp r0,#0x1
+    pop {r0-r12, lr}
+    streq r1,[r0,#0x714]
+    bx lr
+
+.global hook_ChildCanOpenBowSubMenu
+hook_ChildCanOpenBowSubMenu:
+    push {r0-r12, lr}
+    bl Settings_BowAsChild
+    cmp r0,#0x1
+    pop {r0-r12, lr}
+    beq 0x2EB2DC
+    cmp r12,#0x0
+    b 0x2EB2DC
+
+.global hook_RedBoulderExplode
+hook_RedBoulderExplode:
+    ldrb r0,[r5,#0x1B5]
+    push {r0-r12, lr}
+    cpy r0,r5
+    bl ObjHamishi_HitCount
+    cmp r0,#0x2
+    pop {r0-r12, lr}
+    bge 0x26FE9C
+    b 0x26FE80
+
+.global hook_Multiplayer_UpdatePrevActorFlags
+hook_Multiplayer_UpdatePrevActorFlags:
+    str r0,[r5,#0x1b8]
+    push {r0-r12, lr}
+    bl Multiplayer_Sync_UpdatePrevActorFlags
+    pop {r0-r12, pc}
+
+.global hook_Multiplayer_OnLoadFile
+hook_Multiplayer_OnLoadFile:
+    strh r6,[r0,#0x4C]
+    push {r0-r12, lr}
+    bl Multiplayer_OnFileLoad
+    pop {r0-r12, lr}
+.if _EUR_==1
+    b 0x449F20
+.else
+    b 0x449F00
+.endif
+
+.global hook_SendDroppedBottleContents
+hook_SendDroppedBottleContents:
+    add r0,r0,#0x8C
+    push {r0-r12, lr}
+    cpy r0,r2
+    vmov r1,s0
+    vmov r2,s1
+    vmov r3,s2
+    bl SendDroppedBottleContents
+    pop {r0-r12, lr}
+    bx lr
+
+.global hook_IgnoreMaskReaction
+hook_IgnoreMaskReaction:
+    ldrh r0,[r0,#0x0]
+    push {r0-r12, lr}
+    cpy r0,r4
+    bl SaveFile_GetIgnoreMaskReactionOption
+    cmp r0,#0x1
+    pop {r0-r12, lr}
+    moveq r0,#0x0
+    b 0x36BBC8
+
+.global hook_MasterQuestGoldSkulltulaCheck
+hook_MasterQuestGoldSkulltulaCheck:
+    push {r0-r5,r7-r12, lr}
+    bl Settings_IsMasterQuestDungeon
+    cpy r6,r0
+    pop {r0-r5,r7-r12, lr}
+    b 0x3415CC
+
+.global hook_WaterSpoutMasterQuestCheck
+hook_WaterSpoutMasterQuestCheck:
+    push {r1-r12, lr}
+    bl Settings_IsMasterQuestDungeon
+    pop {r1-r12, lr}
+    bx lr
+
+.global hook_PierreSoftlockFixTwo
+hook_PierreSoftlockFixTwo:
+    cpy r6,r1
+    push {r0-r12, lr}
+    mov r2,#0x1
+    mov r1,#0x0
+    cpy r0,r6
+    bl 0x36E980
+    pop {r0-r12, lr}
+    bx lr
+
+.global hook_StoreTargetActorType
+hook_StoreTargetActorType:
+    push {r0-r12, lr}
+    cpy r0,r6
+    bl Fairy_StoreTargetActorType
+    pop {r0-r12, lr}
+    cmp r5,#0x0
+    bx lr
+
+.global hook_ForceTrailEffectUpdate
+hook_ForceTrailEffectUpdate:
+    push {r1-r12, lr}
+    cpy r0,r4
+    bl forceTrailEffectUpdate
+    pop {r1-r12, lr}
+    cmp r0,#0x10
+    bx lr
+
+.global hook_RainbowSwordTrail
+hook_RainbowSwordTrail:
+    push {r0-r12, lr}
+    bl updateSwordTrailColors
+    pop {r0-r12, lr}
+    add r8,r7,#0x100
+    bx lr
+
+.global hook_BoomerangTrailEffect
+hook_BoomerangTrailEffect:
+    push {r0-r12, lr}
+    bl updateBoomerangTrailEffect
+    cmp r0,#0x1
+    pop {r0-r12, lr}
+    bne 0x1F4228
+    strb r4,[r0,#0x282]
+    bx lr
+
+.global hook_RainbowChuTrail
+hook_RainbowChuTrail:
+    push {r0-r12, lr}
+    bl updateChuTrailColors
+    cmp r0,#0x1
+    pop {r0-r12, lr}
+    addne pc,lr,#0x4
+    strb r7,[r0,#0x282]
+    bx lr
+
+.global hook_TimerExpiration
+hook_TimerExpiration:
+    mov r0,#0x5
+    push {r0-r12,lr}
+    bl IceTrap_IsCurseActive
+    cmp r0,#0x1
+    pop {r0-r12,lr}
+    bxne lr
+    add lr,lr,#0x30
+    mov r0,#0x0
+    strh r0,[r4,#0x62]
+    bx lr
+
+.global hook_FWandWarpSongTimerDepletion
+hook_FWandWarpSongTimerDepletion:
+    moveq r1,#0x1
+    movne r1,#0xEF
+    push {r0-r12,lr}
+    bl IceTrap_IsCurseActive
+    cmp r0,#0x1
+    pop {r0-r12,lr}
+    bxeq lr
+    strh r1,[r0,#0x64]
+    bx lr
+
+.global hook_Timer2TickSound
+hook_Timer2TickSound:
+    push {r0-r12,lr}
+    bl IceTrap_IsCurseActive
+    cmp r0,#0x1
+    pop {r0-r12,lr}
+    addeq lr,lr,#0x4
+    cmp r0,#0x3C
+    bx lr
+
+.global hook_CurseTrapDizzyStick
+hook_CurseTrapDizzyStick:
+    push {r0-r12,lr}
+    bl IceTrap_ReverseStick
+    pop {r0-r12,lr}
+    b 0x2FF258
+
+.global hook_CurseTrapDizzyButtons
+hook_CurseTrapDizzyButtons:
+    push {r0,r3-r12,lr}
+    # R1 and R2 contain button status fields
+    # Apply the curse effect to both
+    push {r2}
+    cpy r0,r1
+    bl IceTrap_RandomizeButtons
+    pop {r2}
+    push {r0}
+    cpy r0,r2
+    bl IceTrap_RandomizeButtons
+    cpy r2,r0
+    pop {r1}
+    pop {r0,r3-r12,lr}
+    stmia r0,{r1,r2,r3,r5,r6,r7,r8,r9,r10,r11,r12,lr}
+.if _EUR_==1
+    b 0x41AC04
+.else
+    b 0x41ABE0
+.endif
+
+.global hook_CrouchStabHitbox
+hook_CrouchStabHitbox:
+    push {r0-r12,lr}
+    bl IceTrap_IsSlashHitboxDisabled
+    cmp r0,#0x0
+    pop {r0-r12,lr}
+    movne r10,#0xFF
+    strb r10,[r6,#0x227]
+    bx lr
+
+.global hook_BossChallenge_Enter
+hook_BossChallenge_Enter:
+    push {r0-r12,lr}
+    bl BossChallenge_Enter
+    pop {r0-r12,lr}
+    cpy r4,r0
+    bx lr
+
+.global hook_BossChallenge_ExitMenu
+hook_BossChallenge_ExitMenu:
+    push {r0-r12,lr}
+    cpy r0,r8
+    bl BossChallenge_ExitMenu
+    pop {r0-r12,lr}
+    cmp r8,#0x0
+    bx lr
+
+.global hook_RestoreISG
+hook_RestoreISG:
+    push {lr}
+    push {r0-r12}
+    bl Settings_IsIsgEnabled
+    cmp r0,#0x0
+    pop {r0-r12}
+    bleq 0x34BBFC @Function that cancels ISG
+    pop {lr}
+    bx lr
+
+.global hook_GrannyTextID
+hook_GrannyTextID:
+    push {r1-r12,lr}
+    bl EnDs_GetTextID
+    pop {r1-r12,lr}
+    bx lr
+
+.global hook_GrannyBottleCheck
+hook_GrannyBottleCheck:
+    push {r0-r12,lr}
+    bl EnDs_ShouldIgnoreBottle
+    cmp r0,#0x0
+    pop {r0-r12,lr}
+    beq 0x377A04 @Check for bottle
+    bx lr
+
+.global hook_GrannyItemOverride
+hook_GrannyItemOverride:
+    push {r0,r1,r3-r12,lr}
+    bl EnDs_ItemOverride
+    cpy r2,r0
+    pop {r0,r1,r3-r12,lr}
+    b 0x3724DC @GiveItem
+
+.global hook_GrannySetRewardFlag
+hook_GrannySetRewardFlag:
+    push {r0-r12,lr}
+    bl EnDs_SetRewardFlag
+    pop {r0-r12,lr}
+    mov r0,#0x0
+    bx lr
+
+.global hook_BecomeAdult
+hook_BecomeAdult:
+    strh r3,[r2,#0x5e]
+    push {r0-r12,lr}
+    bl SaveFile_BecomeAdult
+    cmp r0,#0x0
+    pop {r0-r12,lr}
+    ldrb r3,[r2,#0x60]
+    bx lr
+
+.global hook_SwordlessPatchCheck
+hook_SwordlessPatchCheck:
+    cmp r1,#0x0
+    bxne lr
+    push {r0-r12,lr}
+    bl SaveFile_SwordlessPatchesEnabled
+    cmp r0,#0x0
+    pop {r0-r12,lr}
+    bx lr
+
+.global hook_HandleBButton
+hook_HandleBButton:
+    cmp r0,#0x3B
+    cmpne r0,#0x3C
+    cmpne r0,#0x3D
+    cmpne r0,#0xFE
+    bx lr
+
+.global hook_LoadFileSwordless
+hook_LoadFileSwordless:
+    push {lr}
+    push {r0-r12}
+    bl SaveFile_LoadFileSwordless
+    pop {r0-r12}
+    bl hook_SwordlessPatchCheck
+    pop {lr}
+    bx lr
+
+.global hook_GanonRestoreMSOnDeath
+hook_GanonRestoreMSOnDeath:
+    tst r0,r1
+    bxne lr
+    push {r0-r12,lr}
+    bl SaveFile_SwordlessPatchesEnabled
+    cmp r0,#0x0
+    pop {r0-r12,lr}
+    bx lr
+
+.global hook_CriticalHealthCheck
+hook_CriticalHealthCheck:
+    cmp r0,#0x10
+    movle r0,#0x00
+    bxle lr
+    cmp r0,#0x50
+    movle r0,#0x10
+    bxle lr
+    cmp r0,#0xA0
+    movle r0,#0x18
+    bx lr
+
+.global hook_InitSceneMirrorWorld
+hook_InitSceneMirrorWorld:
+    push {r0-r12,lr}
+    bl Entrance_UpdateMQFlag
+    pop {r0-r12,lr}
+    cpy r4,r0
+    bx lr
+
+.global hook_InitSceneEntranceOverride
+hook_InitSceneEntranceOverride:
+    push {r0-r12,lr}
+    bl Entrance_OverrideSpawnScene
+    pop {r0-r12,lr}
+    mov r0, #0x14
+    bx lr
+
+.global hook_CollisionATvsAC
+hook_CollisionATvsAC:
+    ldr r12,[sp,#0x18]
+    push {r0-r12,lr}
+    cpy r0,r1  @ AT collider
+    cpy r1,r12 @ AC collider
+    bl RedIce_CheckIceArrow
+    pop {r0-r12,lr}
+    bx lr
+
+.global hook_CollisionCheck_All_Once
+hook_CollisionCheck_All_Once:
+    cpy r5,r2
+    push {r0-r12,lr}
+    bl HyperActors_GetExtraUpdate
+    cmp r0,#0x1
+    ldr r0,[r0]
+    pop {r0-r12,lr}
+    addeq lr,#0x4
+    bx lr
+
+.global hook_GanonDrawMasterSword
+hook_GanonDrawMasterSword:
+    ldrh r0,[r4,#0x2E]
+    push {r0-r12,lr}
+    bl SaveFile_SwordlessPatchesEnabled
+    cmp r0,#0x0
+    pop {r0-r12,lr}
+    bxeq lr
+    strb r10,[r4,#0x0] @ delete MS effect
+    bx lr
+
+.global hook_SetFWPlayerParams
+hook_SetFWPlayerParams:
+    push {r0-r9,r11-r12,lr}
+    bl Grotto_ChooseFWPlayerParams
+    mov r10,r0
+    pop {r0-r9,r11-r12,lr}
+    bx lr
+
+.global hook_AboutToPickUpActor
+hook_AboutToPickUpActor:
+    ldrh r0,[r7]
+    push {r0-r12,lr}
+    mov r0,r7
+    bl Player_CanPickUpThisActor
+    cmp r0,#0x0
+    pop {r0-r12,lr}
+    subeq lr,lr,#0x8
+    bx lr
+
+.global hook_GoronPotGuaranteeReward
+hook_GoronPotGuaranteeReward:
+    mov r3,#0x0
+    push {r0-r12, lr}
+    cpy r0,r4
+    bl BgSpot18Basket_SetRotation
+    pop {r0-r12, lr}
+    bx lr
+
+.global hook_TargetReticleColor
+hook_TargetReticleColor:
+    mov r4,#0x0
+    push {r0-r12,lr}
+    cpy r0,r6 @ Target Context
+    bl Fairy_SetTargetReticleColor
+    cmp r0,#0x0
+    pop {r0-r12,lr}
+    bxeq lr    @ no custom Navi colors, return to original code
+.if _EUR_==1   @ colors applied, skip original code
+    b 0x47B308
+.else
+    b 0x47B2E8
+.endif
+
+.global hook_TargetPointerColor
+hook_TargetPointerColor:
+    ldr r0,[r6,#0x120]
+    push {r0-r12,lr}
+    cpy r0,r6 @ Target Context
+    cpy r1,r4 @ Targeted actor
+    bl Fairy_SetTargetPointerColor
+    cmp r0,#0x0
+    pop {r0-r12,lr}
+    bxeq lr    @ no custom Navi colors, return to original code
+.if _EUR_==1   @ colors applied, skip original code
+    b 0x47BB50
+.else
+    b 0x47BB30
+.endif
+
+.global hook_MaskSalesmanBorrowMask
+hook_MaskSalesmanBorrowMask:
+    ldrsh r1,[r6,#0x1C]
+    push {r0-r12,lr}
+    cpy r0,r1
+    bl SaveFile_BorrowMask
+    pop {r0-r12,lr}
+    bx lr
+
+.global hook_MaskSalesmanGiveMaskOfTruth
+hook_MaskSalesmanGiveMaskOfTruth:
+    orr r1,r1,#0x400
+    push {r0-r12,lr}
+    mov r0,#0x22 @ Mask of Truth SI id
+    bl SaveFile_BorrowMask
+    pop {r0-r12,lr}
+    bx lr
+
+.global hook_OoBBombchuOne
+hook_OoBBombchuOne:
+    cmp r5,#0x0
+    bxeq lr
+    ldrsh r0,[r5,#0xA]
+    bx lr
+
+.global hook_OoBBombchuTwo
+hook_OoBBombchuTwo:
+    cmp r5,#0x0
+    bxeq lr
+    ldrsh r0,[r5,#0xC]
+    bx lr
+
+.global hook_OoBBombchuThree
+hook_OoBBombchuThree:
+    cmp r5,#0x0
+    bxeq lr
+    ldrsh r0,[r5,#0xE]
+    bx lr
+
+.global hook_BombchuShopInfinitePurchases
+hook_BombchuShopInfinitePurchases:
+    ldrsh r3,[r1,#0x1C]
+    push {r0-r12,lr}
+    bl Settings_IsLogicVanilla
+    cmp r0,#0x1
+    pop {r0-r12,lr}
+    movne r3,#0x0 @ Skip setting itemGetInf flag
+    b 0x188D40
+
+@ ----------------------------------
+@ ----------------------------------
 
 .section .loader
 .global hook_into_loader

@@ -6,6 +6,7 @@ enum class Category {
     cForest,
     cGrotto,
     cMinigame,
+    cChestMinigame,
     cLostWoods,
     cDekuScrub,
     cDekuScrubUpgrades,
@@ -50,6 +51,7 @@ enum class Category {
     cTempleOfTime,
     cFairies,
     cOutsideGanonsCastle,
+    cDungeonReward,
     cSong,
     cSongDungeonReward,
     cCow,
@@ -61,10 +63,11 @@ enum class Category {
     cVanillaMap,
     cVanillaCompass,
     cAdultTrade,
+    cFrogRupees,
 };
 
 enum class OptionCategory {
-  Setting,
-  Cosmetic,
-  Toggle,
+    Setting,
+    Cosmetic,
+    Toggle,
 };

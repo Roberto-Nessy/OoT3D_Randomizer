@@ -18,7 +18,7 @@ Handle getCurrentProcessHandle(void) __attribute__((section(".loader")));
 void loader_main(void) {
     Result res;
 
-    u32 address = NEWCODE_OFFSET;
+    u32 address      = NEWCODE_OFFSET;
     u32 neededMemory = (NEWCODE_SIZE + 0xFFF) & ~0xFFF; // rounding up
 
     res = svcControlProcessMemory(getCurrentProcessHandle(), address, address, neededMemory, MEMOP_PROT,
@@ -30,13 +30,16 @@ void loader_main(void) {
     // Hacky solution to be able to edit gDrawItemTable, which is normally in RO data
     res = svcControlProcessMemory(getCurrentProcessHandle(), 0x4D8000, 0x4D8000, 0x1000, MEMOP_PROT,
                                   MEMPERM_READ | MEMPERM_WRITE);
+    // Same for gGearUsabilityTable
+    res = svcControlProcessMemory(getCurrentProcessHandle(), 0x4D4000, 0x4D4000, 0x1000, MEMOP_PROT,
+                                  MEMPERM_READ | MEMPERM_WRITE);
 
     if (res < 0)
         svcBreak(1);
 }
 
 Handle getCurrentProcessHandle(void) {
-    Handle handle = 0;
+    Handle handle  = 0;
     u32 currentPid = 0;
     Result res;
 

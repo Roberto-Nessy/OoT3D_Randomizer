@@ -13,12 +13,12 @@ typedef struct {
 
     u16 objectId;
     s8 objectModelIdx;
-    s8 cmabIndex; // 0xFF if none
+    s8 cmabIndex;       // 0xFF if none
     s8 objectModelIdx2; // 0xFF if none
-    s8 cmabIndex2; // 0xFF if none
-    s8 special; /* 0xFF if none. objectMeshIdx for rupees
-                                 TexAnim frame for songs
-                                 key ID for small keys */
+    s8 cmabIndex2;      // 0xFF if none
+    s8 special;         /* 0xFF if none. objectMeshIdx for rupees
+                                         TexAnim frame for songs
+                                         key ID for small keys */
     u8 chestType;
     s16 graphicId;
 
@@ -32,7 +32,6 @@ typedef struct {
 u16 ItemTable_ResolveUpgrades(u16 itemId);
 ItemRow* ItemTable_GetItemRow(u16 itemId);
 ItemRow* ItemTable_GetItemRowFromIndex(u8 rowIndex);
-void ItemTable_SetBombchusChestType(u8 type);
 void ItemTable_CallEffect(ItemRow* itemRow);
 
 #endif //_ITEM_TABLE_H_
