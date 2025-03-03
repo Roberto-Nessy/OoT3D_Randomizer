@@ -91,6 +91,128 @@ void LinkDamageNoKnockback(void) {
     LinkDamage(gGlobalContext, PLAYER, 0, 0.0f, 0.0f, 0, 20);
 }
 
+void genRndCoords(u32* rnd, Vec3f* coords, CollisionHeader* colHdr) {
+    #define RNDCOORD(axis) *rnd = Hash(*rnd); coords->axis = (f32)((s32)(*rnd % (u32)(colHdr->maxBounds.axis - colHdr->minBounds.axis)) + colHdr->minBounds.axis)
+    RNDCOORD(x);
+    RNDCOORD(y);
+    RNDCOORD(z);
+    #undef RNDCOORD
+}
+
+s32 pointInTri(Vec3f* pt, Vec3s* v1, Vec3s* v2, Vec3s* v3) {
+    #define TEST(a, b) (pt->x - b->x) * (a->z - b->z) - (pt->z - b->z) * (a->x - b->x)
+    Vec3f tests = {
+        TEST(v1, v2),
+        TEST(v2, v3),
+        TEST(v3, v1)
+    };
+    #undef TEST
+    return (tests.x < 0 || tests.y < 0 || tests.z < 0) ^ (tests.x > 0 || tests.y > 0 || tests.z > 0);
+}
+
+void getPolyIntersect(Vec3f* pos, CollisionPoly* poly, Vec3s* vtxList, f32* yIntersect) {
+    if (poly->norm.y < 0x2000)
+        return;
+
+    f32 point = -(poly->dist * 0x7FFF + poly->norm.x * pos->x + poly->norm.z * pos->z) / poly->norm.y;
+    if (point < *yIntersect || point > pos->y)
+        return;
+
+    Vec3s* verts[3] = {
+        &vtxList[poly->vtxIdx[0]],
+        &vtxList[poly->vtxIdx[1]],
+        &vtxList[poly->vtxIdx[2]]
+    };
+
+    if (pointInTri(pos, verts[0], verts[1], verts[2]))
+        *yIntersect = point;
+}
+
+#define BG_Y_MIN -32000.f
+f32 getStatIntersect(Vec3f* pos, StaticCollisionContext* ctx) {
+    f32 yIntersect = BG_Y_MIN;
+
+    if (pos->x < ctx->minBounds.x || pos->y < ctx->minBounds.y || pos->z < ctx->minBounds.z ||
+        pos->x >= ctx->maxBounds.x || pos->y >= ctx->maxBounds.y || pos->z >= ctx->maxBounds.z
+    ) return yIntersect;
+
+    Vec3s sector = {
+        (s32)((pos->x - ctx->minBounds.x) * ctx->subDivLengthInv.x),
+        (s32)((pos->y - ctx->minBounds.y) * ctx->subDivLengthInv.y),
+        (s32)((pos->z - ctx->minBounds.z) * ctx->subDivLengthInv.z)
+    };
+
+    s32 idx;
+    SSNode* node;
+    CollisionPoly* poly;
+
+    do {
+        idx = sector.x + ctx->subDivAmount.x * (sector.y + ctx->subDivAmount.y * sector.z);
+        for (u16 next = ctx->lookupTable[idx].floor.head; next != 0xFFFF; next = node->next) {
+            node = &ctx->polyNodes.table[next];
+            poly = &ctx->colHeader->polyList[node->polyId];
+            getPolyIntersect(pos, poly, ctx->colHeader->vtxList, &yIntersect);
+        }
+
+        if (yIntersect != BG_Y_MIN)
+            return yIntersect;
+    } while (sector.y--);
+
+    return yIntersect;
+}
+
+s32 pointInCyl(Vec3f* pt, Sphere32* cyl) {
+    #define SQ(axis) ((pt->axis - cyl->center.axis) * (pt->axis - cyl->center.axis))
+    return SQ(x) + SQ(y) <= cyl->radius * cyl->radius;
+    #undef SQ
+}
+
+f32 getDynaIntersect(Vec3f* pos, DynaCollisionContext* ctx) {
+    f32 yIntersect = BG_Y_MIN;
+    SSNode* node;
+    CollisionPoly* poly;
+
+    for (s32 actor = 0; actor < 50; actor++) {
+        if (!(ctx->bgActorFlags[actor] & 1) || pos->y < ctx->bgActors[actor].minY)
+            continue;
+        if (!pointInCyl(pos, &ctx->bgActors[actor].boundingSphere))
+            continue;
+
+        for (u16 next = ctx->bgActors[actor].dynaLookup.floor.head; next != 0xFFFF; next = node->next) {
+            node = &ctx->polyNodes.table[next];
+            poly = &ctx->polyList[node->polyId];
+            getPolyIntersect(pos, poly, ctx->vtxList, &yIntersect);
+        }
+    }
+
+    return yIntersect;
+}
+
+s32 SnapDown(Vec3f* pos, CollisionContext* colCtx) {
+    f32 yIntersectStat = getStatIntersect(pos, &colCtx->stat);
+    f32 yIntersectDyna = getDynaIntersect(pos, &colCtx->dyna);
+
+    if (yIntersectStat > yIntersectDyna) {
+        pos->y = yIntersectStat;
+        return 1;
+    } else if (yIntersectDyna != BG_Y_MIN) {
+        pos->y = yIntersectDyna;
+        return 1;
+    }
+    return 0;
+}
+
+void teleport(u32* rnd) {
+    Vec3f pos;
+
+    do {
+        genRndCoords(rnd, &pos, gGlobalContext->colCtx.stat.colHeader);
+    } while (!SnapDown(&pos, &gGlobalContext->colCtx));
+
+    PLAYER->actor.home.pos = PLAYER->actor.world.pos = pos;
+    LinkDamage(gGlobalContext, PLAYER, 1, 0.0f, 0.0f, 0, 0);
+}
+
 void IceTrap_Give(void) {
     if (possibleItemTrapsAmount == 0)
         IceTrap_InitTypes();

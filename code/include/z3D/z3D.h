@@ -328,7 +328,7 @@ typedef struct {
     /* 0x0 */ u16 setting;
     /* 0x2 */ s16 count;
     /* 0x4 */ Vec3s* camFuncData;
-} CamData; // size = 0x8
+} BgCamInfo; // size = 0x8
 
 typedef struct {
     /* 0x00 */ Vec3f atOffset;
@@ -340,47 +340,118 @@ typedef struct {
 } ShakeInfo; // size = 0x24
 
 typedef struct {
-    /* 0x00 */ char unk_00[0x04];
-    /* 0x04 */ Vec3s minBounds;
-    /* 0x0A */ Vec3s maxBounds;
-    /* 0x10 */ u16 numVertices;
-    /* 0x12 */ u16 numPolygons;
-    /* 0x14 */ u16 numWaterboxes;
+    /* 0x0 */ u32 data[2];
+} SurfaceType; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ s16 xMin;
+    /* 0x02 */ s16 ySurface;
+    /* 0x04 */ s16 zMin;
+    /* 0x06 */ s16 xLength;
+    /* 0x08 */ s16 zLength;
+    /* 0x0C */ u32 properties;
+} WaterBox; // size = 0x10
+
+typedef struct {
+    /* 0x00 */ Vec3s minBounds;
+    /* 0x06 */ Vec3s maxBounds;
+    /* 0x0C */ u16 numVertices;
+    /* 0x0E */ u16 numPolygons;
+    /* 0x10 */ u16 numSurfaceTypes;
+    /* 0x12 */ u16 numBgCams;
+    /* 0x14 */ u16 numWaterBoxes;
     /* 0x18 */ Vec3s* vtxList;
     /* 0x1C */ CollisionPoly* polyList;
-    /* 0x20 */ void* surfaceTypeList;
-    /* 0x24 */ CamData* camDataList;
-    /* 0x28 */ void* waterboxes;
+    /* 0x20 */ SurfaceType* surfaceTypeList;
+    /* 0x24 */ BgCamInfo* bgCamList;
+    /* 0x28 */ WaterBox* waterBoxes;
 } CollisionHeader; // size = 0x2C
 
 typedef struct {
+    /* 0x0 */ s16 polyId;
+    /* 0x2 */ u16 next;
+} SSNode; // size = 0x4
+
+typedef struct {
+    /* 0x0 */ u16 max;
+    /* 0x2 */ u16 count;
+    /* 0x4 */ SSNode* table;
+    /* 0x8 */ u8* polyChkTbl;
+} SSNodeList; // size = 0xC
+
+typedef struct {
+    /* 0x0 */ u16 head;
+} SSList; // Size = 0x2
+
+typedef struct {
+    /* 0x0 */ SSList floor;
+    /* 0x2 */ SSList wall;
+    /* 0x4 */ SSList ceiling;
+} StaticLookup; // size = 0x6
+
+typedef struct {
     /* 0x00 */ CollisionHeader* colHeader;
-    /* 0x04 */ char unk_04[0x4C];
+    /* 0x04 */ Vec3f minBounds;
+    /* 0x10 */ Vec3f maxBounds;
+    /* 0x1C */ Vec3i subDivAmount;
+    /* 0x28 */ Vec3f subDivLength;
+    /* 0x34 */ Vec3f subDivLengthInv;
+    /* 0x40 */ StaticLookup* lookupTable;
+    /* 0x44 */ SSNodeList polyNodes;
 } StaticCollisionContext; // size = 0x50
+
+typedef struct {
+    /* 0x0 */ u16 polyStartIndex;
+    /* 0x2 */ SSList ceiling;
+    /* 0x4 */ SSList wall;
+    /* 0x6 */ SSList floor;
+} DynaLookup; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ Vec3f scale;
+    /* 0x0C */ Vec3s rot;
+    /* 0x14 */ Vec3f pos;
+} ScaleRotPos; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ Vec3f center;
+    /* 0x0C */ f32 radius;
+} Sphere32; // size = 0x10
 
 typedef struct {
     /* 0x00 */ Actor* actor;
     /* 0x04 */ CollisionHeader* colHeader;
-    /* 0x08 */ char unk_04[0x0C];
-    /* 0x14 */ Vec3f scale1;
-    /* 0x20 */ Vec3s rot1;
-    /* 0x28 */ Vec3f pos1;
-    /* 0x34 */ Vec3f scale2;
-    /* 0x40 */ Vec3s rot2;
-    /* 0x48 */ Vec3f pos2;
-    /* 0x54 */ char unk_54[0x18];
-} ActorMesh; // size = 0x6C
+    /* 0x08 */ DynaLookup dynaLookup;
+    /* 0x10 */ u16 vtxStartIndex;
+    /* 0x14 */ ScaleRotPos prevTransform;
+    /* 0x34 */ ScaleRotPos curTransform;
+    /* 0x54 */ Sphere32 boundingSphere;
+    /* 0x64 */ f32 minY;
+    /* 0x68 */ f32 maxY;
+} BgActor; // size = 0x6C
 
 typedef struct {
-    /* 0x0000 */ char unk_00[0x04];
-    /* 0x0004 */ ActorMesh actorMeshArr[50];
-    /* 0x151C */ u16 flags[50];
-    /* 0x1580 */ char unk_13F0[0x24];
-} DynaCollisionContext; // size = 0x15A4
+    /* 0x0 */ SSNode* table;
+    /* 0x4 */ s32 count;
+    /* 0x8 */ s32 max;
+} DynaSSNodeList; // size = 0xC
+
+typedef struct {
+    /* 0x0000 */ u8 bitFlag;
+    /* 0x0004 */ BgActor bgActors[50];
+    /* 0x151C */ u16 bgActorFlags[50];
+    /* 0x1580 */ CollisionPoly* polyList;
+    /* 0x1584 */ Vec3s* vtxList;
+    /* 0x1588 */ DynaSSNodeList polyNodes;
+    /* 0x1594 */ s32 polyNodesMax;
+    /* 0x1598 */ s32 polyListMax;
+    /* 0x159C */ s32 vtxListMax;
+} DynaCollisionContext; // size = 0x15A0
 
 typedef struct {
     /* 0x0000 */ StaticCollisionContext stat;
     /* 0x0050 */ DynaCollisionContext dyna;
+    /* 0x15F0 */ u32 memSize;
 } CollisionContext; // size = 0x15F4
 
 typedef struct {

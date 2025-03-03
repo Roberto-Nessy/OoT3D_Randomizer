@@ -16,10 +16,12 @@ typedef struct {
 } PosRot; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ char unk_00[0x8];
-    /* 0x08 */ Vec3s norm; // Normal vector
-    /* 0x0E */ s16 dist;   // Plane distance from origin
-} CollisionPoly;           // size = 0x10
+    /* 0x00 */ char unk_00[0x2];
+    /* 0x02 */ u16 vtxIdx[3];
+    /* 0x08 */ char unk_08[0x2];
+    /* 0x0A */ Vec3s norm; // Normal vector
+    /* 0x10 */ f32 dist;   // Plane distance from origin
+} CollisionPoly;           // size = 0x14
 
 struct SkeletonAnimationModel;
 typedef void (*SkeletonAnimationModelFunc)(struct SkeletonAnimationModel*);
